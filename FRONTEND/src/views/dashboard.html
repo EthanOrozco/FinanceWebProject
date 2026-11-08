@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="es" data-bs-theme="dark">
+  <head>
+    <title>Vector — Dashboard</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/main.css"/>
+    <link rel="stylesheet" href="../styles/dashboard.css"/>
+    <script src="../components/navbar.js" defer></script>
+  </head>
+
+  <body>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+    <div class="page-layout">
+    <app-navbar></app-navbar>
+    <main class="main-wrapper">
+      <header class="topbar">
+        <button class="btn btn-outline-secondary d-lg-none" onclick="openSidebar()" aria-label="Abrir menú">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="input-group mb-0 topbar-search">
+          <span class="input-group-text">
+            <i class="fa-solid fa-magnifying-glass" style="color: var(--c-text-muted)"></i>
+          </span>
+          <input type="text" class="form-control" placeholder="Buscar movimientos, cuentas…" aria-label="Buscar">
+        </div>
+        <div class="ms-auto topbar-actions">
+          <button class="btn btn-outline-secondary d-none d-sm-flex" aria-label="Tema">
+            <i class="fa-regular fa-moon"></i>
+          </button>
+          <button class="btn btn-outline-secondary d-none d-sm-flex" aria-label="Notificaciones">
+            <i class="fa-regular fa-bell"></i>
+          </button>
+          <button class="btn btn-gold-primary" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal">
+            <i class="fa-solid fa-plus"></i>
+            <span class="d-none d-md-inline">Nuevo movimiento</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="content-area">
+        <div class="d-flex justify-content-between align-items-end greeting-row">
+          <div>
+            <h1 class="mb-1" style="font-size: 1.75rem; font-weight: 700;">Buenas tardes, Ethan</h1>
+            <p class="mb-0" style="font-size: 14px; color: var(--c-text-muted);">Resumen de noviembre 2026</p>
+          </div>
+          <div class="period-toggle" role="group" aria-label="Periodo">
+            <button type="button" class="btn">Semana</button>
+            <button type="button" class="btn active">Mes</button>
+            <button type="button" class="btn">Año</button>
+          </div>
+        </div>
+
+        <!-- alertas -->
+        <div class="alert-payment d-flex align-items-center gap-3 p-3" role="alert">
+          <i class="fa-solid fa-credit-card fa-lg" style="color: var(--c-gold-dark); flex-shrink: 0;"></i>
+          <div class="flex-grow-1">
+            <strong>Tu Tarjeta Nu vence en 3 días</strong>
+            <p class="mb-0" style="font-size: 13px;">Fecha límite: martes 10 de noviembre · Saldo a pagar $4,250.00</p>
+          </div>
+          <button class="btn btn-gold-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal">Registrar pago</button>
+          <button type="button" class="btn btn-sm" style="color: var(--c-text-muted);" onclick="this.closest('.alert-payment').remove()" aria-label="Cerrar">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <!-- detalles -->
+        <div class="row g-3">
+          <div class="col-12 col-lg-8">
+            <div class="card">
+              <div class="card-body p-4">
+                <div class="card-header-row">
+                  <div>
+                    <p class="mb-0" style="font-size: 14px; font-weight: 600;">Balance neto total</p>
+                    <p class="mb-0" style="font-size: 12px; color: var(--c-text-muted);">5 cuentas · MXN</p>
+                  </div>
+                  <span class="badge" style="background: #173329; color: #5ED3A8; font-weight: 600;">
+                    <i class="fa-solid fa-arrow-trend-up me-1"></i>+8.4% vs oct
+                  </span>
+                </div>
+                <h2 class="balance-amount">$42,370.55</h2>
+                <div class="balance-stats">
+                  <div>
+                    <p class="balance-stat-label">Activos (débito, ahorro, efectivo)</p>
+                    <p class="balance-stat-value">$55,620.20</p>
+                  </div>
+                  <div>
+                    <p class="balance-stat-label">Deuda en tarjetas</p>
+                    <p class="balance-stat-value text-expense">−$13,249.65</p>
+                  </div>
+                  <div>
+                    <p class="balance-stat-label">Ahorro neto del mes</p>
+                    <p class="balance-stat-value text-income">+$8,527.50</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-4 d-flex flex-column gap-3">
+            <div class="card flex-grow-1">
+              <div class="card-body p-4">
+                <div class="kpi-header">
+                  <span class="kpi-label"><i class="fa-solid fa-arrow-down me-1" style="color:#5ED3A8"></i>Ingresos de noviembre</span>
+                  <span class="badge" style="background:#173329; color:#5ED3A8;">+6.2%</span>
+                </div>
+                <p class="kpi-amount">$18,400.00</p>
+              </div>
+            </div>
+            <div class="card flex-grow-1">
+              <div class="card-body p-4">
+                <div class="kpi-header">
+                  <span class="kpi-label"><i class="fa-solid fa-arrow-up me-1" style="color:#F0918A"></i>Gastos de noviembre</span>
+                  <span class="badge" style="background:#3A2224; color:#F0918A;">−3.1%</span>
+                </div>
+                <p class="kpi-amount">$9,872.50</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- graficas -->
+        <div class="row g-3">
+          <div class="col-12 col-lg-8">
+            <div class="card">
+              <div class="card-body p-4">
+                <div class="card-header-row">
+                  <div>
+                    <h5 class="mb-0" style="font-size: 15px; font-weight: 600;">Flujo de efectivo</h5>
+                    <p class="mb-0" style="font-size: 13px; color: var(--c-text-muted);">Ingresos vs gastos por mes</p>
+                  </div>
+                </div>
+                <canvas id="cashFlowChart" class="mt-3"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-4">
+            <div class="card">
+              <div class="card-body p-4">
+                <div class="card-header-row">
+                  <div>
+                    <h5 class="mb-0" style="font-size: 15px; font-weight: 600;">Gastos por categoría</h5>
+                    <p class="mb-0" style="font-size: 13px; color: var(--c-text-muted);">Noviembre 2026</p>
+                  </div>
+                  <a href="#">Ver todo</a>
+                </div>
+                <div class="cat-chart-wrap mt-3">
+                  <canvas id="catChart"></canvas>
+                  <div class="cat-chart-center">
+                    <span class="cat-total-label"></span>
+                    <span class="cat-total-amount"></span>
+                  </div>
+                </div>
+                <ul class="cat-legend list-unstyled mt-3 mb-0">
+                  <li><span class="cat-dot" style="background:#c9933b"></span><span class="cat-name">Comida</span><span class="cat-pct">32%</span><span class="cat-amount">$3,120</span></li>
+                  <li><span class="cat-dot" style="background:#6C9EF8"></span><span class="cat-name">Transporte</span><span class="cat-pct">19%</span><span class="cat-amount">$1,850</span></li>
+                  <li><span class="cat-dot" style="background:#A98BF5"></span><span class="cat-name">Hogar</span><span class="cat-pct">16%</span><span class="cat-amount">$1,600</span></li>
+                  <li><span class="cat-dot" style="background:#5ED3A8"></span><span class="cat-name">Suscripciones</span><span class="cat-pct">13%</span><span class="cat-amount">$1,240</span></li>
+                  <li><span class="cat-dot" style="background:#F0918A"></span><span class="cat-name">Ocio</span><span class="cat-pct">12%</span><span class="cat-amount">$1,180</span></li>
+                  <li><span class="cat-dot" style="background:#7D869A"></span><span class="cat-name">Otros</span><span class="cat-pct">9%</span><span class="cat-amount">$882</span></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-3">
+          <!-- cuentas -->
+          <div class="col-12 col-md-6 col-xl-4">
+            <div class="card">
+              <div class="card-body p-4">
+                <div class="card-header-row mb-1">
+                  <div>
+                    <h5 class="mb-0" style="font-size: 15px; font-weight: 600;">Mis cuentas</h5>
+                    <p class="mb-0" style="font-size: 13px; color: var(--c-text-muted);">Saldo actual proyectado</p>
+                  </div>
+                  <a href="#">Gestionar</a>
+                </div>
+                <ul class="list-unstyled mb-0 mt-2">
+                  <li class="card-list-item">
+                    <div>
+                      <p class="item-name">BBVA Débito</p>
+                      <p class="item-sub">Débito</p>
+                    </div>
+                    <p class="item-value">$22,480.20</p>
+                  </li>
+                  <li class="card-list-item">
+                    <div>
+                      <p class="item-name">Ahorro Hey</p>
+                      <p class="item-sub">Ahorro · 10.5% anual</p>
+                    </div>
+                    <p class="item-value">$31,200.00</p>
+                  </li>
+                  <li class="card-list-item">
+                    <div>
+                      <p class="item-name">Tarjeta Nu</p>
+                      <p class="item-sub">Crédito · corte día 25</p>
+                    </div>
+                    <p class="item-value text-expense">−$4,250.00</p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- metas prioritarias -->
+          <div class="col-12 col-md-6 col-xl-4">
+            <div class="card">
+              <div class="card-body p-4">
+                <div class="card-header-row mb-1">
+                  <div>
+                    <h5 class="mb-0" style="font-size: 15px; font-weight: 600;">Metas prioritarias</h5>
+                    <p class="mb-0" style="font-size: 13px; color: var(--c-text-muted);">Ahorros y deudas</p>
+                  </div>
+                  <a href="#">Ver metas</a>
+                </div>
+                <ul class="list-unstyled mb-0 mt-3">
+                  <li class="goal-item">
+                    <div class="goal-header">
+                      <div>
+                        <p class="item-name">Fondo de emergencia</p>
+                        <p class="item-sub">Ahorro · meta jun 2027</p>
+                      </div>
+                      <span style="font-weight: 700; color: #5ED3A8;">69%</span>
+                    </div>
+                    <div class="progress" style="height: 8px; background: var(--c-black);">
+                      <div class="progress-bar" style="width: 69%; background: #5ED3A8;"></div>
+                    </div>
+                    <div class="goal-footer">
+                      <span>$31,200 ahorrados</span>
+                      <span>Meta $45,000</span>
+                    </div>
+                  </li>
+                  <li class="goal-item mt-3">
+                    <div class="goal-header">
+                      <div>
+                        <p class="item-name">Liquidar Tarjeta Oro</p>
+                        <p class="item-sub">Deuda · baja hacia $0</p>
+                      </div>
+                      <span style="font-weight: 700; color: var(--c-gold-dark);">40%</span>
+                    </div>
+                    <div class="progress" style="height: 8px; background: var(--c-black);">
+                      <div class="progress-bar" style="width: 40%; background: var(--c-gold-dark);"></div>
+                    </div>
+                    <div class="goal-footer">
+                      <span>$8,999 pendientes</span>
+                      <span>Inicial $15,000</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Movimientos recientes -->
+          <div class="col-12 col-md-6 col-xl-4">
+            <div class="card">
+              <div class="card-body p-4">
+                <div class="card-header-row mb-1">
+                  <div>
+                    <h5 class="mb-0" style="font-size: 15px; font-weight: 600;">Movimientos recientes</h5>
+                    <p class="mb-0" style="font-size: 13px; color: var(--c-text-muted);">Últimos 5 registros</p>
+                  </div>
+                  <a href="#">Historial</a>
+                </div>
+                <ul class="list-unstyled mb-0 mt-2">
+                  <li class="card-list-item">
+                    <div>
+                      <p class="item-name">Nómina quincenal</p>
+                      <p class="item-sub">Hoy · BBVA Débito</p>
+                    </div>
+                    <p class="item-value text-income">+$9,200.00</p>
+                  </li>
+                  <li class="card-list-item">
+                    <div>
+                      <p class="item-name">Despensa Soriana</p>
+                      <p class="item-sub">Hoy · Tarjeta Nu · Comida</p>
+                    </div>
+                    <p class="item-value text-expense">−$1,286.40</p>
+                  </li>
+                  <li class="card-list-item">
+                    <div>
+                      <p class="item-name">Uber al trabajo</p>
+                      <p class="item-sub">Ayer · Tarjeta Oro</p>
+                    </div>
+                    <p class="item-value text-expense">−$148.00</p>
+                  </li>
+                  <li class="card-list-item">
+                    <div>
+                      <p class="item-name">Spotify Premium</p>
+                      <p class="item-sub">5 nov · Tarjeta Nu</p>
+                    </div>
+                    <p class="item-value text-expense">−$129.00</p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal fade" id="nuevoMovimientoModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Nuevo movimiento</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+              <div class="type-selector">
+                <button type="button" class="btn-type active flex-fill">Gasto</button>
+                <button type="button" class="btn-type flex-fill">Ingreso</button>
+                <button type="button" class="btn-type flex-fill">Transferencia</button>
+              </div>
+              <form>
+                <div class="mb-3">
+                  <label class="form-label" style="font-size: 13px; color: var(--c-text-muted);">Monto</label>
+                  <input type="number" class="form-control form-control-lg" placeholder="0.00">
+                </div>
+                <div class="row g-2 mb-3">
+                  <div class="col-6">
+                    <label class="form-label" style="font-size: 13px; color: var(--c-text-muted);">Cuenta</label>
+                    <select class="form-select">
+                      <option>BBVA Débito</option>
+                      <option>Ahorro Hey</option>
+                      <option>Tarjeta Nu</option>
+                      <option>Tarjeta Oro</option>
+                      <option>Efectivo</option>
+                    </select>
+                  </div>
+                  <div class="col-6">
+                    <label class="form-label" style="font-size: 13px; color: var(--c-text-muted);">Categoría</label>
+                    <select class="form-select">
+                      <option>Comida</option>
+                      <option>Transporte</option>
+                      <option>Hogar</option>
+                      <option>Suscripciones</option>
+                      <option>Ocio</option>
+                      <option>Nómina</option>
+                      <option>Otros</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <label class="form-label" style="font-size: 13px; color: var(--c-text-muted);">Descripción</label>
+                  <input type="text" class="form-control" placeholder="Ej. Pago de tarjeta Nu">
+                </div>
+                <div class="mb-1">
+                  <label class="form-label" style="font-size: 13px; color: var(--c-text-muted);">Fecha</label>
+                  <input type="date" class="form-control" value="2026-11-07">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button class="btn btn-gold-primary">Guardar movimiento</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const ctx = document.getElementById('cashFlowChart');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov'],
+          datasets: [
+            { label: 'Ingresos', data: [15200, 15800, 16100, 17900, 17300, 18400], backgroundColor: '#c9933b', borderRadius: 4 },
+            { label: 'Gastos',   data: [11200,  9800, 12600, 10400, 10180,  9872], backgroundColor: '#3d4a63', borderRadius: 4 }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'top', labels: { color: '#9aa7bf' } } },
+          scales: {
+            x: { ticks: { color: '#9aa7bf' }, grid: { color: '#2a3245' } },
+            y: { ticks: { color: '#9aa7bf' }, grid: { color: '#2a3245' } }
+          }
+        }
+      });
+
+      const centerTextPlugin = {
+        id: 'centerText',
+        beforeDraw(chart) {
+          if (chart.config.type !== 'doughnut') return;
+          const { ctx, chartArea: { left, right, top, bottom } } = chart;
+          const cx = (left + right) / 2;
+          const cy = (top + bottom) / 2;
+          ctx.save();
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillStyle = '#8A93A6';
+          ctx.font = '500 12px Inter, sans-serif';
+          ctx.fillText('Total', cx, cy - 11);
+          ctx.fillStyle = '#E8EAF0';
+          ctx.font = '700 18px Inter, sans-serif';
+          ctx.fillText('$9,872', cx, cy + 11);
+          ctx.restore();
+        }
+      };
+
+      const ctx2 = document.getElementById('catChart');
+      new Chart(ctx2, {
+        type: 'doughnut',
+        data: {
+          labels: ['Comida', 'Transporte', 'Hogar', 'Suscripciones', 'Ocio', 'Otros'],
+          datasets: [{
+            data: [3120, 1850, 1600, 1240, 1180, 882],
+            backgroundColor: ['#c9933b', '#6C9EF8', '#A98BF5', '#5ED3A8', '#F0918A', '#7D869A'],
+            borderWidth: 0,
+            hoverOffset: 6,
+            cutout: '72%'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } }
+        },
+        plugins: [centerTextPlugin]
+      });
+      
+      function openSidebar() {
+        document.getElementById('sidebarNav').classList.add('sidebar-open');
+        document.getElementById('sidebarBackdrop').classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeSidebar() {
+        document.getElementById('sidebarNav').classList.remove('sidebar-open');
+        document.getElementById('sidebarBackdrop').classList.remove('show');
+        document.body.style.overflow = '';
+      }
+
+      document.querySelectorAll('.btn-type').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.btn-type').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+    </script>
+  </body>
+</html>
