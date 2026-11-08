@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="es" data-bs-theme="dark">
+  <head>
+    <title>Vector — Transacciones</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/main.css"/>
+    <link rel="stylesheet" href="../styles/navbar.css"/>
+    <link rel="stylesheet" href="../styles/transacciones.css"/>
+    <script src="../components/navbar.js" defer></script>
+  </head>
+
+  <body>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+    <div class="page-layout">
+      <app-navbar></app-navbar>
+      <main class="main-wrapper">
+        <header class="topbar">
+          <button class="btn btn-outline-secondary d-lg-none" onclick="openSidebar()" aria-label="Abrir menú">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <nav aria-label="Ruta de navegación" class="breadcrumb-nav">
+            <a href="/dashboard">Dashboard</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <span>Transacciones</span>
+          </nav>
+          <div class="ms-auto topbar-actions">
+            <button class="btn btn-tx-secondary d-none d-sm-flex" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal">
+              <i class="fa-solid fa-right-left"></i>
+              <span class="d-none d-md-inline">Transferencia</span>
+            </button>
+            <button class="btn btn-gold-primary" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal">
+              <i class="fa-solid fa-plus"></i>
+              <span class="d-none d-md-inline">Nuevo movimiento</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="content-area">
+
+          <div>
+            <h1 class="page-title">Historial de transacciones</h1>
+            <p class="page-subtitle">Busca, filtra y administra todos tus movimientos.</p>
+          </div>
+
+          <!-- tarjetas estadisticas -->
+          <div class="row g-3">
+            <div class="col-6 col-md-3">
+              <div class="stat-card">
+                <span class="stat-label">Movimientos encontrados</span>
+                <span class="stat-value">24</span>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="stat-card">
+                <span class="stat-label">Ingresos</span>
+                <span class="stat-value text-income">$27,600.00</span>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="stat-card">
+                <span class="stat-label">Gastos</span>
+                <span class="stat-value text-expense">$9,872.50</span>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="stat-card">
+                <span class="stat-label">Flujo neto</span>
+                <span class="stat-value" style="color: var(--c-gold-dark);">+$17,727.50</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-card">
+
+            <!-- filtros -->
+            <div class="filter-section">
+              <div class="filter-row-1">
+                <label class="search-label" for="tx-search">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input id="tx-search" type="search" placeholder="Buscar por concepto o descripción…">
+                </label>
+                <div class="type-tabs" role="group" aria-label="Tipo de movimiento">
+                  <button type="button" class="type-tab active">Todos</button>
+                  <button type="button" class="type-tab">Ingresos</button>
+                  <button type="button" class="type-tab">Gastos</button>
+                  <button type="button" class="type-tab">Transferencias</button>
+                </div>
+              </div>
+              <div class="filter-row-2">
+                <div class="filter-field">
+                  <label for="f-desde">Desde</label>
+                  <input id="f-desde" type="date" value="2026-11-01">
+                </div>
+                <div class="filter-field">
+                  <label for="f-hasta">Hasta</label>
+                  <input id="f-hasta" type="date" value="2026-11-08">
+                </div>
+                <div class="filter-field">
+                  <label for="f-cuenta">Cuenta</label>
+                  <select id="f-cuenta">
+                    <option value="">Todas las cuentas</option>
+                    <option>BBVA Débito</option>
+                    <option>Ahorro Hey</option>
+                    <option>Efectivo</option>
+                    <option>Tarjeta Nu</option>
+                    <option>Tarjeta Oro</option>
+                  </select>
+                </div>
+                <div class="filter-field">
+                  <label for="f-categoria">Categoría</label>
+                  <select id="f-categoria">
+                    <option value="">Todas las categorías</option>
+                    <option>Comida</option>
+                    <option>Transporte</option>
+                    <option>Hogar</option>
+                    <option>Suscripciones</option>
+                    <option>Ocio</option>
+                    <option>Nómina</option>
+                    <option>Freelance</option>
+                    <option>Otros</option>
+                  </select>
+                </div>
+                <div class="filter-field">
+                  <label for="f-orden">Ordenar por</label>
+                  <select id="f-orden">
+                    <option value="new">Más reciente</option>
+                    <option value="old">Más antigua</option>
+                    <option value="hi">Monto: mayor a menor</option>
+                    <option value="lo">Monto: menor a mayor</option>
+                    <option value="az">Nombre: A–Z</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- tabla transacciones -->
+            <div class="table-scroll">
+              <table class="tx-table">
+                <thead>
+                  <tr>
+                    <th scope="col">FECHA</th>
+                    <th scope="col">CONCEPTO</th>
+                    <th scope="col">CATEGORÍA</th>
+                    <th scope="col">CUENTA</th>
+                    <th scope="col" class="text-end">MONTO</th>
+                    <th scope="col" class="text-end">ACCIONES</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="tx-row">
+                    <td class="tx-date"><span>8 nov</span><span class="tx-time">10:32</span></td>
+                    <td><div class="tx-concept"><span class="tx-icon-wrap tx-income-icon"><i class="fa-solid fa-arrow-down-left"></i></span><div><span class="tx-title">Nómina quincenal</span><span class="tx-note">Depósito SPEI — BBVA Nómina</span></div></div></td>
+                    <td><span class="cat-badge" style="--dot:#5ED3A8">Nómina</span></td>
+                    <td class="tx-acct">BBVA Débito</td>
+                    <td class="tx-amount text-income">+$9,200.00</td>
+                    <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
+                  </tr>
+                  <tr class="tx-row">
+                    <td class="tx-date"><span>8 nov</span><span class="tx-time">09:15</span></td>
+                    <td><div class="tx-concept"><span class="tx-icon-wrap tx-expense-icon"><i class="fa-solid fa-arrow-up-right"></i></span><div><span class="tx-title">Despensa Soriana</span><span class="tx-note">Compra semanal</span></div></div></td>
+                    <td><span class="cat-badge" style="--dot:#c9933b">Comida</span></td>
+                    <td class="tx-acct">Tarjeta Nu</td>
+                    <td class="tx-amount text-expense">−$1,286.40</td>
+                    <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
+                  </tr>
+                  <tr class="tx-row">
+                    <td class="tx-date"><span>7 nov</span><span class="tx-time">18:40</span></td>
+                    <td><div class="tx-concept"><span class="tx-icon-wrap tx-expense-icon"><i class="fa-solid fa-arrow-up-right"></i></span><div><span class="tx-title">Uber al trabajo</span><span class="tx-note">Viaje Colonia del Valle → Centro</span></div></div></td>
+                    <td><span class="cat-badge" style="--dot:#6C9EF8">Transporte</span></td>
+                    <td class="tx-acct">Tarjeta Oro</td>
+                    <td class="tx-amount text-expense">−$148.00</td>
+                    <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
+                  </tr>
+                  <tr class="tx-row">
+                    <td class="tx-date"><span>7 nov</span><span class="tx-time">12:00</span></td>
+                    <td><div class="tx-concept"><span class="tx-icon-wrap tx-transfer-icon"><i class="fa-solid fa-right-left"></i></span><div><span class="tx-title">Transferencia a Ahorro</span><span class="tx-note">Ahorro programado mensual</span></div></div></td>
+                    <td><span class="cat-badge" style="--dot:#7D869A">Otros</span></td>
+                    <td class="tx-acct">BBVA Débito</td>
+                    <td class="tx-amount" style="color:#8A93A6">$5,000.00</td>
+                    <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
+                  </tr>
+                  <tr class="tx-row">
+                    <td class="tx-date"><span>6 nov</span><span class="tx-time">08:00</span></td>
+                    <td><div class="tx-concept"><span class="tx-icon-wrap tx-expense-icon"><i class="fa-solid fa-arrow-up-right"></i></span><div><span class="tx-title">Spotify Premium</span><span class="tx-note">Suscripción mensual</span></div></div></td>
+                    <td><span class="cat-badge" style="--dot:#5ED3A8">Suscripciones</span></td>
+                    <td class="tx-acct">Tarjeta Nu</td>
+                    <td class="tx-amount text-expense">−$129.00</td>
+                    <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
+                  </tr>
+                  <tr class="tx-row">
+                    <td class="tx-date"><span>5 nov</span><span class="tx-time">20:15</span></td>
+                    <td><div class="tx-concept"><span class="tx-icon-wrap tx-expense-icon"><i class="fa-solid fa-arrow-up-right"></i></span><div><span class="tx-title">Cine Cinemex</span><span class="tx-note">2 boletos + palomitas</span></div></div></td>
+                    <td><span class="cat-badge" style="--dot:#F0918A">Ocio</span></td>
+                    <td class="tx-acct">Tarjeta Oro</td>
+                    <td class="tx-amount text-expense">−$380.00</td>
+                    <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
+                  </tr>
+                  <tr class="tx-row">
+                    <td class="tx-date"><span>4 nov</span><span class="tx-time">14:30</span></td>
+                    <td><div class="tx-concept"><span class="tx-icon-wrap tx-expense-icon"><i class="fa-solid fa-arrow-up-right"></i></span><div><span class="tx-title">CFE — Luz</span><span class="tx-note">Bimestre oct–nov</span></div></div></td>
+                    <td><span class="cat-badge" style="--dot:#A98BF5">Hogar</span></td>
+                    <td class="tx-acct">BBVA Débito</td>
+                    <td class="tx-amount text-expense">−$743.00</td>
+                    <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
+                  </tr>
+                  <tr class="tx-row">
+                    <td class="tx-date"><span>3 nov</span><span class="tx-time">11:00</span></td>
+                    <td><div class="tx-concept"><span class="tx-icon-wrap tx-income-icon"><i class="fa-solid fa-arrow-down-left"></i></span><div><span class="tx-title">Pago freelance</span><span class="tx-note">Proyecto web — cliente García</span></div></div></td>
+                    <td><span class="cat-badge" style="--dot:#5ED3A8">Freelance</span></td>
+                    <td class="tx-acct">BBVA Débito</td>
+                    <td class="tx-amount text-income">+$8,200.00</td>
+                    <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
+                  </tr>
+                  <tr class="tx-row">
+                    <td class="tx-date"><span>2 nov</span><span class="tx-time">09:30</span></td>
+                    <td><div class="tx-concept"><span class="tx-icon-wrap tx-expense-icon"><i class="fa-solid fa-arrow-up-right"></i></span><div><span class="tx-title">Gasolina Shell</span><span class="tx-note">30 litros Magna</span></div></div></td>
+                    <td><span class="cat-badge" style="--dot:#6C9EF8">Transporte</span></td>
+                    <td class="tx-acct">Tarjeta Oro</td>
+                    <td class="tx-amount text-expense">−$780.00</td>
+                    <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
+                  </tr>
+                  <tr class="tx-row">
+                    <td class="tx-date"><span>1 nov</span><span class="tx-time">07:00</span></td>
+                    <td><div class="tx-concept"><span class="tx-icon-wrap tx-income-icon"><i class="fa-solid fa-arrow-down-left"></i></span><div><span class="tx-title">Nómina quincenal</span><span class="tx-note">Depósito SPEI — BBVA Nómina</span></div></div></td>
+                    <td><span class="cat-badge" style="--dot:#5ED3A8">Nómina</span></td>
+                    <td class="tx-acct">BBVA Débito</td>
+                    <td class="tx-amount text-income">+$9,200.00</td>
+                    <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- paginacion (no funcional) -->
+            <div class="tx-pagination">
+              <span class="pagination-info">Mostrando 1–10 de 24 movimientos</span>
+              <nav aria-label="Paginación">
+                <ul class="pagination pagination-sm mb-0">
+                  <li class="page-item disabled"><a class="page-link" href="#"><i class="fa-solid fa-chevron-left"></i></a></li>
+                  <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                  <li class="page-item"><a class="page-link" href="#">2</a></li>
+                  <li class="page-item"><a class="page-link" href="#">3</a></li>
+                  <li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-chevron-right"></i></a></li>
+                </ul>
+              </nav>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- nuevo movimiento -->
+        <div class="modal fade" id="nuevoMovimientoModal" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Nuevo movimiento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              </div>
+              <div class="modal-body">
+                <div class="type-selector">
+                  <button type="button" class="btn-type active flex-fill">Gasto</button>
+                  <button type="button" class="btn-type flex-fill">Ingreso</button>
+                  <button type="button" class="btn-type flex-fill">Transferencia</button>
+                </div>
+                <form>
+                  <div class="mb-3">
+                    <label class="form-label" for="mov-monto">Monto</label>
+                    <input id="mov-monto" type="number" class="form-control form-control-lg" placeholder="0.00">
+                  </div>
+                  <div class="row g-2 mb-3">
+                    <div class="col-6">
+                      <label class="form-label" for="mov-cuenta">Cuenta</label>
+                      <select id="mov-cuenta" class="form-select">
+                        <option>BBVA Débito</option>
+                        <option>Ahorro Hey</option>
+                        <option>Tarjeta Nu</option>
+                        <option>Tarjeta Oro</option>
+                        <option>Efectivo</option>
+                      </select>
+                    </div>
+                    <div class="col-6">
+                      <label class="form-label" for="mov-categoria">Categoría</label>
+                      <select id="mov-categoria" class="form-select">
+                        <option>Comida</option>
+                        <option>Transporte</option>
+                        <option>Hogar</option>
+                        <option>Suscripciones</option>
+                        <option>Ocio</option>
+                        <option>Nómina</option>
+                        <option>Otros</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="mov-descripcion">Descripción</label>
+                    <input id="mov-descripcion" type="text" class="form-control" placeholder="Ej. Pago de tarjeta Nu">
+                  </div>
+                  <div class="mb-1">
+                    <label class="form-label" for="mov-fecha">Fecha</label>
+                    <input id="mov-fecha" type="date" class="form-control" value="2026-11-08">
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-gold-primary">Guardar movimiento</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- modal eliminar confirmar -->
+        <div class="modal fade" id="deleteModal" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+              <div class="modal-body text-center p-4">
+                <div class="delete-icon-wrap">
+                  <i class="fa-regular fa-trash-can"></i>
+                </div>
+                <h5 class="mt-3 mb-1" style="font-size:16px;">¿Eliminar movimiento?</h5>
+                <p style="font-size:13px; color:var(--c-text-muted);">Esta acción no se puede deshacer.</p>
+                <div class="d-flex gap-2 mt-3">
+                  <button class="btn btn-secondary flex-fill" data-bs-dismiss="modal">Cancelar</button>
+                  <button class="btn btn-danger flex-fill">Eliminar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script>
+      function openSidebar() {
+        document.getElementById('sidebarNav').classList.add('sidebar-open');
+        document.getElementById('sidebarBackdrop').classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeSidebar() {
+        document.getElementById('sidebarNav').classList.remove('sidebar-open');
+        document.getElementById('sidebarBackdrop').classList.remove('show');
+        document.body.style.overflow = '';
+      }
+
+      document.querySelectorAll('.type-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.type-tab').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+
+      document.querySelectorAll('.btn-type').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.btn-type').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+        });
+      });
+    </script>
+  </body>
+</html>
