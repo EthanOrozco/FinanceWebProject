@@ -6,4 +6,12 @@ router.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/index.html'));
 });
 
+router.get('/login', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/login.html'));
+});
+
+router.get('/dashboard', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/dashboard.html'));
+});
+
 module.exports = router;
