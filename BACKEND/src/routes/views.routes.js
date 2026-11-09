@@ -14,4 +14,8 @@ router.get('/dashboard', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/dashboard.html'));
 });
 
+router.get('/transacciones', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/transacciones.html'));
+});
+
 module.exports = router;
