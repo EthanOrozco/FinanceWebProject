@@ -22,7 +22,7 @@ router.get('/metas', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/metas.html'));
 })
 
-router.get('/metas', (req, res) => {
+router.get('/perfil', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/perfil.html'));
 })
 
