@@ -18,4 +18,12 @@ router.get('/transacciones', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/transacciones.html'));
 });
 
+router.get('/metas', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/metas.html'));
+})
+
+router.get('/metas', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/perfil.html'));
+})
+
 module.exports = router;

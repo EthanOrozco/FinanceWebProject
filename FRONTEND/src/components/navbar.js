@@ -21,14 +21,13 @@ class AppNavbar extends HTMLElement {
           <ul class="nav-links list-unstyled">
             <li><a href="/dashboard" class="nav-link"><i class="fa-solid fa-gauge"></i>Dashboard</a></li>
             <li><a href="/transacciones" class="nav-link"><i class="fa-solid fa-right-left"></i>Transacciones</a></li>
-            <li><a href="#" class="nav-link"><i class="fa-solid fa-wallet"></i>Cuentas</a></li>
-            <li><a href="#" class="nav-link"><i class="fa-solid fa-bullseye"></i>Metas y deudas</a></li>
+            <li><a href="/metas" class="nav-link"><i class="fa-solid fa-bullseye"></i>Metas y deudas</a></li>
             <li><a href="#" class="nav-link"><i class="fa-solid fa-tag"></i>Categorías</a></li>
           </ul>
 
           <span class="nav-section-label" style="margin-top: 8px;">CUENTA</span>
           <ul class="nav-links list-unstyled">
-            <li><a href="#" class="nav-link"><i class="fa-solid fa-user"></i>Perfil</a></li>
+            <li><a href="/perfil" class="nav-link"><i class="fa-solid fa-user"></i>Perfil</a></li>
             <li><a href="#" class="nav-link"><i class="fa-solid fa-circle-question"></i>Ayuda y FAQ</a></li>
           </ul>
         </nav>
