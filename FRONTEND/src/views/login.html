@@ -162,12 +162,11 @@
             register.classList.toggle('d-none');
         }
 
-        // Transición de entrada (Fade-in)
+        // Animacion
         window.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('page-loaded');
         });
 
-        // Transición de salida suave (Fade-out) al regresar a la Landing
         document.querySelectorAll('a[href="landing.html"]').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -182,21 +181,15 @@
             });
         });
 
-        // Redirección al Dashboard al enviar el formulario de Login
         document.getElementById('formLogin').addEventListener('submit', function(e) {
-            e.preventDefault(); // Evita la recarga nativa de la página
-
-            // Animación de salida (Fade-out)
+            e.preventDefault(); 
             document.body.classList.remove('page-loaded');
             document.body.classList.add('page-exit');
-
-            // Redirige al dashboard en views/dashboard.html
             setTimeout(() => {
                 window.location.href = 'dashboard.html';
             }, 350);
         });
 
-        // Redirección al Dashboard al enviar el formulario de Registro
         document.getElementById('formRegister').addEventListener('submit', function(e) {
             e.preventDefault();
 

@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="es" data-bs-theme="dark">
+  <head>
+    <title>Vector — Cuentas</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/main.css"/>
+    <link rel="stylesheet" href="../styles/navbar.css"/>
+    <link rel="stylesheet" href="../styles/cuentas.css"/>
+    <script src="../components/navbar.js" defer></script>
+  </head>
+
+  <body>
+    <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="closeSidebar()"></div>
+    <div class="page-layout">
+      <app-navbar></app-navbar>
+      <main class="main-wrapper">
+        <header class="topbar">
+          <button class="btn btn-outline-secondary d-lg-none" onclick="openSidebar()" aria-label="Abrir menú">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <nav aria-label="Ruta de navegación" class="breadcrumb-nav">
+            <a href="./dashboard.html">Dashboard</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <span>Cuentas</span>
+          </nav>
+          <div class="ms-auto topbar-actions">
+            <button class="btn btn-tx-secondary d-none d-sm-flex" data-bs-toggle="modal" data-bs-target="#transferModal">
+              <i class="fa-solid fa-right-left"></i>
+              <span class="d-none d-md-inline">Transferir</span>
+            </button>
+            <button class="btn btn-gold-primary" data-bs-toggle="modal" data-bs-target="#cuentaModal">
+              <i class="fa-solid fa-plus"></i>
+              <span class="d-none d-md-inline">Nueva cuenta</span>
+            </button>
+          </div>
+        </header>
+
+        <div class="content-area">
+
+          <div>
+            <h1 class="page-title">Mis cuentas</h1>
+            <p class="page-subtitle">Tus cuentas bancarias, de ahorro, efectivo y tarjetas de crédito en un solo lugar.</p>
+          </div>
+
+          <!-- tarjetas estadisticas -->
+          <div class="row g-3">
+            <div class="col-6 col-md-3">
+              <div class="stat-card">
+                <span class="stat-label">Balance neto</span>
+                <span class="stat-value" style="color: var(--c-gold-light);">$42,370.55</span>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="stat-card">
+                <span class="stat-label">Activos (débito, ahorro, efectivo)</span>
+                <span class="stat-value">$55,620.20</span>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="stat-card">
+                <span class="stat-label">Deuda en tarjetas</span>
+                <span class="stat-value text-expense">−$13,249.65</span>
+              </div>
+            </div>
+            <div class="col-6 col-md-3">
+              <div class="stat-card">
+                <span class="stat-label">Crédito disponible</span>
+                <span class="stat-value">$18,750.35</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- filtros -->
+          <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
+            <div class="type-tabs acc-tabs" role="group" aria-label="Filtrar por tipo de cuenta">
+              <button type="button" class="type-tab active" data-filter="all">Todas (5)</button>
+              <button type="button" class="type-tab" data-filter="debito">Débito (1)</button>
+              <button type="button" class="type-tab" data-filter="ahorro">Ahorro (1)</button>
+              <button type="button" class="type-tab" data-filter="efectivo">Efectivo (1)</button>
+              <button type="button" class="type-tab" data-filter="credito">Crédito (2)</button>
+            </div>
+            <span class="acc-count">5 cuentas</span>
+          </div>
+
+          <!-- tarjetas de cuentas -->
+          <div class="row g-3">
+
+            <!-- bbva débito -->
+            <div class="col-12 col-md-6 col-xl-4" data-type="debito">
+              <article class="acc-card acc-card-selected" aria-label="BBVA Débito">
+                <div class="acc-card-header">
+                  <span class="acc-icon" style="background: #1E2A44; color: #6C9EF8;"><i class="fa-solid fa-building-columns"></i></span>
+                  <div class="flex-grow-1 min-w-0">
+                    <h2 class="acc-name">BBVA Débito</h2>
+                    <span class="acc-type">Débito · •••• 4821</span>
+                  </div>
+                  <button class="tx-btn" aria-label="Editar BBVA Débito" data-bs-toggle="modal" data-bs-target="#cuentaModal"><i class="fa-solid fa-pen"></i></button>
+                  <button class="tx-btn tx-btn-danger" aria-label="Eliminar BBVA Débito" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button>
+                </div>
+
+                <div>
+                  <span class="acc-balance-label">Saldo actual</span>
+                  <span class="acc-balance">$22,480.20</span>
+                </div>
+
+                <div class="acc-details acc-details-2">
+                  <div><span>Entradas del mes</span><strong class="text-income">+$12,700.00</strong></div>
+                  <div><span>Salidas del mes</span><strong class="text-expense">−$4,326.40</strong></div>
+                </div>
+
+                <div class="acc-actions">
+                  <a href="#movimientos" class="btn btn-acc-ghost">Ver movimientos</a>
+                  <button class="btn btn-acc-slate" data-bs-toggle="modal" data-bs-target="#transferModal">Transferir</button>
+                </div>
+              </article>
+            </div>
+
+            <!-- ahorro hey -->
+            <div class="col-12 col-md-6 col-xl-4" data-type="ahorro">
+              <article class="acc-card" aria-label="Ahorro Hey">
+                <div class="acc-card-header">
+                  <span class="acc-icon" style="background: #173329; color: #5ED3A8;"><i class="fa-solid fa-piggy-bank"></i></span>
+                  <div class="flex-grow-1 min-w-0">
+                    <h2 class="acc-name">Ahorro Hey</h2>
+                    <span class="acc-type">Ahorro · 10.5% anual</span>
+                  </div>
+                  <button class="tx-btn" aria-label="Editar Ahorro Hey" data-bs-toggle="modal" data-bs-target="#cuentaModal"><i class="fa-solid fa-pen"></i></button>
+                  <button class="tx-btn tx-btn-danger" aria-label="Eliminar Ahorro Hey" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button>
+                </div>
+
+                <div>
+                  <span class="acc-balance-label">Saldo actual</span>
+                  <span class="acc-balance">$31,200.00</span>
+                </div>
+
+                <div class="acc-details acc-details-2">
+                  <div><span>Entradas del mes</span><strong class="text-income">+$2,268.40</strong></div>
+                  <div><span>Salidas del mes</span><strong class="text-expense">−$0.00</strong></div>
+                </div>
+
+                <div class="acc-actions">
+                  <a href="#movimientos" class="btn btn-acc-ghost">Ver movimientos</a>
+                  <button class="btn btn-acc-slate" data-bs-toggle="modal" data-bs-target="#transferModal">Transferir</button>
+                </div>
+              </article>
+            </div>
+
+            <!-- efectivo -->
+            <div class="col-12 col-md-6 col-xl-4" data-type="efectivo">
+              <article class="acc-card" aria-label="Efectivo">
+                <div class="acc-card-header">
+                  <span class="acc-icon" style="background: #2A2418; color: var(--c-gold-light);"><i class="fa-solid fa-wallet"></i></span>
+                  <div class="flex-grow-1 min-w-0">
+                    <h2 class="acc-name">Efectivo</h2>
+                    <span class="acc-type">Efectivo · En cartera</span>
+                  </div>
+                  <button class="tx-btn" aria-label="Editar Efectivo" data-bs-toggle="modal" data-bs-target="#cuentaModal"><i class="fa-solid fa-pen"></i></button>
+                  <button class="tx-btn tx-btn-danger" aria-label="Eliminar Efectivo" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button>
+                </div>
+
+                <div>
+                  <span class="acc-balance-label">Saldo actual</span>
+                  <span class="acc-balance">$1,940.00</span>
+                </div>
+
+                <div class="acc-details acc-details-2">
+                  <div><span>Entradas del mes</span><strong class="text-income">+$1,000.00</strong></div>
+                  <div><span>Salidas del mes</span><strong class="text-expense">−$785.00</strong></div>
+                </div>
+
+                <div class="acc-actions">
+                  <a href="#movimientos" class="btn btn-acc-ghost">Ver movimientos</a>
+                  <button class="btn btn-acc-slate" data-bs-toggle="modal" data-bs-target="#transferModal">Transferir</button>
+                </div>
+              </article>
+            </div>
+
+            <!-- tarjeta nu -->
+            <div class="col-12 col-md-6 col-xl-4" data-type="credito">
+              <article class="acc-card" aria-label="Tarjeta Nu">
+                <div class="acc-card-header">
+                  <span class="acc-icon" style="background: #2A2140; color: #A98BF5;"><i class="fa-solid fa-credit-card"></i></span>
+                  <div class="flex-grow-1 min-w-0">
+                    <h2 class="acc-name">Tarjeta Nu</h2>
+                    <span class="acc-type">Crédito · •••• 0937</span>
+                  </div>
+                  <button class="tx-btn" aria-label="Editar Tarjeta Nu" data-bs-toggle="modal" data-bs-target="#cuentaModal"><i class="fa-solid fa-pen"></i></button>
+                  <button class="tx-btn tx-btn-danger" aria-label="Eliminar Tarjeta Nu" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button>
+                </div>
+
+                <div>
+                  <span class="acc-balance-label">Deuda pendiente</span>
+                  <span class="acc-balance text-expense">−$4,250.00</span>
+                </div>
+
+                <div>
+                  <div class="credit-usage">
+                    <span>28% del límite usado</span>
+                    <span>Límite $15,000</span>
+                  </div>
+                  <div class="credit-bar" role="progressbar" aria-label="Uso del límite" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100">
+                    <div style="width: 28%; background: #A98BF5;"></div>
+                  </div>
+                </div>
+
+                <div class="acc-details">
+                  <div><span>Disponible</span><strong>$10,750.00</strong></div>
+                  <div><span>Corte</span><strong>Día 25</strong></div>
+                  <div><span>Pago límite</span><strong>10 nov</strong></div>
+                </div>
+
+                <div class="due-alert" role="status">
+                  <i class="fa-solid fa-triangle-exclamation"></i>
+                  Tu pago vence en 3 días
+                </div>
+
+                <div class="acc-actions">
+                  <a href="#movimientos" class="btn btn-acc-ghost">Ver movimientos</a>
+                  <button class="btn btn-acc-gold" data-bs-toggle="modal" data-bs-target="#transferModal">Pagar tarjeta</button>
+                </div>
+              </article>
+            </div>
+
+            <!-- tarjeta oro -->
+            <div class="col-12 col-md-6 col-xl-4" data-type="credito">
+              <article class="acc-card" aria-label="Tarjeta Oro">
+                <div class="acc-card-header">
+                  <span class="acc-icon" style="background: #3A2224; color: #F0918A;"><i class="fa-solid fa-credit-card"></i></span>
+                  <div class="flex-grow-1 min-w-0">
+                    <h2 class="acc-name">Tarjeta Oro</h2>
+                    <span class="acc-type">Crédito · •••• 7712</span>
+                  </div>
+                  <button class="tx-btn" aria-label="Editar Tarjeta Oro" data-bs-toggle="modal" data-bs-target="#cuentaModal"><i class="fa-solid fa-pen"></i></button>
+                  <button class="tx-btn tx-btn-danger" aria-label="Eliminar Tarjeta Oro" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button>
+                </div>
+
+                <div>
+                  <span class="acc-balance-label">Deuda pendiente</span>
+                  <span class="acc-balance text-expense">−$8,999.65</span>
+                </div>
+
+                <div>
+                  <div class="credit-usage">
+                    <span>53% del límite usado</span>
+                    <span>Límite $17,000</span>
+                  </div>
+                  <div class="credit-bar" role="progressbar" aria-label="Uso del límite" aria-valuenow="53" aria-valuemin="0" aria-valuemax="100">
+                    <div style="width: 53%; background: var(--c-gold-light);"></div>
+                  </div>
+                </div>
+
+                <div class="acc-details">
+                  <div><span>Disponible</span><strong>$8,000.35</strong></div>
+                  <div><span>Corte</span><strong>Día 3</strong></div>
+                  <div><span>Pago límite</span><strong>23 nov</strong></div>
+                </div>
+
+                <div class="acc-actions">
+                  <a href="#movimientos" class="btn btn-acc-ghost">Ver movimientos</a>
+                  <button class="btn btn-acc-gold" data-bs-toggle="modal" data-bs-target="#transferModal">Pagar tarjeta</button>
+                </div>
+              </article>
+            </div>
+
+            <!-- agregar cuenta -->
+            <div class="col-12 col-md-6 col-xl-4">
+              <button type="button" class="acc-card acc-card-new" data-bs-toggle="modal" data-bs-target="#cuentaModal">
+                <span class="acc-new-icon"><i class="fa-solid fa-plus"></i></span>
+                Agregar cuenta
+              </button>
+            </div>
+
+          </div>
+
+          <!-- movimientos de la cuenta seleccionada -->
+          <section class="movements-card" id="movimientos" aria-labelledby="movimientos-title">
+            <div class="d-flex flex-wrap align-items-start justify-content-between gap-2">
+              <div>
+                <h2 class="movements-title" id="movimientos-title">Movimientos recientes · BBVA Débito</h2>
+                <span class="movements-sub">Últimos movimientos de esta cuenta</span>
+              </div>
+              <a href="./transacciones.html" class="movements-link">Ver en historial</a>
+            </div>
+
+            <ul class="movements-list list-unstyled">
+              <li>
+                <span class="mv-icon mv-in"><i class="fa-solid fa-arrow-down"></i></span>
+                <div class="flex-grow-1 min-w-0">
+                  <span class="mv-title">Nómina quincenal</span>
+                  <span class="mv-sub">7 nov · Nómina</span>
+                </div>
+                <strong class="text-income">+$9,200.00</strong>
+              </li>
+              <li>
+                <span class="mv-icon mv-tr"><i class="fa-solid fa-right-left"></i></span>
+                <div class="flex-grow-1 min-w-0">
+                  <span class="mv-title">BBVA → Ahorro Hey</span>
+                  <span class="mv-sub">6 nov · Transferencia</span>
+                </div>
+                <strong class="text-transfer">$2,000.00</strong>
+              </li>
+              <li>
+                <span class="mv-icon mv-out"><i class="fa-solid fa-arrow-up"></i></span>
+                <div class="flex-grow-1 min-w-0">
+                  <span class="mv-title">Gasolina</span>
+                  <span class="mv-sub">4 nov · Transporte</span>
+                </div>
+                <strong class="text-expense">−$850.00</strong>
+              </li>
+              <li>
+                <span class="mv-icon mv-in"><i class="fa-solid fa-arrow-down"></i></span>
+                <div class="flex-grow-1 min-w-0">
+                  <span class="mv-title">Proyecto freelance</span>
+                  <span class="mv-sub">3 nov · Freelance</span>
+                </div>
+                <strong class="text-income">+$3,500.00</strong>
+              </li>
+            </ul>
+          </section>
+
+        </div>
+
+        <!-- nueva / editar cuenta -->
+        <div class="modal fade" id="cuentaModal" tabindex="-1" aria-labelledby="cuentaModalTitle">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="cuentaModalTitle">Nueva cuenta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              </div>
+              <div class="modal-body">
+                <form id="cuentaForm">
+                  <div class="mb-3">
+                    <label class="form-label" for="cuenta-nombre">Nombre de la cuenta</label>
+                    <input id="cuenta-nombre" type="text" class="form-control" placeholder="Ej. BBVA Nómina">
+                  </div>
+
+                  <span class="form-label d-block">Tipo</span>
+                  <div class="type-selector" role="radiogroup" aria-label="Tipo de cuenta">
+                    <input type="radio" class="btn-check" name="cuenta-tipo" id="tipo-debito" value="debito" checked>
+                    <label class="btn-type flex-fill text-center" for="tipo-debito">Débito</label>
+                    <input type="radio" class="btn-check" name="cuenta-tipo" id="tipo-ahorro" value="ahorro">
+                    <label class="btn-type flex-fill text-center" for="tipo-ahorro">Ahorro</label>
+                    <input type="radio" class="btn-check" name="cuenta-tipo" id="tipo-efectivo" value="efectivo">
+                    <label class="btn-type flex-fill text-center" for="tipo-efectivo">Efectivo</label>
+                    <input type="radio" class="btn-check" name="cuenta-tipo" id="tipo-credito" value="credito">
+                    <label class="btn-type flex-fill text-center" for="tipo-credito">Crédito</label>
+                  </div>
+
+                  <!-- se oculta cuando el tipo es crédito (ver cuentas.css) -->
+                  <div class="mb-3 saldo-inicial">
+                    <label class="form-label" for="cuenta-saldo">Saldo inicial</label>
+                    <div class="input-group">
+                      <span class="input-group-text">$</span>
+                      <input id="cuenta-saldo" type="number" step="0.01" class="form-control" placeholder="0.00">
+                      <span class="input-group-text">MXN</span>
+                    </div>
+                  </div>
+
+                  <!-- solo se muestra cuando el tipo es crédito (ver cuentas.css) -->
+                  <fieldset class="credit-fields mb-3">
+                    <legend class="credit-fields-title">Datos de la tarjeta</legend>
+                    <div class="mb-3">
+                      <label class="form-label" for="cuenta-limite">Límite de crédito</label>
+                      <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input id="cuenta-limite" type="number" step="0.01" class="form-control" placeholder="0.00">
+                      </div>
+                    </div>
+                    <div class="row g-2">
+                      <div class="col-6">
+                        <label class="form-label" for="cuenta-corte">Día de corte</label>
+                        <input id="cuenta-corte" type="number" min="1" max="31" class="form-control" placeholder="1–31">
+                      </div>
+                      <div class="col-6">
+                        <label class="form-label" for="cuenta-pago">Día límite de pago</label>
+                        <input id="cuenta-pago" type="number" min="1" max="31" class="form-control" placeholder="1–31">
+                      </div>
+                    </div>
+                  </fieldset>
+
+                  <span class="form-label d-block">Color</span>
+                  <div class="color-swatches" role="radiogroup" aria-label="Color de la cuenta">
+                    <input type="radio" class="btn-check" name="cuenta-color" id="color-dorado" checked>
+                    <label class="swatch" for="color-dorado" style="background: #2A2418;" title="Dorado"><span style="background: #E9B95C;"></span><span class="visually-hidden">Dorado</span></label>
+                    <input type="radio" class="btn-check" name="cuenta-color" id="color-azul">
+                    <label class="swatch" for="color-azul" style="background: #1E2A44;" title="Azul"><span style="background: #6C9EF8;"></span><span class="visually-hidden">Azul</span></label>
+                    <input type="radio" class="btn-check" name="cuenta-color" id="color-verde">
+                    <label class="swatch" for="color-verde" style="background: #173329;" title="Verde"><span style="background: #5ED3A8;"></span><span class="visually-hidden">Verde</span></label>
+                    <input type="radio" class="btn-check" name="cuenta-color" id="color-morado">
+                    <label class="swatch" for="color-morado" style="background: #2A2140;" title="Morado"><span style="background: #A98BF5;"></span><span class="visually-hidden">Morado</span></label>
+                    <input type="radio" class="btn-check" name="cuenta-color" id="color-coral">
+                    <label class="swatch" for="color-coral" style="background: #3A2224;" title="Coral"><span style="background: #F0918A;"></span><span class="visually-hidden">Coral</span></label>
+                    <input type="radio" class="btn-check" name="cuenta-color" id="color-gris">
+                    <label class="swatch" for="color-gris" style="background: #262E40;" title="Gris"><span style="background: #AEB5C4;"></span><span class="visually-hidden">Gris</span></label>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-gold-primary" data-bs-dismiss="modal">Crear cuenta</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- transferir / pagar tarjeta -->
+        <div class="modal fade" id="transferModal" tabindex="-1" aria-labelledby="transferModalTitle">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="transferModalTitle">Transferir entre cuentas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="row g-2 mb-3">
+                    <div class="col-6">
+                      <label class="form-label" for="tf-desde">Desde</label>
+                      <select id="tf-desde" class="form-select">
+                        <option selected>BBVA Débito</option>
+                        <option>Ahorro Hey</option>
+                        <option>Efectivo</option>
+                        <option>Tarjeta Nu</option>
+                        <option>Tarjeta Oro</option>
+                      </select>
+                    </div>
+                    <div class="col-6">
+                      <label class="form-label" for="tf-hacia">Hacia</label>
+                      <select id="tf-hacia" class="form-select">
+                        <option>BBVA Débito</option>
+                        <option selected>Ahorro Hey</option>
+                        <option>Efectivo</option>
+                        <option>Tarjeta Nu</option>
+                        <option>Tarjeta Oro</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label" for="tf-monto">Monto</label>
+                    <input id="tf-monto" type="number" step="0.01" class="form-control form-control-lg" placeholder="0.00" value="2000.00">
+                  </div>
+                  <div class="row g-2 mb-3">
+                    <div class="col-6">
+                      <label class="form-label" for="tf-fecha">Fecha</label>
+                      <input id="tf-fecha" type="date" class="form-control" value="2026-11-09">
+                    </div>
+                    <div class="col-6">
+                      <label class="form-label" for="tf-meta">Abonar a meta (opcional)</label>
+                      <select id="tf-meta" class="form-select">
+                        <option>Ninguna</option>
+                        <option>Fondo de emergencia</option>
+                        <option>Laptop nueva</option>
+                        <option>Liquidar Tarjeta Oro</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="transfer-preview">
+                    <span class="transfer-preview-title">Así quedarán tus saldos</span>
+                    <div><span>BBVA Débito</span><span>$22,480.20 → <strong>$20,480.20</strong></span></div>
+                    <div><span>Ahorro Hey</span><span>$31,200.00 → <strong>$33,200.00</strong></span></div>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button class="btn btn-gold-primary" data-bs-dismiss="modal">Confirmar transferencia</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- modal eliminar confirmar -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalTitle">
+          <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+              <div class="modal-body text-center p-4">
+                <div class="delete-icon-wrap">
+                  <i class="fa-regular fa-trash-can"></i>
+                </div>
+                <h5 class="mt-3 mb-1" id="deleteModalTitle" style="font-size:16px;">¿Eliminar cuenta?</h5>
+                <p style="font-size:13px; color:var(--c-text-muted);">Sus movimientos también se borrarán y dejarán de contar en tu balance. Esta acción no se puede deshacer.</p>
+                <div class="d-flex gap-2 mt-3">
+                  <button class="btn btn-secondary flex-fill" data-bs-dismiss="modal">Cancelar</button>
+                  <button class="btn btn-danger flex-fill" data-bs-dismiss="modal">Eliminar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script>
+      function openSidebar() {
+        document.getElementById('sidebarNav').classList.add('sidebar-open');
+        document.getElementById('sidebarBackdrop').classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeSidebar() {
+        document.getElementById('sidebarNav').classList.remove('sidebar-open');
+        document.getElementById('sidebarBackdrop').classList.remove('show');
+        document.body.style.overflow = '';
+      }
+
+      // filtro por tipo de cuenta
+      const tabs = document.querySelectorAll('.type-tab');
+      const cards = document.querySelectorAll('[data-type]');
+      const count = document.querySelector('.acc-count');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+
+          const filter = tab.dataset.filter;
+          let visible = 0;
+          cards.forEach(card => {
+            const show = filter === 'all' || card.dataset.type === filter;
+            card.classList.toggle('d-none', !show);
+            if (show) visible++;
+          });
+          count.textContent = visible + (visible === 1 ? ' cuenta' : ' cuentas');
+        });
+      });
+    </script>
+  </body>
+</html>
