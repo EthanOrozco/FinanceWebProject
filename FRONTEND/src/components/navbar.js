@@ -22,7 +22,7 @@ class AppNavbar extends HTMLElement {
             <li><a href="./dashboard.html" class="nav-link"><i class="fa-solid fa-gauge"></i>Dashboard</a></li>
             <li><a href="./transacciones.html" class="nav-link"><i class="fa-solid fa-right-left"></i>Transacciones</a></li>
             <li><a href="#" class="nav-link"><i class="fa-solid fa-wallet"></i>Cuentas</a></li>
-            <li><a href="#" class="nav-link"><i class="fa-solid fa-bullseye"></i>Metas y deudas</a></li>
+            <li><a href="./metas.html" class="nav-link"><i class="fa-solid fa-bullseye"></i>Metas y deudas</a></li>
             <li><a href="./categorias.html" class="nav-link"><i class="fa-solid fa-tag"></i>Categorías</a></li>
           </ul>
 
