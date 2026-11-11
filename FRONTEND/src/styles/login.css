@@ -1,5 +1,6 @@
 :root {
     /* Paleta de colores de Vector */
+    --c-white: #ffffff;
     --c-black: #111418;
     --c-navy-dark: #1e2638;
     --c-slate-blue: #3d4a63;
@@ -198,6 +199,7 @@ hr.divider-custom {
     background-color: var(--c-card-bg);
     border: 1px solid var(--c-slate-blue);
     border-radius: 16px;
+    color: var(--c-white);
 }
 
 .mail-icon-wrap {
