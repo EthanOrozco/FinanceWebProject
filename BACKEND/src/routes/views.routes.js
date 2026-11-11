@@ -18,4 +18,8 @@ router.get('/transacciones', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/transacciones.html'));
 });
 
+router.get('/categorias', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/categorias.html'));
+});
+
 module.exports = router;
