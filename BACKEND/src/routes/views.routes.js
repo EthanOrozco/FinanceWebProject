@@ -21,5 +21,12 @@ router.get('/transacciones', (req, res) => {
 router.get('/categorias', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/categorias.html'));
 });
+router.get('/metas', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/metas.html'));
+})
+
+router.get('/metas', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/perfil.html'));
+})
 
 module.exports = router;
