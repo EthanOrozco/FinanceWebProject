@@ -1,14 +1,14 @@
 :root {
-    /* Paleta de colores de Vector */
     --c-white: #ffffff;
     --c-black: #111418;
-    --c-navy-dark: #1e2638;
-    --c-slate-blue: #3d4a63;
+    --c-navy-dark: #191c24;
+    --c-slate-blue: #282d3a;
     --c-gold-dark: #c9933b;
     --c-gold-light: #f5c76c;
-    --c-card-bg: #1c2333;
-    --c-input-bg: #273144;
-    --c-text-muted: #cbd5e1;
+    --c-card-bg: #161820;
+    --c-input-bg: #1e2028;
+    --c-text-muted: #9aa7bf;
+    --c-hairline: rgba(255, 255, 255, 0.07);
 }
 
 /* Transición suave entre páginas */
@@ -32,8 +32,7 @@ body.page-exit {
 
 /* Fondo radial para la página de login */
 body.login-page {
-    background: radial-gradient(circle at 18% 50%, var(--c-navy-dark) 0%, var(--c-black) 92%);
-    background-attachment: fixed;
+    background-color: var(--c-black);
     display: flex;
     flex-direction: column;
 }
@@ -50,7 +49,7 @@ body.login-page {
 
 .navbar-brand-custom {
     color: var(--c-gold-light);
-    font-weight: 800;
+    font-weight: 600;
     letter-spacing: 2px;
     text-decoration: none;
     display: inline-flex;
@@ -71,7 +70,7 @@ body.login-page {
     font-weight: 500;
     padding: 0.5rem 1rem;
     border-radius: 8px;
-    transition: all 0.2s ease;
+    transition: background-color 0.15s ease, color 0.15s ease;
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -99,7 +98,7 @@ body.login-page {
 /* TEXTOS DE MARCA */
 .brand-headline {
     font-size: clamp(3.2rem, 5.5vw, 5.5rem);
-    font-weight: 900;
+    font-weight: 600;
     letter-spacing: -1.5px;
     color: var(--c-gold-light);
     line-height: 1;
@@ -128,7 +127,7 @@ body.login-page {
 .form-label {
     color: #d5deeb;
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 500;
     margin-bottom: 0.45rem;
 }
 
@@ -157,18 +156,16 @@ body.login-page {
     background-color: var(--c-gold-dark);
     border: none;
     color: #111418;
-    font-weight: 700;
+    font-weight: 600;
     font-size: 1.05rem;
     padding: 0.9rem;
     border-radius: 10px;
-    transition: all 0.2s ease;
+    transition: background-color 0.15s ease;
 }
 
 .btn-gold-primary:hover {
     background-color: var(--c-gold-light);
     color: #111418;
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(201, 147, 59, 0.3);
 }
 
 /* BOTÓN SECUNDARIO (CREAR CUENTA / YA TENGO CUENTA) */
@@ -176,17 +173,16 @@ body.login-page {
     background-color: var(--c-slate-blue);
     border: none;
     color: #ffffff;
-    font-weight: 700;
+    font-weight: 500;
     font-size: 1rem;
     padding: 0.85rem;
     border-radius: 10px;
-    transition: all 0.2s ease;
+    transition: background-color 0.15s ease;
 }
 
 .btn-slate-accent:hover {
-    background-color: #4e5f7e;
+    background-color: rgba(255, 255, 255, 0.1);
     color: #ffffff;
-    transform: translateY(-1px);
 }
 
 hr.divider-custom {
@@ -197,7 +193,7 @@ hr.divider-custom {
 /* modal recuperar contraseña */
 .modal-content {
     background-color: var(--c-card-bg);
-    border: 1px solid var(--c-slate-blue);
+    border: 1px solid var(--c-hairline);
     border-radius: 16px;
     color: var(--c-white);
 }
