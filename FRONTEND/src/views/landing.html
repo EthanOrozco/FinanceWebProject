@@ -3,235 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vector - Tu centro de gravedad financiero</title>
+    <title>Vector — Tus cuentas, tarjetas y efectivo en un solo balance</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="../styles/main.css">
     <link rel="stylesheet" href="../styles/landing.css">
-
 </head>
 <body>
-    <script>
-    // Animacion
-    window.addEventListener('DOMContentLoaded', () => {
-        document.body.classList.add('page-loaded');
-    });
-
-    document.querySelectorAll('a[href="login.html"]').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const destino = this.getAttribute('href');
-            document.body.classList.remove('page-loaded');
-            document.body.classList.add('page-exit');
-            setTimeout(() => {
-                window.location.href = destino;
-            }, 350);
-        });
-    });
-    </script>
 
     <header class="top-navbar">
-        <div class="container-fluid px-4 px-md-5 d-flex justify-content-between align-items-center">
+        <div class="nav-inner">
             <a href="#" class="navbar-brand-custom">
-                <i class="bi bi-compass fs-4"></i>
+                <i class="fa-solid fa-compass"></i>
                 <span>VECTOR</span>
             </a>
-
-            <div>
-                <a href="login.html" class="btn-nav-login">Iniciar Sesión</a>
-            </div>
+            <a href="login.html" class="btn-nav-login">Iniciar sesión</a>
         </div>
     </header>
 
+    <!-- HERO -->
     <section class="hero-section">
-        <div class="container">
-            <h1 class="hero-title">IMAGINA UN LUGAR...<br><span>DONDE TU DINERO HACE SENTIDO</span></h1>
-            <p class="hero-subtitle">
-                Donde no necesitas saltar entre 5 aplicaciones de bancos ni llevar hojas de cálculo manuales. Un único espacio reactivo para ver tu balance neto real, liquidar pasivos y proyectar tu futuro financiero sin fricción.
-            </p>
-            <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
-                <a href="login.html" class="btn-discord-primary">
-                    <i class="bi bi-rocket-takeoff-fill"></i>
-                    Comenzar Ahora Gratis
-                </a>
-                <a href="#centraliza" class="btn-discord-secondary">
-                    <i class="bi bi-eye"></i>
-                    Explorar Funciones
-                </a>
+        <div class="page-inner hero-grid">
+            <div class="hero-copy">
+                <h1 class="hero-title">Débito, tarjetas y efectivo en un solo balance neto</h1>
+                <p class="hero-subtitle">
+                    Registra tus movimientos y ve cuánto tienes de verdad, en qué se va cada peso y cuánto te falta para tus metas. Sin hojas de cálculo.
+                </p>
+                <div class="hero-actions">
+                    <a href="login.html" class="btn-land btn-land-primary">Empezar gratis</a>
+                    <a href="#centraliza" class="btn-land btn-land-secondary">Ver funciones</a>
+                </div>
+            </div>
+
+            <!-- Vista previa del dashboard -->
+            <div class="hero-preview" aria-hidden="true">
+                <div class="preview-window">
+                    <div class="preview-head">
+                        <div>
+                            <p class="preview-title">Noviembre 2026</p>
+                            <p class="preview-sub">Resumen financiero</p>
+                        </div>
+                        <span class="preview-btn"><i class="fa-solid fa-plus"></i> Nuevo movimiento</span>
+                    </div>
+
+                    <div class="preview-alert">
+                        <i class="fa-solid fa-bell"></i>
+                        <div class="preview-alert-text">
+                            <p>Tu Tarjeta Nu vence en 3 días</p>
+                            <span>Fecha límite 10 nov · Saldo a pagar $4,250.00</span>
+                        </div>
+                        <span class="preview-link">Registrar pago</span>
+                    </div>
+
+                    <div class="preview-main">
+                        <div class="preview-balance">
+                            <div class="preview-balance-top">
+                                <div>
+                                    <p class="label-strong">Balance neto total</p>
+                                    <p class="label-muted">5 cuentas · MXN</p>
+                                </div>
+                                <span class="delta-pos">+8.4% vs oct</span>
+                            </div>
+                            <p class="balance-figure">$42,370.55</p>
+                            <div class="preview-stats">
+                                <div>
+                                    <p class="label-muted">Activos</p>
+                                    <p class="stat-figure">$55,620.20</p>
+                                </div>
+                                <div>
+                                    <p class="label-muted">Deuda en tarjetas</p>
+                                    <p class="stat-figure neg">−$13,249.65</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="preview-card-col">
+                            <div class="bank-card">
+                                <div class="bank-card-top">
+                                    <span class="bank-card-name">Tarjeta Oro</span>
+                                    <i class="fa-solid fa-compass"></i>
+                                </div>
+                                <div class="bank-card-chip"></div>
+                                <div class="bank-card-bottom">
+                                    <span>•••• 7712</span>
+                                    <span>Crédito</span>
+                                </div>
+                            </div>
+                            <div class="card-meta">
+                                <span>Disponible</span>
+                                <span class="num">$8,000.35</span>
+                            </div>
+                            <div class="limit-track"><div class="limit-fill" style="width: 53%"></div></div>
+                            <p class="label-muted">53% del límite usado</p>
+                        </div>
+                    </div>
+
+                    <ul class="preview-accounts">
+                        <li>
+                            <span class="acc-name">BBVA Débito</span>
+                            <span class="acc-type">Débito</span>
+                            <span class="num">$22,480.20</span>
+                        </li>
+                        <li>
+                            <span class="acc-name">Ahorro Hey</span>
+                            <span class="acc-type">Ahorro · 10.5% anual</span>
+                            <span class="num">$31,200.00</span>
+                        </li>
+                        <li>
+                            <span class="acc-name">Tarjeta Nu</span>
+                            <span class="acc-type">Crédito · corte día 25</span>
+                            <span class="num neg">−$4,250.00</span>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- CINTA DE MOVIMIENTO INFINITO ESTILO DISCORD -->
-    <div class="ticker-wrap">
-        <div class="ticker-track">
-            <div class="ticker-content">
-                <span>VECTOR</span> <i class="bi bi-compass-fill"></i>
-                <span>FINANZAS</span> <i class="bi bi-compass-fill"></i>
-                <span>BALANCE REAL</span> <i class="bi bi-compass-fill"></i>
-                <span>CONTROL</span> <i class="bi bi-compass-fill"></i>
-                <span>METAS</span> <i class="bi bi-compass-fill"></i>
-                <span>LIQUIDACIÓN</span> <i class="bi bi-compass-fill"></i>
-                <span>AGILIDAD</span> <i class="bi bi-compass-fill"></i>
-                <span>PROYECCIÓN</span> <i class="bi bi-compass-fill"></i>
-            </div>
-            <div class="ticker-content" aria-hidden="true">
-                <span>VECTOR</span> <i class="bi bi-compass-fill"></i>
-                <span>FINANZAS</span> <i class="bi bi-compass-fill"></i>
-                <span>BALANCE REAL</span> <i class="bi bi-compass-fill"></i>
-                <span>CONTROL</span> <i class="bi bi-compass-fill"></i>
-                <span>METAS</span> <i class="bi bi-compass-fill"></i>
-                <span>LIQUIDACIÓN</span> <i class="bi bi-compass-fill"></i>
-                <span>AGILIDAD</span> <i class="bi bi-compass-fill"></i>
-                <span>PROYECCIÓN</span> <i class="bi bi-compass-fill"></i>
-            </div>
-        </div>
+    <!-- MÓDULOS -->
+    <div class="modules-strip">
+        <ul class="page-inner modules-list">
+            <li><i class="fa-solid fa-building-columns"></i> Cuentas</li>
+            <li><i class="fa-solid fa-arrow-right-arrow-left"></i> Movimientos</li>
+            <li><i class="fa-solid fa-tags"></i> Categorías</li>
+            <li><i class="fa-solid fa-bullseye"></i> Metas y deudas</li>
+        </ul>
     </div>
 
-    <!-- FEATURE 1: CENTRALIZACIÓN -->
+    <!-- FEATURE 1: CUENTAS -->
     <section id="centraliza" class="feature-stripe">
-        <div class="container">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-6">
-                    <h2 class="feature-heading">Un solo núcleo para todas tus entidades financieras</h2>
-                    <p class="feature-desc">
-                        Cuentas de débito, tarjetas de crédito con corte a la vista y efectivo manual. Vector centraliza cada saldo en un motor asíncrono que consolida tu patrimonio neto sin demoras de sincronización ni recargas de navegador.
-                    </p>
-                </div>
-                <div class="col-lg-6">
-                    <div class="mockup-box">
-                        <div class="d-flex justify-content-between mb-4">
-                            <span class="fw-bold" style="color: var(--c-gold-light);">Balance Consolidado</span>
-                            <span class="badge bg-dark border border-secondary text-light">En tiempo real</span>
-                        </div>
-                        <div class="mockup-pill">
-                            <div class="d-flex align-items-center gap-3">
-                                <i class="bi bi-bank fs-3 text-warning"></i>
-                                <div>
-                                    <div class="fw-bold">Cuentas Bancarias</div>
-                                    <small>Nómina y Ahorros</small>
-                                </div>
-                            </div>
-                            <span class="fw-bold text-success">+$28,450.00</span>
-                        </div>
-                        <div class="mockup-pill">
-                            <div class="d-flex align-items-center gap-3">
-                                <i class="bi bi-credit-card-2-front fs-3 text-info"></i>
-                                <div>
-                                    <div class="fw-bold">Tarjetas de Crédito</div>
-                                    <small>Pasivo diferido</small>
-                                </div>
-                            </div>
-                            <span class="fw-bold text-danger">-$6,120.00</span>
-                        </div>
-                        <div class="mockup-pill mb-0">
-                            <div class="d-flex align-items-center gap-3">
-                                <i class="bi bi-cash-stack fs-3 text-success"></i>
-                                <div>
-                                    <div class="fw-bold">Efectivo Disponible</div>
-                                    <small>Caja chica</small>
-                                </div>
-                            </div>
-                            <span class="fw-bold text-light">+$2,300.00</span>
-                        </div>
+        <div class="page-inner feature-grid">
+            <div class="feature-copy">
+                <h2 class="feature-heading">Cada cuenta con sus fechas, límites y saldos</h2>
+                <p class="feature-desc">
+                    Agrega cuentas de débito, ahorro, efectivo y tarjetas de crédito. Vector te muestra el día de corte, la fecha límite de pago y cuánto del límite llevas usado, y te avisa días antes de que venza un pago.
+                </p>
+                <p class="feature-desc">
+                    Al transferir entre cuentas ves cómo quedarán tus saldos antes de confirmar.
+                </p>
+            </div>
+            <div class="mockup-box" aria-hidden="true">
+                <div class="mock-row-head">
+                    <div>
+                        <p class="label-strong">Tarjeta Nu</p>
+                        <p class="label-muted">Crédito · •••• 0937</p>
                     </div>
+                    <span class="mock-chip-warn">Vence en 3 días</span>
                 </div>
+                <p class="label-muted mt-16">Deuda pendiente</p>
+                <p class="mock-figure neg">−$4,250.00</p>
+                <div class="limit-track"><div class="limit-fill neutral" style="width: 28%"></div></div>
+                <div class="mock-meta-grid">
+                    <div><span class="label-muted">Límite</span><span class="num">$15,000.00</span></div>
+                    <div><span class="label-muted">Disponible</span><span class="num">$10,750.00</span></div>
+                    <div><span class="label-muted">Corte</span><span>Día 25</span></div>
+                    <div><span class="label-muted">Pago límite</span><span>10 nov</span></div>
+                </div>
+
+                <div class="mock-divider"></div>
+
+                <p class="label-strong">Así quedarán tus saldos</p>
+                <ul class="transfer-list">
+                    <li>
+                        <span>BBVA Débito</span>
+                        <span class="num muted">$22,480.20</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <span class="num">$20,480.20</span>
+                    </li>
+                    <li>
+                        <span>Ahorro Hey</span>
+                        <span class="num muted">$31,200.00</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <span class="num">$33,200.00</span>
+                    </li>
+                </ul>
             </div>
         </div>
     </section>
 
-    <!-- FEATURE 2: HÁBITOS -->
+    <!-- FEATURE 2: CATEGORÍAS -->
     <section id="habitos" class="feature-stripe alt-bg">
-        <div class="container">
-            <div class="row align-items-center g-5 flex-lg-row-reverse">
-                <div class="col-lg-6">
-                    <h2 class="feature-heading">Entiende a dónde va cada peso con categorización ágil</h2>
-                    <p class="feature-desc">
-                        Registra transacciones en milisegundos con atajos rápidos de teclado. Vector analiza tus patrones de consumo diarios y clasifica tus hábitos para que no te sorprendas al final de la quincena.
-                    </p>
-                </div>
-                <div class="col-lg-6">
-                    <div class="mockup-box">
-                        <h4 class="fw-bold mb-4" style="color: var(--c-gold-light);">Hábitos del Mes</h4>
-                        <div class="mb-4">
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="fw-semibold">Alimentación y Despensa</span>
-                                <span class="fw-bold">38%</span>
-                            </div>
-                            <div class="progress" style="height: 10px; background-color: var(--c-input-bg);">
-                                <div class="progress-bar bg-warning" style="width: 38%"></div>
-                            </div>
-                        </div>
-                        <div class="mb-4">
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="fw-semibold">Servicios y Suscripciones</span>
-                                <span class="fw-bold">22%</span>
-                            </div>
-                            <div class="progress" style="height: 10px; background-color: var(--c-input-bg);">
-                                <div class="progress-bar bg-info" style="width: 22%"></div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="fw-semibold">Transporte y Salidas</span>
-                                <span class="fw-bold">14%</span>
-                            </div>
-                            <div class="progress" style="height: 10px; background-color: var(--c-input-bg);">
-                                <div class="progress-bar bg-light" style="width: 14%"></div>
-                            </div>
-                        </div>
+        <div class="page-inner feature-grid reverse">
+            <div class="feature-copy">
+                <h2 class="feature-heading">Ve en qué se va cada peso</h2>
+                <p class="feature-desc">
+                    Registra cada gasto o ingreso con su cuenta y su categoría. Vector suma lo que gastas por categoría cada mes y te muestra qué subió o bajó frente al mes anterior, para que la quincena no te sorprenda.
+                </p>
+            </div>
+            <div class="mockup-box" aria-hidden="true">
+                <div class="mock-row-head">
+                    <div>
+                        <p class="label-strong">Gastos por categoría</p>
+                        <p class="label-muted">Noviembre 2026</p>
                     </div>
+                    <span class="num mock-total">$9,872.50</span>
+                </div>
+                <ul class="cat-list">
+                    <li class="is-lead">
+                        <div class="cat-line"><span>Comida</span><span class="num">$3,120.00</span><span class="num muted">32%</span></div>
+                        <div class="cat-track"><div style="width: 100%"></div></div>
+                    </li>
+                    <li>
+                        <div class="cat-line"><span>Transporte</span><span class="num">$1,850.00</span><span class="num muted">19%</span></div>
+                        <div class="cat-track"><div style="width: 59%"></div></div>
+                    </li>
+                    <li>
+                        <div class="cat-line"><span>Hogar</span><span class="num">$1,600.00</span><span class="num muted">16%</span></div>
+                        <div class="cat-track"><div style="width: 51%"></div></div>
+                    </li>
+                    <li>
+                        <div class="cat-line"><span>Suscripciones</span><span class="num">$1,240.00</span><span class="num muted">13%</span></div>
+                        <div class="cat-track"><div style="width: 40%"></div></div>
+                    </li>
+                    <li>
+                        <div class="cat-line"><span>Ocio</span><span class="num">$1,180.00</span><span class="num muted">12%</span></div>
+                        <div class="cat-track"><div style="width: 38%"></div></div>
+                    </li>
+                </ul>
+                <div class="mock-foot">
+                    <span class="label-muted">Mayor cambio vs octubre</span>
+                    <span>Hogar <span class="delta-neg">+22%</span></span>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FEATURE 3: DEUDAS Y METAS -->
+    <!-- FEATURE 3: METAS Y DEUDAS -->
     <section id="metas" class="feature-stripe">
-        <div class="container">
-            <div class="row align-items-center g-5">
-                <div class="col-lg-6">
-                    <h2 class="feature-heading">Proyecta abonos y liquida deudas con certidumbre matemática</h2>
-                    <p class="feature-desc">
-                        Usa simuladores interactivos de amortización. Establece objetivos de ahorro o metas de liquidación rápida, proyectando el impacto directo de cada abono adicional en el tiempo total de liberación de capital.
-                    </p>
+        <div class="page-inner feature-grid">
+            <div class="feature-copy">
+                <h2 class="feature-heading">Ahorra para lo que quieres y lleva tus deudas a cero</h2>
+                <p class="feature-desc">
+                    Crea metas de ahorro o de deuda con fecha límite. Vector calcula cuánto necesitas aportar al mes, te dice si vas en camino o atrasado y registra cada abono, desde la meta o al transferir entre cuentas.
+                </p>
+            </div>
+            <div class="mockup-box goals" aria-hidden="true">
+                <div class="goal">
+                    <div class="mock-row-head">
+                        <div>
+                            <p class="label-strong">Fondo de emergencia</p>
+                            <p class="label-muted">Ahorro · Ahorro Hey</p>
+                        </div>
+                        <span class="goal-pct num">69%</span>
+                    </div>
+                    <div class="bearing"><div class="bearing-fill" style="width: 69%"></div></div>
+                    <div class="goal-line">
+                        <span><span class="num">$31,200.00</span> <span class="muted">de $45,000.00</span></span>
+                        <span class="status on-track">En camino</span>
+                    </div>
+                    <div class="goal-meta">
+                        <span>Fecha límite jun 2027</span>
+                        <span>Sugerido / mes <span class="num">$1,971.00</span></span>
+                    </div>
                 </div>
-                <div class="col-lg-6">
-                    <div class="mockup-box text-center p-4 p-md-5">
-                        <div class="d-inline-flex align-items-center justify-content-center p-3 rounded-circle mb-3" style="background: rgba(245, 199, 108, 0.15); color: var(--c-gold-light);">
-                            <i class="bi bi-bullseye fs-1"></i>
+
+                <div class="mock-divider"></div>
+
+                <div class="goal">
+                    <div class="mock-row-head">
+                        <div>
+                            <p class="label-strong">Liquidar Tarjeta Oro</p>
+                            <p class="label-muted">Deuda · Tarjeta Oro</p>
                         </div>
-                        <h3 class="fw-bold mb-1">Fondo de Emergencia</h3>
-                        <p class="text-muted mb-4">Progreso: $36,000 / $50,000 MXN</p>
-                        <div class="progress mb-4" style="height: 14px; background-color: var(--c-input-bg);">
-                            <div class="progress-bar" style="width: 72%; background-color: var(--c-gold-dark);">72%</div>
-                        </div>
-                        <div class="alert mb-0 text-start border-0 py-3 px-4" style="background: var(--c-input-bg); color: #cbd5e1; border-radius: 14px;">
-                            <i class="bi bi-graph-up-arrow text-success me-2"></i> Manteniendo el ritmo actual de abonos, completarás esta meta en <strong>2.5 meses</strong>.
-                        </div>
+                        <span class="goal-pct num">40%</span>
+                    </div>
+                    <div class="bearing"><div class="bearing-fill" style="width: 40%"></div></div>
+                    <div class="goal-line">
+                        <span><span class="num">$6,000.35</span> <span class="muted">pagados de $15,000.00</span></span>
+                        <span class="status late">Atrasada · faltan $1,500.00/mes</span>
+                    </div>
+                    <div class="goal-meta">
+                        <span>Fecha límite feb 2027</span>
+                        <span>Sugerido / mes <span class="num">$3,000.00</span></span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CLOSING CTA -->
+    <!-- CTA FINAL -->
     <section class="cta-bottom-section">
-        <div class="container">
-            <h2>¿Listo para tomar la dirección de tu dinero?</h2>
-            <p class="mx-auto">
-                Únete a Vector y experimenta una forma ágil, moderna y precisa de gobernar tus finanzas personales.
-            </p>
-            <a href="login.html" class="btn-discord-primary">
-                <i class="bi bi-box-arrow-in-right"></i>
-                Ingresar a Vector
-            </a>
+        <div class="page-inner cta-inner">
+            <h2>Toma la dirección de tu dinero</h2>
+            <p>Agrega tus cuentas, registra tus movimientos y ve tu balance neto en un solo lugar.</p>
+            <a href="login.html" class="btn-land btn-land-primary">Ingresar a Vector</a>
         </div>
     </section>
 
-    <!-- Bootstrap Bundle JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Transición de salida hacia el login
+    document.querySelectorAll('a[href="login.html"]').forEach(link => {
+        link.addEventListener('click', function (e) {
+            if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+            e.preventDefault();
+            const destino = this.getAttribute('href');
+            document.body.classList.add('page-exit');
+            setTimeout(() => { window.location.href = destino; }, 240);
+        });
+    });
+    // Al volver con el botón "atrás" del navegador, quitar el estado de salida
+    window.addEventListener('pageshow', () => document.body.classList.remove('page-exit'));
+    </script>
 </body>
 </html>
