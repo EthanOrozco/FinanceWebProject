@@ -3,7 +3,7 @@ class AppNavbar extends HTMLElement {
     this.innerHTML = `
       <aside class="side-navbar" id="sidebarNav">
         <div class="nav-mobile-header d-lg-none">
-          <a href="./dashboard.html" class="nav-logo">
+          <a href="/dashboard" class="nav-logo">
             <i class="fa-regular fa-compass nav-logo-icon"></i>
             <span>VECTOR</span>
           </a>
@@ -11,7 +11,7 @@ class AppNavbar extends HTMLElement {
             <i class="fa-solid fa-xmark"></i>
           </button>
         </div>
-        <a href="./dashboard.html" class="nav-logo d-none d-lg-flex">
+        <a href="/dashboard" class="nav-logo d-none d-lg-flex">
           <i class="fa-regular fa-compass nav-logo-icon"></i>
           <span>VECTOR</span>
         </a>
@@ -19,16 +19,16 @@ class AppNavbar extends HTMLElement {
         <nav class="flex-grow-1">
           <span class="nav-section-label">GENERAL</span>
           <ul class="nav-links list-unstyled">
-            <li><a href="./dashboard.html" class="nav-link"><i class="fa-solid fa-gauge"></i>Dashboard</a></li>
-            <li><a href="./transacciones.html" class="nav-link"><i class="fa-solid fa-right-left"></i>Transacciones</a></li>
-            <li><a href="./cuentas.html" class="nav-link"><i class="fa-solid fa-wallet"></i>Cuentas</a></li>
-            <li><a href="./metas.html" class="nav-link"><i class="fa-solid fa-bullseye"></i>Metas y deudas</a></li>
-            <li><a href="./categorias.html" class="nav-link"><i class="fa-solid fa-tag"></i>Categorías</a></li>
+            <li><a href="/dashboard" class="nav-link"><i class="fa-solid fa-gauge"></i>Dashboard</a></li>
+            <li><a href="/transacciones" class="nav-link"><i class="fa-solid fa-right-left"></i>Transacciones</a></li>
+            <li><a href="/cuentas" class="nav-link"><i class="fa-solid fa-wallet"></i>Cuentas</a></li>
+            <li><a href="/metas" class="nav-link"><i class="fa-solid fa-bullseye"></i>Metas y deudas</a></li>
+            <li><a href="/categorias" class="nav-link"><i class="fa-solid fa-tag"></i>Categorías</a></li>
           </ul>
 
           <span class="nav-section-label" style="margin-top: 8px;">CUENTA</span>
           <ul class="nav-links list-unstyled">
-            <li><a href="./perfil.html" class="nav-link"><i class="fa-solid fa-user"></i>Perfil</a></li>
+            <li><a href="/perfil" class="nav-link"><i class="fa-solid fa-user"></i>Perfil</a></li>
           </ul>
         </nav>
 
@@ -61,7 +61,7 @@ class AppNavbar extends HTMLElement {
                 </p>
                 <div class="d-flex gap-2 mt-3">
                   <button class="btn btn-secondary flex-fill" data-bs-dismiss="modal">Cancelar</button>
-                  <button class="btn btn-primary flex-fill" onclick="window.location.href='./login.html'">
+                  <button class="btn btn-primary flex-fill" onclick="window.location.href = '/login'">
                     Cerrar sesión
                   </button>
                 </div>

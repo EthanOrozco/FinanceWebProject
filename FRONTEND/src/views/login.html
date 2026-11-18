@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <!-- Estilos de Login -->
-    <link rel="stylesheet" href="../styles/login.css">
+    <link rel="stylesheet" href="/styles/login.css">
 </head>
 <body class="login-page">
 
@@ -22,7 +22,7 @@
     <header class="top-navbar">
         <div class="container-fluid px-4 px-md-5 d-flex justify-content-between align-items-center">
             <!-- Logo que redirige a la Landing -->
-            <a href="landing.html" class="navbar-brand-custom" title="Volver al inicio">
+            <a href="/" class="navbar-brand-custom" title="Volver al inicio">
                 <i class="bi bi-compass fs-4"></i>
                 <span>VECTOR</span>
             </a>
@@ -48,7 +48,7 @@
                 
                 <!-- COLUMNA IZQUIERDA: IDENTIDAD Y DESCRIPCIÓN -->
                 <div class="col-lg-6 text-center text-lg-start">
-                    <a href="landing.html" style="text-decoration: none; display: inline-block;">
+                    <a href="/" style="text-decoration: none; display: inline-block;">
                         <h1 class="brand-headline">VECTOR</h1>
                     </a>
                     <p class="brand-subtext">
@@ -167,7 +167,7 @@
             document.body.classList.add('page-loaded');
         });
 
-        document.querySelectorAll('a[href="landing.html"]').forEach(link => {
+        document.querySelectorAll('a[href="/"]').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 const destino = this.getAttribute('href');
@@ -186,7 +186,7 @@
             document.body.classList.remove('page-loaded');
             document.body.classList.add('page-exit');
             setTimeout(() => {
-                window.location.href = 'dashboard.html';
+                window.location.href = '/dashboard';
             }, 350);
         });
 
@@ -197,11 +197,11 @@
             document.body.classList.add('page-exit');
 
             setTimeout(() => {
-                window.location.href = 'dashboard.html';
+                window.location.href = '/dashboard';
             }, 350);
         });
     </script>
-    <script src="../controllers/env.js"></script>
-    <script src="../controllers/auth_controller.js"></script>
+    <script src="/controllers/env.js"></script>
+    <script src="/controllers/auth_controller.js"></script>
 </body>
 </html>

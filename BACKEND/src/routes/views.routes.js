@@ -2,28 +2,20 @@ const { Router } = require('express');
 const path = require('path');
 const router = Router();
 
-router.get('/', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/index.html'));
-});
+const VIEWS_DIR = path.resolve(__dirname, '../../../FRONTEND/src/views');
 
-router.get('/login', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/login.html'));
-});
+const pages = {
+  '/':              'landing.html',
+  '/login':         'login.html',
+  '/dashboard':     'dashboard.html',
+  '/cuentas':       'cuentas.html',
+  '/transacciones': 'transacciones.html',
+  '/categorias':    'categorias.html',
+  '/metas':         'metas.html',
+  '/perfil':        'perfil.html',
+};
 
-router.get('/dashboard', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/dashboard.html'));
-});
-
-router.get('/transacciones', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/transacciones.html'));
-});
-
-router.get('/metas', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/metas.html'));
-})
-
-router.get('/perfil', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../../../FRONTEND/src/views/perfil.html'));
-})
-
+for (const [url, file] of Object.entries(pages)) {
+  router.get(url, (req, res) => res.sendFile(path.join(VIEWS_DIR, file)))
+}
 module.exports = router;
