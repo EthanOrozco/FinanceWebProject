@@ -1,6 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
+
+const connectDB = require('./config/db');
+const port = process.env.PORT || 3000;
+const errorHandler = require('./middleware/errorHandler');
 
 const usersRoutes = require('./routes/users.routes');
 const accountsRoutes = require('./routes/accounts.routes');
@@ -10,7 +15,6 @@ const transactionsRoutes = require('./routes/transactions.routes')
 const viewsRoutes = require('./routes/views.routes');
 
 const app = express();
-const port = 3000;
 
 app.use(express.json());
 app.use(cors());
@@ -24,6 +28,10 @@ app.use('/api/transactions', transactionsRoutes);
 
 app.use('/', viewsRoutes);
 
-app.listen(port, () => {
-  console.log(`server running on http://localhost:${port}`);
+app.use(errorHandler);
+
+connectDB().then(() => {
+  app.listen(port, () => {
+    console.log(`server listening on http://localhost:${port}`);
+  });
 });
