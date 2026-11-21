@@ -93,7 +93,7 @@
 .kind-tab:hover { color: var(--c-white); }
 
 .kind-tab.active {
-  color: var(--c-gold-dark);
+  color: var(--c-gold-text);
   border-bottom-color: var(--c-gold-dark);
 }
 
@@ -180,8 +180,8 @@
   font-size: 13px;
   outline: none;
   cursor: pointer;
-  color-scheme: dark;
 }
+
 
 .sort-label select:focus { border-color: var(--c-gold-dark); }
 
@@ -204,7 +204,7 @@
   transition: border-color 0.15s;
 }
 
-.cat-card:hover { border-color: #3A4560; }
+.cat-card:hover { border-color: var(--c-border-hover); }
 
 .cat-card-header {
   display: flex;
@@ -260,7 +260,7 @@
   border-radius: 8px;
   border: none;
   background: transparent;
-  color: #AEB5C4;
+  color: var(--c-text-3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -269,10 +269,10 @@
   transition: background-color 0.15s, color 0.15s;
 }
 
-.cat-action-btn:hover { background: #262E40; color: var(--c-white); }
+.cat-action-btn:hover { background: var(--c-hover); color: var(--c-white); }
 
-.cat-delete-btn { color: #F0918A; }
-.cat-delete-btn:hover { background: #3A2224; color: #F0918A; }
+.cat-delete-btn { color: var(--c-coral); }
+.cat-delete-btn:hover { background: var(--c-coral-tint); color: var(--c-coral); }
 
 .cat-lock-btn {
   width: 36px;
@@ -280,7 +280,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #8A93A6;
+  color: var(--c-text-4);
   font-size: 13px;
 }
 
@@ -314,7 +314,7 @@
 .cat-bar-track {
   height: 6px;
   border-radius: 3px;
-  background: #161B26;
+  background: var(--c-input-bg);
   overflow: hidden;
 }
 
@@ -340,7 +340,7 @@
   min-height: 40px;
   border-radius: 9px;
   border: 1px solid var(--c-slate-blue);
-  color: #C4CAD6;
+  color: var(--c-text-2);
   font-size: 13px;
   font-weight: 600;
   text-decoration: none;
@@ -357,7 +357,7 @@
 .cat-add-card {
   min-height: 240px;
   border-radius: 16px;
-  border: 2px dashed #2F3850;
+  border: 2px dashed var(--c-dashed);
   background: transparent;
   color: var(--c-text-muted);
   font: inherit;
@@ -374,14 +374,14 @@
 
 .cat-add-card:hover {
   border-color: var(--c-gold-dark);
-  color: var(--c-gold-dark);
+  color: var(--c-gold-text);
 }
 
 .cat-add-icon {
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: #1E2433;
+  background: var(--c-surface-2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -428,7 +428,7 @@
 .modal .form-label {
   font-size: 13px;
   font-weight: 500;
-  color: #C4CAD6;
+  color: var(--c-text-2);
   margin-bottom: 4px;
 }
 
@@ -439,7 +439,7 @@
   gap: 12px;
   padding: 14px;
   border-radius: 12px;
-  background: #161B26;
+  background: var(--c-sunken);
   border: 1px solid var(--c-slate-blue);
   margin-bottom: 20px;
 }
@@ -462,7 +462,7 @@
   gap: 4px;
   padding: 4px;
   border-radius: 10px;
-  background: #161B26;
+  background: var(--c-sunken);
 }
 
 .btn-type {
@@ -480,8 +480,8 @@
 }
 
 .btn-type.active {
-  background: #2A2418;
-  color: var(--c-gold-dark);
+  background: var(--c-gold-tint);
+  color: var(--c-gold-text);
 }
 
 /* Color swatches */
@@ -547,7 +547,7 @@
   border-radius: 10px;
   border: none;
   background-color: var(--c-gold-dark);
-  color: var(--c-black);
+  color: var(--c-on-gold);
   font: inherit;
   font-size: 14px;
   font-weight: 700;
@@ -562,14 +562,15 @@
   width: 52px;
   height: 52px;
   border-radius: 14px;
-  background: #3A2224;
-  color: #F0918A;
+  background: var(--c-coral-tint);
+  color: var(--c-coral);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 22px;
   margin: 0 auto;
 }
+
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 767.98px) {

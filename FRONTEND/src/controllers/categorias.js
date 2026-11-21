@@ -1,11 +1,11 @@
 const PAL = {
-  gold: { color: "#E9B95C", tint: "#2A2418", label: "Dorado" },
-  blue: { color: "#6C9EF8", tint: "#1E2A44", label: "Azul" },
-  teal: { color: "#5ED3A8", tint: "#173329", label: "Verde" },
-  purple: { color: "#A98BF5", tint: "#2A2140", label: "Morado" },
-  coral: { color: "#F0918A", tint: "#3A2224", label: "Coral" },
-  pink: { color: "#F28CC3", tint: "#3A2033", label: "Rosa" },
-  slate: { color: "#AEB5C4", tint: "#262E40", label: "Gris" },
+  gold: { color: "var(--c-gold)", tint: "var(--c-gold-tint)", label: "Dorado" },
+  blue: { color: "var(--c-blue)", tint: "var(--c-blue-tint)", label: "Azul" },
+  teal: { color: "var(--c-teal)", tint: "var(--c-teal-tint)", label: "Verde" },
+  purple: { color: "var(--c-purple)", tint: "var(--c-purple-tint)", label: "Morado" },
+  coral: { color: "var(--c-coral)", tint: "var(--c-coral-tint)", label: "Coral" },
+  pink: { color: "var(--c-pink)", tint: "var(--c-pink-tint)", label: "Rosa" },
+  slate: { color: "var(--c-text-3)", tint: "var(--c-hover)", label: "Gris" },
 };
 
 const ICONS = [
@@ -130,7 +130,7 @@ const buildSwatches = () => {
     btn.className = 'swatch-btn' + (key === selectedColor ? ' active' : '');
     btn.setAttribute('aria-label', 'Color ' + p.label);
     btn.setAttribute('aria-pressed', key === selectedColor ? 'true' : 'false');
-    btn.style.cssText = key === selectedColor ? `background:${p.tint}; border-color: #E8EAF0;` : `background:${p.tint}; border-color:transparent;`;
+    btn.style.cssText = key === selectedColor ? `background:${p.tint}; border-color: var(--c-text-strong);` : `background:${p.tint}; border-color:transparent;`;
     btn.innerHTML = `<span style="background:${p.color};"></span>`;
     btn.onclick = () => { selectedColor = key; buildSwatches(); buildIcons(); updatePreview(); };
     grid.appendChild(btn);
@@ -149,7 +149,7 @@ const buildIcons = () => {
         btn.setAttribute('aria-pressed', ic.key === selectedIcon ? 'true' : 'false');
         btn.style.cssText = ic.key === selectedIcon
           ? `background:${p.tint}; color:${p.color}; border-color:${p.color};`
-          : 'background:#161B26; color:#AEB5C4; border-color:transparent;';
+          : 'background:var(--c-sunken); color:var(--c-text-3); border-color:transparent;';
         btn.innerHTML = `<i class="fa-solid ${ic.key}"></i>`;
         btn.onclick = () => { selectedIcon = ic.key; buildIcons(); updatePreview(); };
         grid.appendChild(btn);

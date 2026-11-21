@@ -114,8 +114,8 @@
   font-weight: 700;
 }
 
-.text-income { color: #5ED3A8; }
-.text-expense { color: #F0918A; }
+.text-income { color: var(--c-teal); }
+.text-expense { color: var(--c-coral); }
 
 .table-card {
   background: var(--c-card-bg);
@@ -195,7 +195,7 @@
 
 .type-tab.active {
   background: var(--c-gold-dark);
-  color: var(--c-black);
+  color: var(--c-on-gold);
 }
 
 .filter-row-2 {
@@ -226,7 +226,6 @@
   color: var(--c-white);
   font: inherit;
   font-size: 13px;
-  color-scheme: dark;
   box-sizing: border-box;
   outline: none;
   transition: border-color 0.15s;
@@ -250,7 +249,7 @@
   font-size: 11px;
   letter-spacing: 0.08em;
   color: var(--c-text-muted);
-  background: #1A2030;
+  background: var(--c-surface-2);
 }
 
 .tx-table thead th {
@@ -262,8 +261,8 @@
 .tx-table thead th:first-child { padding-left: 20px; }
 .tx-table thead th:last-child  { padding-right: 20px; }
 
-.tx-row { border-top: 1px solid #262E40; transition: background-color 0.1s; }
-.tx-row:hover { background: #232A3B; }
+.tx-row { border-top: 1px solid var(--c-hover); transition: background-color 0.1s; }
+.tx-row:hover { background: var(--c-row-hover); }
 
 .tx-row td { padding: 10px 16px; vertical-align: middle; }
 .tx-row td:first-child { padding-left: 20px; }
@@ -299,9 +298,9 @@
   font-size: 13px;
 }
 
-.tx-income-icon   { background: #173329; color: #5ED3A8; }
-.tx-expense-icon  { background: #3A2224; color: #F0918A; }
-.tx-transfer-icon { background: #1A2538; color: #6C9EF8; }
+.tx-income-icon   { background: var(--c-teal-tint); color: var(--c-teal); }
+.tx-expense-icon  { background: var(--c-coral-tint); color: var(--c-coral); }
+.tx-transfer-icon { background: var(--c-blue-tint); color: var(--c-blue); }
 
 .tx-title {
   display: block;
@@ -332,7 +331,7 @@
   background: var(--c-black);
   font-size: 12px;
   font-weight: 500;
-  color: #C4CAD6;
+  color: var(--c-text-2);
   white-space: nowrap;
 }
 
@@ -346,7 +345,7 @@
 }
 
 .tx-acct {
-  color: #C4CAD6;
+  color: var(--c-text-2);
   white-space: nowrap;
 }
 
@@ -368,7 +367,7 @@
   border-radius: 8px;
   border: none;
   background: transparent;
-  color: #AEB5C4;
+  color: var(--c-text-3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -377,9 +376,9 @@
   transition: background-color 0.15s, color 0.15s;
 }
 
-.tx-btn:hover { background: #262E40; color: var(--c-white); }
-.tx-btn-danger { color: #F0918A; }
-.tx-btn-danger:hover { background: #3A2224; color: #F0918A; }
+.tx-btn:hover { background: var(--c-hover); color: var(--c-white); }
+.tx-btn-danger { color: var(--c-coral); }
+.tx-btn-danger:hover { background: var(--c-coral-tint); color: var(--c-coral); }
 
 .tx-pagination {
   display: flex;
@@ -407,7 +406,7 @@
 .pagination .page-item.active .page-link {
   background: var(--c-gold-dark);
   border-color: var(--c-gold-dark);
-  color: var(--c-black);
+  color: var(--c-on-gold);
 }
 
 .pagination .page-link:hover {
@@ -456,7 +455,7 @@
 
 .btn-type.active {
   background-color: var(--c-gold-dark);
-  color: var(--c-black);
+  color: var(--c-on-gold);
 }
 
 .type-selector {
@@ -472,8 +471,8 @@
   width: 52px;
   height: 52px;
   border-radius: 14px;
-  background: #3A2224;
-  color: #F0918A;
+  background: var(--c-coral-tint);
+  color: var(--c-coral);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -125,8 +125,8 @@
   color: var(--c-text-muted);
 }
 
-.text-income { color: #5ED3A8; }
-.text-expense { color: #F0918A; }
+.text-income { color: var(--c-teal); }
+.text-expense { color: var(--c-coral); }
 
 /* ===== TABS ===== */
 .type-tabs {
@@ -159,7 +159,7 @@
 
 .type-tab.active {
   background: var(--c-gold-dark);
-  color: var(--c-black);
+  color: var(--c-on-gold);
 }
 
 /* ===== GOAL CARDS ===== */
@@ -274,9 +274,9 @@
   flex-shrink: 0;
 }
 
-.status-ok     { background: #173329; color: #5ED3A8; }
-.status-late   { background: #3A2224; color: #F0918A; }
-.status-almost { background: #3A2F1C; color: var(--c-gold-light); }
+.status-ok     { background: var(--c-teal-tint); color: var(--c-teal); }
+.status-late   { background: var(--c-coral-tint); color: var(--c-coral); }
+.status-almost { background: var(--c-gold-tint-2); color: var(--c-gold-text-2); }
 
 .goal-details {
   display: grid;
@@ -310,7 +310,7 @@
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
-  border-bottom: 1px solid #262E40;
+  border-bottom: 1px solid var(--c-hover);
   font-size: 13px;
 }
 
@@ -364,7 +364,7 @@
   border-radius: 8px;
   border: none;
   background: transparent;
-  color: #AEB5C4;
+  color: var(--c-text-3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -374,9 +374,9 @@
   transition: background-color 0.15s, color 0.15s;
 }
 
-.tx-btn:hover { background: #262E40; color: var(--c-white); }
-.tx-btn-danger { color: #F0918A; }
-.tx-btn-danger:hover { background: #3A2224; color: #F0918A; }
+.tx-btn:hover { background: var(--c-hover); color: var(--c-white); }
+.tx-btn-danger { color: var(--c-coral); }
+.tx-btn-danger:hover { background: var(--c-coral-tint); color: var(--c-coral); }
 
 /* ===== MODAL ===== */
 .modal-content {
@@ -419,7 +419,7 @@
 
 .btn-type.active {
   background-color: var(--c-gold-dark);
-  color: var(--c-black);
+  color: var(--c-on-gold);
 }
 
 .type-selector {
@@ -435,8 +435,8 @@
   width: 52px;
   height: 52px;
   border-radius: 14px;
-  background: #3A2224;
-  color: #F0918A;
+  background: var(--c-coral-tint);
+  color: var(--c-coral);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -448,8 +448,8 @@
   width: 52px;
   height: 52px;
   border-radius: 14px;
-  background: #3A2F1C;
-  color: var(--c-gold-light);
+  background: var(--c-gold-tint-2);
+  color: var(--c-gold-text-2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -472,7 +472,7 @@
 
 .completed-amount strong {
   font-size: 20px;
-  color: #5ED3A8;
+  color: var(--c-teal);
 }
 
 @media (max-width: 767.98px) {

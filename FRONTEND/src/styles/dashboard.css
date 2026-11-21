@@ -88,13 +88,13 @@
 .card-header-row a {
   font-size: 13px;
   font-weight: 600;
-  color: var(--c-gold-dark);
+  color: var(--c-gold-text);
   text-decoration: none;
   white-space: nowrap;
 }
 
 .card-header-row a:hover {
-  color: var(--c-gold-light);
+  color: var(--c-gold-text-2);
 }
 
 .period-toggle {
@@ -119,7 +119,7 @@
 .period-toggle .btn.active,
 .period-toggle .btn:active {
   background-color: var(--c-gold-dark) !important;
-  color: var(--c-black) !important;
+  color: var(--c-on-gold) !important;
   box-shadow: none !important;
 }
 
@@ -129,7 +129,7 @@
 }
 
 .balance-amount {
-  color: var(--c-gold-dark);
+  color: var(--c-gold-text);
   font-size: 2.8rem;
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -176,14 +176,14 @@
 }
 
 .alert-payment {
-  background-color: #2A2418;
-  border: 1px solid #5A4724;
+  background-color: var(--c-gold-tint);
+  border: 1px solid var(--c-gold-line);
   border-radius: 12px;
-  color: #F3CF85;
+  color: var(--c-gold-ink);
 }
 
 .alert-payment p {
-  color: #C9BFA8;
+  color: var(--c-text-2);
 }
 
 .card-list-item {
@@ -222,8 +222,8 @@
   white-space: nowrap;
 }
 
-.text-income { color: #5ED3A8; }
-.text-expense { color: #F0918A; }
+.text-income { color: var(--c-teal); }
+.text-expense { color: var(--c-coral); }
 
 .goal-item {
   padding-bottom: 16px;
@@ -279,7 +279,7 @@
 
 .modal .btn-type.active {
   background-color: var(--c-gold-dark);
-  color: var(--c-black);
+  color: var(--c-on-gold);
 }
 
 .type-selector {
@@ -340,7 +340,7 @@
 
 .cat-name {
   flex: 1;
-  color: #C4CAD6;
+  color: var(--c-text-2);
 }
 
 .cat-pct {

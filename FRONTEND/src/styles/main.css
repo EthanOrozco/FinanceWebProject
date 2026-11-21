@@ -1,4 +1,12 @@
+/*
+ * Tokens are named after their dark-mode color, but they mean a ROLE:
+ *   --c-white  = primary text        --c-black     = page / deepest surface
+ *   --c-on-gold = text on gold fills  --c-gold-text = gold used as text/icon
+ * Light mode swaps the values, never the names. Don't hardcode hex in page
+ * CSS, HTML or JS: add a token here with a value for both themes.
+ */
 :root {
+    color-scheme: dark;
     --c-white: #ffffff;
     --c-black: #111418;
     --c-navy-dark: #1e2638;
@@ -8,6 +16,94 @@
     --c-card-bg: #1c2333;
     --c-input-bg: #273144;
     --c-text-muted: #9aa7bf;
+    --c-hairline: rgba(255, 255, 255, 0.07);
+
+    --c-on-gold: #111418;
+    --c-gold-text: #c9933b;
+    --c-gold-text-2: #f5c76c;
+
+    --c-text-strong: #E8EAF0;
+    --c-text-2: #C4CAD6;
+    --c-text-3: #AEB5C4;
+    --c-text-4: #8A93A6;
+
+    --c-sidebar: #12161F;
+    --c-sunken: #161B26;
+    --c-surface-2: #1A2030;
+    --c-hover: #262E40;
+    --c-row-hover: #232A3B;
+    --c-border-hover: #3A4560;
+    --c-border-strong: #4e5f7e;
+    --c-grid: #2a3245;
+    --c-dashed: #2F3850;
+    --c-sidebar-line: #232A3A;
+    --c-gold-line: #5A4724;
+
+    /* accent hues: ink = foreground, tint = chip/pill background */
+    --c-gold: #E9B95C;      --c-gold-ink: #F3CF85;  --c-gold-tint: #2A2418;  --c-gold-tint-2: #3A2F1C;
+    --c-teal: #5ED3A8;      --c-teal-tint: #173329;
+    --c-coral: #F0918A;     --c-coral-tint: #3A2224; --c-coral-line: #5A3134;
+    --c-blue: #6C9EF8;      --c-blue-2: #8FB4FA;    --c-blue-tint: #1E2A44;
+    --c-purple: #A98BF5;    --c-purple-tint: #2A2140;
+    --c-pink: #F28CC3;      --c-pink-tint: #3A2033;
+    --c-slate: #7D869A;
+}
+
+/*
+ * Light: "slate paper and brass". No surface is pure white; the page sits at
+ * ~79% luminance and cards at ~90%, so a full screen never glares. Accents are
+ * deepened versions of the dark hues so they pass AA on light surfaces.
+ */
+[data-bs-theme="light"] {
+    color-scheme: light;
+    --c-white: #1A2130;
+    --c-black: #E2E6EC;
+    --c-navy-dark: #EAEDF1;
+    --c-slate-blue: #CBD2DC;
+    --c-gold-dark: #C99A45;
+    --c-gold-light: #D6AA58;
+    --c-card-bg: #F1F3F6;
+    --c-input-bg: #E6E9EE;
+    --c-text-muted: #5B6578;
+    --c-hairline: rgba(26, 33, 48, 0.10);
+
+    --c-on-gold: #111418;
+    --c-gold-text: #8C6216;
+    --c-gold-text-2: #7A5513;
+
+    --c-text-strong: #141A27;
+    --c-text-2: #3B4456;
+    --c-text-3: #4D5668;
+    --c-text-4: #626B7E;
+
+    --c-sidebar: #EAEDF1;
+    --c-sunken: #E2E6EC;
+    --c-surface-2: #E8EBF0;
+    --c-hover: #DDE2E9;
+    --c-row-hover: #E7EAEF;
+    --c-border-hover: #B5BECB;
+    --c-border-strong: #9AA4B5;
+    --c-grid: #D5DBE3;
+    --c-dashed: #B5BECB;
+    --c-sidebar-line: #D5DBE3;
+    --c-gold-line: #DCC79D;
+
+    --c-gold: #A8761F;      --c-gold-ink: #7A5513;  --c-gold-tint: #EEE2C6;  --c-gold-tint-2: #E8D7B3;
+    --c-teal: #136E52;      --c-teal-tint: #D6EADF;
+    --c-coral: #A53C35;     --c-coral-tint: #F2DCD8; --c-coral-line: #E0B4AF;
+    --c-blue: #2D5CB8;      --c-blue-2: #2D5CB8;    --c-blue-tint: #DCE4F4;
+    --c-purple: #6A4EC2;    --c-purple-tint: #E5DFF5;
+    --c-pink: #A93A77;      --c-pink-tint: #F3DCE8;
+    --c-slate: #646D80;
+
+    /* keep Bootstrap components (modals, dropdowns, inputs) off pure white */
+    --bs-body-bg: var(--c-card-bg);
+    --bs-body-color: var(--c-white);
+    --bs-emphasis-color: var(--c-text-strong);
+    --bs-secondary-color: var(--c-text-muted);
+    --bs-secondary-bg: var(--c-black);
+    --bs-tertiary-bg: var(--c-input-bg);
+    --bs-border-color: var(--c-slate-blue);
 }
 
 body {
@@ -21,7 +117,7 @@ body {
 .btn-gold-primary {
     background-color: var(--c-gold-dark);
     border: none;
-    color: #111418;
+    color: var(--c-on-gold);
     font-weight: 700;
     font-size: 1rem;
     padding: 0.75rem 1.25rem;
@@ -36,7 +132,7 @@ body {
 
 .btn-gold-primary:hover {
     background-color: var(--c-gold-light);
-    color: #111418;
+    color: var(--c-on-gold);
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(201, 147, 59, 0.3);
 }

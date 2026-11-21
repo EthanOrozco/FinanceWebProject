@@ -33,7 +33,7 @@ class AppNavbar extends HTMLElement {
         </nav>
 
         <div class="nav-user-card ">
-          <div class="nav-avatar">EO</div>
+          <div class="nav-avatar"></div>
           <div class="nav-user-info">
             <span class="nav-user-name">Ethan Orozco</span>
             <span class="nav-user-email">ethan@example.com</span>
@@ -52,7 +52,7 @@ class AppNavbar extends HTMLElement {
           <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
               <div class="modal-body p-4">
-                <div class="delete-icon-wrap" style="background:#1E2A44;color:#6C9EF8;">
+                <div class="delete-icon-wrap" style="background:var(--c-blue-tint);color:var(--c-blue);">
                   <i class="fa-solid fa-right-from-bracket"></i>
                 </div>
                 <h5 class="mt-3 mb-1 text-center" id="logoutModalLabel" style="font-size:16px;">¿Cerrar sesión?</h5>
@@ -79,6 +79,12 @@ class AppNavbar extends HTMLElement {
         link.classList.add('active-link');
       }
     });
+
+    const avatarEl = this.querySelector('.nav-avatar');
+    const name = this.querySelector('.nav-user-name')?.textContent || 'Usuario';
+    const fillAvatar = () => { avatarEl.innerHTML = window.blobatar(name, { size: 36, background: 'circle' }); };
+    if (window.blobatar) fillAvatar();
+    else window.addEventListener('blobatar-ready', fillAvatar, { once: true });
   }
 }
 
