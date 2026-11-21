@@ -429,17 +429,6 @@
         plugins: [centerTextPlugin]
       });
       
-      function openSidebar() {
-        document.getElementById('sidebarNav').classList.add('sidebar-open');
-        document.getElementById('sidebarBackdrop').classList.add('show');
-        document.body.style.overflow = 'hidden';
-      }
-      function closeSidebar() {
-        document.getElementById('sidebarNav').classList.remove('sidebar-open');
-        document.getElementById('sidebarBackdrop').classList.remove('show');
-        document.body.style.overflow = '';
-      }
-
       document.querySelectorAll('.btn-type').forEach(btn => {
         btn.addEventListener('click', () => {
           document.querySelectorAll('.btn-type').forEach(b => b.classList.remove('active'));

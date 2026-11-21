@@ -25,7 +25,6 @@ const createCategory = async (req, res) => {
   const category = await Category.create({
     name, kind, color, icon,
     userId: req.userId,
-    isDefault: false
   });
   res.status(201).json(category);
 };

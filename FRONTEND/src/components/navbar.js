@@ -87,3 +87,15 @@ customElements.define('app-navbar', AppNavbar)
 function openLogoutModal() {
   new bootstrap.Modal(document.getElementById('logoutModal')).show();
 }
+
+function openSidebar() {
+  document.getElementById('sidebarNav').classList.add('sidebar-open');
+  document.getElementById('sidebarBackdrop').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSidebar() {
+  document.getElementById('sidebarNav').classList.remove('sidebar-open');
+  document.getElementById('sidebarBackdrop').classList.remove('show');
+  document.body.style.overflow = '';
+}
