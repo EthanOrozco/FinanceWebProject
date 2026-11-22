@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="es" data-bs-theme="dark">
+<html lang="es">
   <head>
     <title>Vector — Transacciones</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="/controllers/theme.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -12,6 +13,7 @@
     <link rel="stylesheet" href="/styles/navbar.css"/>
     <link rel="stylesheet" href="/styles/transacciones.css"/>
     <script src="/components/navbar.js" defer></script>
+    <script type="module" src="/lib/blobatar-init.js"></script>
   </head>
 
   <body>
@@ -29,6 +31,9 @@
             <span>Transacciones</span>
           </nav>
           <div class="ms-auto topbar-actions">
+            <button id="theme-btn" class="btn btn-outline-secondary d-none d-sm-flex" onclick="toggleTheme()" aria-label="Cambiar tema">
+              <i class="fa-regular fa-moon"></i>
+            </button>
             <button class="btn btn-tx-secondary d-none d-sm-flex" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal">
               <i class="fa-solid fa-right-left"></i>
               <span class="d-none d-md-inline">Transferencia</span>
@@ -70,7 +75,7 @@
             <div class="col-6 col-md-3">
               <div class="stat-card">
                 <span class="stat-label">Flujo neto</span>
-                <span class="stat-value" style="color: var(--c-gold-dark);">+$17,727.50</span>
+                <span class="stat-value" style="color: var(--c-gold-text);">+$17,727.50</span>
               </div>
             </div>
           </div>
@@ -155,7 +160,7 @@
                   <tr class="tx-row">
                     <td class="tx-date"><span>8 nov</span><span class="tx-time">10:32</span></td>
                     <td><div class="tx-concept"><span class="tx-icon-wrap tx-income-icon"><i class="fa-solid fa-arrow-down-left"></i></span><div><span class="tx-title">Nómina quincenal</span><span class="tx-note">Depósito SPEI — BBVA Nómina</span></div></div></td>
-                    <td><span class="cat-badge" style="--dot:#5ED3A8">Nómina</span></td>
+                    <td><span class="cat-badge" style="--dot:var(--c-teal)">Nómina</span></td>
                     <td class="tx-acct">BBVA Débito</td>
                     <td class="tx-amount text-income">+$9,200.00</td>
                     <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
@@ -163,7 +168,7 @@
                   <tr class="tx-row">
                     <td class="tx-date"><span>8 nov</span><span class="tx-time">09:15</span></td>
                     <td><div class="tx-concept"><span class="tx-icon-wrap tx-expense-icon"><i class="fa-solid fa-arrow-up-right"></i></span><div><span class="tx-title">Despensa Soriana</span><span class="tx-note">Compra semanal</span></div></div></td>
-                    <td><span class="cat-badge" style="--dot:#c9933b">Comida</span></td>
+                    <td><span class="cat-badge" style="--dot:var(--c-gold-dark)">Comida</span></td>
                     <td class="tx-acct">Tarjeta Nu</td>
                     <td class="tx-amount text-expense">−$1,286.40</td>
                     <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
@@ -171,7 +176,7 @@
                   <tr class="tx-row">
                     <td class="tx-date"><span>7 nov</span><span class="tx-time">18:40</span></td>
                     <td><div class="tx-concept"><span class="tx-icon-wrap tx-expense-icon"><i class="fa-solid fa-arrow-up-right"></i></span><div><span class="tx-title">Uber al trabajo</span><span class="tx-note">Viaje Colonia del Valle → Centro</span></div></div></td>
-                    <td><span class="cat-badge" style="--dot:#6C9EF8">Transporte</span></td>
+                    <td><span class="cat-badge" style="--dot:var(--c-blue)">Transporte</span></td>
                     <td class="tx-acct">Tarjeta Oro</td>
                     <td class="tx-amount text-expense">−$148.00</td>
                     <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
@@ -179,15 +184,15 @@
                   <tr class="tx-row">
                     <td class="tx-date"><span>7 nov</span><span class="tx-time">12:00</span></td>
                     <td><div class="tx-concept"><span class="tx-icon-wrap tx-transfer-icon"><i class="fa-solid fa-right-left"></i></span><div><span class="tx-title">Transferencia a Ahorro</span><span class="tx-note">Ahorro programado mensual</span></div></div></td>
-                    <td><span class="cat-badge" style="--dot:#7D869A">Otros</span></td>
+                    <td><span class="cat-badge" style="--dot:var(--c-slate)">Otros</span></td>
                     <td class="tx-acct">BBVA Débito</td>
-                    <td class="tx-amount" style="color:#8A93A6">$5,000.00</td>
+                    <td class="tx-amount" style="color:var(--c-text-4)">$5,000.00</td>
                     <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
                   </tr>
                   <tr class="tx-row">
                     <td class="tx-date"><span>6 nov</span><span class="tx-time">08:00</span></td>
                     <td><div class="tx-concept"><span class="tx-icon-wrap tx-expense-icon"><i class="fa-solid fa-arrow-up-right"></i></span><div><span class="tx-title">Spotify Premium</span><span class="tx-note">Suscripción mensual</span></div></div></td>
-                    <td><span class="cat-badge" style="--dot:#5ED3A8">Suscripciones</span></td>
+                    <td><span class="cat-badge" style="--dot:var(--c-teal)">Suscripciones</span></td>
                     <td class="tx-acct">Tarjeta Nu</td>
                     <td class="tx-amount text-expense">−$129.00</td>
                     <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
@@ -195,7 +200,7 @@
                   <tr class="tx-row">
                     <td class="tx-date"><span>5 nov</span><span class="tx-time">20:15</span></td>
                     <td><div class="tx-concept"><span class="tx-icon-wrap tx-expense-icon"><i class="fa-solid fa-arrow-up-right"></i></span><div><span class="tx-title">Cine Cinemex</span><span class="tx-note">2 boletos + palomitas</span></div></div></td>
-                    <td><span class="cat-badge" style="--dot:#F0918A">Ocio</span></td>
+                    <td><span class="cat-badge" style="--dot:var(--c-coral)">Ocio</span></td>
                     <td class="tx-acct">Tarjeta Oro</td>
                     <td class="tx-amount text-expense">−$380.00</td>
                     <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
@@ -203,7 +208,7 @@
                   <tr class="tx-row">
                     <td class="tx-date"><span>4 nov</span><span class="tx-time">14:30</span></td>
                     <td><div class="tx-concept"><span class="tx-icon-wrap tx-expense-icon"><i class="fa-solid fa-arrow-up-right"></i></span><div><span class="tx-title">CFE — Luz</span><span class="tx-note">Bimestre oct–nov</span></div></div></td>
-                    <td><span class="cat-badge" style="--dot:#A98BF5">Hogar</span></td>
+                    <td><span class="cat-badge" style="--dot:var(--c-purple)">Hogar</span></td>
                     <td class="tx-acct">BBVA Débito</td>
                     <td class="tx-amount text-expense">−$743.00</td>
                     <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
@@ -211,7 +216,7 @@
                   <tr class="tx-row">
                     <td class="tx-date"><span>3 nov</span><span class="tx-time">11:00</span></td>
                     <td><div class="tx-concept"><span class="tx-icon-wrap tx-income-icon"><i class="fa-solid fa-arrow-down-left"></i></span><div><span class="tx-title">Pago freelance</span><span class="tx-note">Proyecto web — cliente García</span></div></div></td>
-                    <td><span class="cat-badge" style="--dot:#5ED3A8">Freelance</span></td>
+                    <td><span class="cat-badge" style="--dot:var(--c-teal)">Freelance</span></td>
                     <td class="tx-acct">BBVA Débito</td>
                     <td class="tx-amount text-income">+$8,200.00</td>
                     <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
@@ -219,7 +224,7 @@
                   <tr class="tx-row">
                     <td class="tx-date"><span>2 nov</span><span class="tx-time">09:30</span></td>
                     <td><div class="tx-concept"><span class="tx-icon-wrap tx-expense-icon"><i class="fa-solid fa-arrow-up-right"></i></span><div><span class="tx-title">Gasolina Shell</span><span class="tx-note">30 litros Magna</span></div></div></td>
-                    <td><span class="cat-badge" style="--dot:#6C9EF8">Transporte</span></td>
+                    <td><span class="cat-badge" style="--dot:var(--c-blue)">Transporte</span></td>
                     <td class="tx-acct">Tarjeta Oro</td>
                     <td class="tx-amount text-expense">−$780.00</td>
                     <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>
@@ -227,7 +232,7 @@
                   <tr class="tx-row">
                     <td class="tx-date"><span>1 nov</span><span class="tx-time">07:00</span></td>
                     <td><div class="tx-concept"><span class="tx-icon-wrap tx-income-icon"><i class="fa-solid fa-arrow-down-left"></i></span><div><span class="tx-title">Nómina quincenal</span><span class="tx-note">Depósito SPEI — BBVA Nómina</span></div></div></td>
-                    <td><span class="cat-badge" style="--dot:#5ED3A8">Nómina</span></td>
+                    <td><span class="cat-badge" style="--dot:var(--c-teal)">Nómina</span></td>
                     <td class="tx-acct">BBVA Débito</td>
                     <td class="tx-amount text-income">+$9,200.00</td>
                     <td><div class="tx-actions"><button class="tx-btn" aria-label="Ver detalle"><i class="fa-regular fa-eye"></i></button><button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal"><i class="fa-regular fa-pen-to-square"></i></button><button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button></div></td>

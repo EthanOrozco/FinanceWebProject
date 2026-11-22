@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="es" data-bs-theme="dark">
+<html lang="es">
   <head>
     <title>Vector — Dashboard</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="/controllers/theme.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -12,6 +13,7 @@
     <link rel="stylesheet" href="/styles/navbar.css"/>
     <link rel="stylesheet" href="/styles/dashboard.css"/>
     <script src="/components/navbar.js" defer></script>
+    <script type="module" src="/lib/blobatar-init.js"></script>
   </head>
 
   <body>
@@ -30,7 +32,7 @@
           <input type="text" class="form-control" placeholder="Buscar movimientos, cuentas…" aria-label="Buscar">
         </div>
         <div class="ms-auto topbar-actions">
-          <button class="btn btn-outline-secondary d-none d-sm-flex" aria-label="Tema">
+          <button id="theme-btn" class="btn btn-outline-secondary d-none d-sm-flex" onclick="toggleTheme()" aria-label="Cambiar tema">
             <i class="fa-regular fa-moon"></i>
           </button>
           <button class="btn btn-outline-secondary d-none d-sm-flex" aria-label="Notificaciones">
@@ -58,7 +60,7 @@
 
         <!-- alertas -->
         <div class="alert-payment d-flex align-items-center gap-3 p-3" role="alert">
-          <i class="fa-solid fa-credit-card fa-lg" style="color: var(--c-gold-dark); flex-shrink: 0;"></i>
+          <i class="fa-solid fa-credit-card fa-lg" style="color: var(--c-gold-text); flex-shrink: 0;"></i>
           <div class="flex-grow-1">
             <strong>Tu Tarjeta Nu vence en 3 días</strong>
             <p class="mb-0" style="font-size: 13px;">Fecha límite: martes 10 de noviembre · Saldo a pagar $4,250.00</p>
@@ -79,7 +81,7 @@
                     <p class="mb-0" style="font-size: 14px; font-weight: 600;">Balance neto total</p>
                     <p class="mb-0" style="font-size: 12px; color: var(--c-text-muted);">5 cuentas · MXN</p>
                   </div>
-                  <span class="badge" style="background: #173329; color: #5ED3A8; font-weight: 600;">
+                  <span class="badge" style="background: var(--c-teal-tint); color: var(--c-teal); font-weight: 600;">
                     <i class="fa-solid fa-arrow-trend-up me-1"></i>+8.4% vs oct
                   </span>
                 </div>
@@ -105,8 +107,8 @@
             <div class="card flex-grow-1">
               <div class="card-body p-4">
                 <div class="kpi-header">
-                  <span class="kpi-label"><i class="fa-solid fa-arrow-down me-1" style="color:#5ED3A8"></i>Ingresos de noviembre</span>
-                  <span class="badge" style="background:#173329; color:#5ED3A8;">+6.2%</span>
+                  <span class="kpi-label"><i class="fa-solid fa-arrow-down me-1" style="color:var(--c-teal)"></i>Ingresos de noviembre</span>
+                  <span class="badge" style="background:var(--c-teal-tint); color:var(--c-teal);">+6.2%</span>
                 </div>
                 <p class="kpi-amount">$18,400.00</p>
               </div>
@@ -114,8 +116,8 @@
             <div class="card flex-grow-1">
               <div class="card-body p-4">
                 <div class="kpi-header">
-                  <span class="kpi-label"><i class="fa-solid fa-arrow-up me-1" style="color:#F0918A"></i>Gastos de noviembre</span>
-                  <span class="badge" style="background:#3A2224; color:#F0918A;">−3.1%</span>
+                  <span class="kpi-label"><i class="fa-solid fa-arrow-up me-1" style="color:var(--c-coral)"></i>Gastos de noviembre</span>
+                  <span class="badge" style="background:var(--c-coral-tint); color:var(--c-coral);">−3.1%</span>
                 </div>
                 <p class="kpi-amount">$9,872.50</p>
               </div>
@@ -156,12 +158,12 @@
                   </div>
                 </div>
                 <ul class="cat-legend list-unstyled mt-3 mb-0">
-                  <li><span class="cat-dot" style="background:#c9933b"></span><span class="cat-name">Comida</span><span class="cat-pct">32%</span><span class="cat-amount">$3,120</span></li>
-                  <li><span class="cat-dot" style="background:#6C9EF8"></span><span class="cat-name">Transporte</span><span class="cat-pct">19%</span><span class="cat-amount">$1,850</span></li>
-                  <li><span class="cat-dot" style="background:#A98BF5"></span><span class="cat-name">Hogar</span><span class="cat-pct">16%</span><span class="cat-amount">$1,600</span></li>
-                  <li><span class="cat-dot" style="background:#5ED3A8"></span><span class="cat-name">Suscripciones</span><span class="cat-pct">13%</span><span class="cat-amount">$1,240</span></li>
-                  <li><span class="cat-dot" style="background:#F0918A"></span><span class="cat-name">Ocio</span><span class="cat-pct">12%</span><span class="cat-amount">$1,180</span></li>
-                  <li><span class="cat-dot" style="background:#7D869A"></span><span class="cat-name">Otros</span><span class="cat-pct">9%</span><span class="cat-amount">$882</span></li>
+                  <li><span class="cat-dot" style="background:var(--c-gold-dark)"></span><span class="cat-name">Comida</span><span class="cat-pct">32%</span><span class="cat-amount">$3,120</span></li>
+                  <li><span class="cat-dot" style="background:var(--c-blue)"></span><span class="cat-name">Transporte</span><span class="cat-pct">19%</span><span class="cat-amount">$1,850</span></li>
+                  <li><span class="cat-dot" style="background:var(--c-purple)"></span><span class="cat-name">Hogar</span><span class="cat-pct">16%</span><span class="cat-amount">$1,600</span></li>
+                  <li><span class="cat-dot" style="background:var(--c-teal)"></span><span class="cat-name">Suscripciones</span><span class="cat-pct">13%</span><span class="cat-amount">$1,240</span></li>
+                  <li><span class="cat-dot" style="background:var(--c-coral)"></span><span class="cat-name">Ocio</span><span class="cat-pct">12%</span><span class="cat-amount">$1,180</span></li>
+                  <li><span class="cat-dot" style="background:var(--c-slate)"></span><span class="cat-name">Otros</span><span class="cat-pct">9%</span><span class="cat-amount">$882</span></li>
                 </ul>
               </div>
             </div>
@@ -225,10 +227,10 @@
                         <p class="item-name">Fondo de emergencia</p>
                         <p class="item-sub">Ahorro · meta jun 2027</p>
                       </div>
-                      <span style="font-weight: 700; color: #5ED3A8;">69%</span>
+                      <span style="font-weight: 700; color: var(--c-teal);">69%</span>
                     </div>
-                    <div class="progress" style="height: 8px; background: var(--c-black);">
-                      <div class="progress-bar" style="width: 69%; background: #5ED3A8;"></div>
+                    <div class="progress" style="height: 8px; background: var(--c-input-bg);">
+                      <div class="progress-bar" style="width: 69%; background: var(--c-teal);"></div>
                     </div>
                     <div class="goal-footer">
                       <span>$31,200 ahorrados</span>
@@ -241,9 +243,9 @@
                         <p class="item-name">Liquidar Tarjeta Oro</p>
                         <p class="item-sub">Deuda · baja hacia $0</p>
                       </div>
-                      <span style="font-weight: 700; color: var(--c-gold-dark);">40%</span>
+                      <span style="font-weight: 700; color: var(--c-gold-text);">40%</span>
                     </div>
-                    <div class="progress" style="height: 8px; background: var(--c-black);">
+                    <div class="progress" style="height: 8px; background: var(--c-input-bg);">
                       <div class="progress-bar" style="width: 40%; background: var(--c-gold-dark);"></div>
                     </div>
                     <div class="goal-footer">
@@ -369,23 +371,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" integrity="sha384-b0GXujLkk9eYYSmcSfoyZbfyElGAQnDyY0skCHSG6w3JgTMFnz11ggrTAr7seu9f" crossorigin="anonymous"></script>
     <script>
-      const ctx = document.getElementById('cashFlowChart');
-      new Chart(ctx, {
+      const cashChart = new Chart(document.getElementById('cashFlowChart'), {
         type: 'bar',
         data: {
           labels: ['Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov'],
           datasets: [
-            { label: 'Ingresos', data: [15200, 15800, 16100, 17900, 17300, 18400], backgroundColor: '#5ED3A8', borderRadius: 4 },
-            { label: 'Gastos',   data: [11200,  9800, 12600, 10400, 10180,  9872], backgroundColor: '#F0918A', borderRadius: 4 }
+            { label: 'Ingresos', data: [15200, 15800, 16100, 17900, 17300, 18400], borderRadius: 4 },
+            { label: 'Gastos',   data: [11200,  9800, 12600, 10400, 10180,  9872], borderRadius: 4 }
           ]
         },
         options: {
           responsive: true,
-          plugins: { legend: { position: 'top', labels: { color: '#9aa7bf' } } },
-          scales: {
-            x: { ticks: { color: '#9aa7bf' }, grid: { color: '#2a3245' } },
-            y: { ticks: { color: '#9aa7bf' }, grid: { color: '#2a3245' } }
-          }
+          plugins: { legend: { position: 'top', labels: {} } },
+          scales: { x: { ticks: {}, grid: {} }, y: { ticks: {}, grid: {} } }
         }
       });
 
@@ -399,24 +397,22 @@
           ctx.save();
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillStyle = '#8A93A6';
+          ctx.fillStyle = cssVar('--c-text-4');
           ctx.font = '500 12px Inter, sans-serif';
           ctx.fillText('Total', cx, cy - 11);
-          ctx.fillStyle = '#E8EAF0';
-          ctx.font = '700 18px Inter, sans-serif';
-          ctx.fillText('$9,872', cx, cy + 11);
+          ctx.fillStyle = cssVar('--c-text-strong');
+          ctx.font = '600 18px Inter, sans-serif';
+          ctx.fillText('$9,872.00', cx, cy + 11);
           ctx.restore();
         }
       };
 
-      const ctx2 = document.getElementById('catChart');
-      new Chart(ctx2, {
+      const catChart = new Chart(document.getElementById('catChart'), {
         type: 'doughnut',
         data: {
           labels: ['Comida', 'Transporte', 'Hogar', 'Suscripciones', 'Ocio', 'Otros'],
           datasets: [{
             data: [3120, 1850, 1600, 1240, 1180, 882],
-            backgroundColor: ['#c9933b', '#6C9EF8', '#A98BF5', '#5ED3A8', '#F0918A', '#7D869A'],
             borderWidth: 0,
             hoverOffset: 6,
             cutout: '72%'
@@ -428,7 +424,26 @@
         },
         plugins: [centerTextPlugin]
       });
-      
+
+      // Canvas can't resolve var(), so pull token values and repaint on theme change.
+      function paintCharts() {
+        const muted = cssVar('--c-text-muted'), grid = cssVar('--c-grid');
+        const [inc, exp] = cashChart.data.datasets;
+        inc.backgroundColor = cssVar('--c-teal');
+        exp.backgroundColor = cssVar('--c-coral');
+        cashChart.options.plugins.legend.labels.color = muted;
+        for (const axis of ['x', 'y']) {
+          cashChart.options.scales[axis].ticks.color = muted;
+          cashChart.options.scales[axis].grid.color = grid;
+        }
+        catChart.data.datasets[0].backgroundColor =
+          ['--c-gold-dark', '--c-blue', '--c-purple', '--c-teal', '--c-coral', '--c-slate'].map(cssVar);
+        cashChart.update('none');
+        catChart.update('none');
+      }
+      paintCharts();
+      window.addEventListener('themechange', paintCharts);
+
       document.querySelectorAll('.btn-type').forEach(btn => {
         btn.addEventListener('click', () => {
           document.querySelectorAll('.btn-type').forEach(b => b.classList.remove('active'));

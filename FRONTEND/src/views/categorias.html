@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="es" data-bs-theme="dark">
+<html lang="es">
   <head>
     <title>Vector — Categorías</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="/controllers/theme.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -12,6 +13,7 @@
     <link rel="stylesheet" href="/styles/navbar.css"/>
     <link rel="stylesheet" href="/styles/categorias.css"/>
     <script src="/components/navbar.js" defer></script>
+    <script type="module" src="/lib/blobatar-init.js"></script>
   </head>
 
   <body>
@@ -31,6 +33,9 @@
             <span>Categorías</span>
           </nav>
           <div class="ms-auto topbar-actions">
+            <button id="theme-btn" class="btn btn-outline-secondary d-none d-sm-flex" onclick="toggleTheme()" aria-label="Cambiar tema">
+              <i class="fa-regular fa-moon"></i>
+            </button>
             <button class="btn btn-gold-primary" onclick="openNewModal()">
               <i class="fa-solid fa-plus"></i>
               <span class="d-none d-md-inline">Nueva categoría</span>
@@ -57,7 +62,7 @@
             <div class="col-6 col-md-3">
               <div class="stat-card">
                 <span class="stat-label" id="stat-sum-label">Gastado en noviembre</span>
-                <span class="stat-value" id="stat-sum-value" style="color: var(--c-gold-dark);"></span>
+                <span class="stat-value" id="stat-sum-value" style="color: var(--c-gold-text);"></span>
               </div>
             </div>
             <div class="col-6 col-md-3">

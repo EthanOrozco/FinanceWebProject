@@ -122,9 +122,9 @@
   font-weight: 700;
 }
 
-.text-income { color: #5ED3A8; }
-.text-expense { color: #F0918A; }
-.text-transfer { color: #8FB4FA; }
+.text-income { color: var(--c-teal); }
+.text-expense { color: var(--c-coral); }
+.text-transfer { color: var(--c-blue-2); }
 
 /* ===== TABS ===== */
 .type-tabs {
@@ -155,7 +155,7 @@
 
 .type-tab.active {
   background: var(--c-gold-dark);
-  color: var(--c-black);
+  color: var(--c-on-gold);
 }
 
 .acc-count {
@@ -176,7 +176,7 @@
   transition: border-color 0.15s;
 }
 
-.acc-card:hover { border-color: #4e5f7e; }
+.acc-card:hover { border-color: var(--c-border-strong); }
 
 .acc-card-selected,
 .acc-card-selected:hover { border-color: var(--c-gold-dark); }
@@ -276,11 +276,11 @@
   gap: 8px;
   padding: 8px 12px;
   border-radius: 9px;
-  background: #2A2418;
-  border: 1px solid #5A4724;
+  background: var(--c-gold-tint);
+  border: 1px solid var(--c-gold-line);
   font-size: 12px;
   font-weight: 500;
-  color: #F3CF85;
+  color: var(--c-gold-ink);
 }
 
 .acc-actions {
@@ -303,11 +303,11 @@
 .btn-acc-ghost {
   border: 1px solid var(--c-slate-blue);
   background: transparent;
-  color: #C4CAD6;
+  color: var(--c-text-2);
 }
 
 .btn-acc-ghost:hover {
-  background: #262E40;
+  background: var(--c-hover);
   color: var(--c-white);
   border-color: var(--c-slate-blue);
 }
@@ -319,21 +319,21 @@
 }
 
 .btn-acc-slate:hover {
-  background: #4e5f7e;
+  background: var(--c-border-strong);
   color: var(--c-white);
-  border-color: #4e5f7e;
+  border-color: var(--c-border-strong);
 }
 
 .acc-actions .btn-acc-gold {
   border: none;
   background: var(--c-gold-dark);
-  color: var(--c-black);
+  color: var(--c-on-gold);
   font-weight: 700;
 }
 
 .btn-acc-gold:hover {
   background: var(--c-gold-light);
-  color: var(--c-black);
+  color: var(--c-on-gold);
 }
 
 /* agregar cuenta */
@@ -355,7 +355,7 @@
 
 .acc-card-new:hover {
   border-color: var(--c-gold-dark);
-  color: var(--c-gold-light);
+  color: var(--c-gold-text-2);
 }
 
 .acc-new-icon {
@@ -395,7 +395,7 @@
 .movements-link {
   font-size: 13px;
   font-weight: 600;
-  color: var(--c-gold-light);
+  color: var(--c-gold-text-2);
   text-decoration: none;
 }
 
@@ -413,7 +413,7 @@
   transition: background-color 0.15s;
 }
 
-.movements-list li:hover { background: #232A3B; }
+.movements-list li:hover { background: var(--c-row-hover); }
 
 .movements-list strong {
   font-size: 14px;
@@ -432,9 +432,9 @@
   font-size: 13px;
 }
 
-.mv-in  { background: #173329; color: #5ED3A8; }
-.mv-out { background: #3A2224; color: #F0918A; }
-.mv-tr  { background: #1E2A44; color: #8FB4FA; }
+.mv-in  { background: var(--c-teal-tint); color: var(--c-teal); }
+.mv-out { background: var(--c-coral-tint); color: var(--c-coral); }
+.mv-tr  { background: var(--c-blue-tint); color: var(--c-blue-2); }
 
 .mv-title {
   display: block;
@@ -458,7 +458,7 @@
   border-radius: 8px;
   border: none;
   background: transparent;
-  color: #AEB5C4;
+  color: var(--c-text-3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -468,9 +468,9 @@
   transition: background-color 0.15s, color 0.15s;
 }
 
-.tx-btn:hover { background: #262E40; color: var(--c-white); }
-.tx-btn-danger { color: #F0918A; }
-.tx-btn-danger:hover { background: #3A2224; color: #F0918A; }
+.tx-btn:hover { background: var(--c-hover); color: var(--c-white); }
+.tx-btn-danger { color: var(--c-coral); }
+.tx-btn-danger:hover { background: var(--c-coral-tint); color: var(--c-coral); }
 
 /* ===== MODAL ===== */
 .modal-content {
@@ -526,7 +526,7 @@
 
 .btn-check:checked + .btn-type {
   background-color: var(--c-gold-dark);
-  color: var(--c-black);
+  color: var(--c-on-gold);
 }
 
 .btn-check:focus-visible + .btn-type,
@@ -609,7 +609,7 @@
   color: var(--c-text-muted);
 }
 
-.transfer-preview div span:first-child { color: #C4CAD6; }
+.transfer-preview div span:first-child { color: var(--c-text-2); }
 .transfer-preview strong { color: var(--c-white); }
 
 /* ===== DELETE MODAL ===== */
@@ -617,8 +617,8 @@
   width: 52px;
   height: 52px;
   border-radius: 14px;
-  background: #3A2224;
-  color: #F0918A;
+  background: var(--c-coral-tint);
+  color: var(--c-coral);
   display: flex;
   align-items: center;
   justify-content: center;
