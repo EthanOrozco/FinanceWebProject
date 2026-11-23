@@ -220,38 +220,9 @@
                   </div>
                   <a href="/metas">Ver metas</a>
                 </div>
-                <ul class="list-unstyled mb-0 mt-3">
-                  <li class="goal-item">
-                    <div class="goal-header">
-                      <div>
-                        <p class="item-name">Fondo de emergencia</p>
-                        <p class="item-sub">Ahorro · meta jun 2027</p>
-                      </div>
-                      <span style="font-weight: 700; color: var(--c-teal);">69%</span>
-                    </div>
-                    <div class="progress" style="height: 8px; background: var(--c-input-bg);">
-                      <div class="progress-bar" style="width: 69%; background: var(--c-teal);"></div>
-                    </div>
-                    <div class="goal-footer">
-                      <span>$31,200 ahorrados</span>
-                      <span>Meta $45,000</span>
-                    </div>
-                  </li>
-                  <li class="goal-item mt-3">
-                    <div class="goal-header">
-                      <div>
-                        <p class="item-name">Liquidar Tarjeta Oro</p>
-                        <p class="item-sub">Deuda · baja hacia $0</p>
-                      </div>
-                      <span style="font-weight: 700; color: var(--c-gold-text);">40%</span>
-                    </div>
-                    <div class="progress" style="height: 8px; background: var(--c-input-bg);">
-                      <div class="progress-bar" style="width: 40%; background: var(--c-gold-dark);"></div>
-                    </div>
-                    <div class="goal-footer">
-                      <span>$8,999 pendientes</span>
-                      <span>Inicial $15,000</span>
-                    </div>
+                <ul class="list-unstyled mb-0 mt-3" id="dash-goals">
+                  <li class="text-center py-3" style="font-size: 13px; color: var(--c-text-muted);">
+                    <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Cargando metas…
                   </li>
                 </ul>
               </div>
@@ -369,6 +340,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="/controllers/dashboard-metas.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" integrity="sha384-b0GXujLkk9eYYSmcSfoyZbfyElGAQnDyY0skCHSG6w3JgTMFnz11ggrTAr7seu9f" crossorigin="anonymous"></script>
     <script>
       const cashChart = new Chart(document.getElementById('cashFlowChart'), {
