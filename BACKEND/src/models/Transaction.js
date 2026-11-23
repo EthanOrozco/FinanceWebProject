@@ -25,7 +25,9 @@ const transactionSchema = new Schema({
 // Reglas que dependen del tipo:
 //  - expense/income: requieren categoría, no llevan cuenta destino
 //  - transfer: requiere cuenta destino distinta a la de origen, no lleva categoría
+//  - abono a meta (trae goalId): el destino es la meta, no exige categoría ni cuenta destino
 transactionSchema.pre('validate', function () {
+  if (this.goalId) return;
   if (this.type === 'transfer') {
     this.categoryId = null;
     if (!this.toAccountId) {

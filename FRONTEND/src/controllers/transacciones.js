@@ -193,10 +193,15 @@ const rowHTML = (t) => {
     transfer: ['tx-transfer-icon', 'fa-right-left'],
   }[t.type];
 
-  const note = isTransfer ? `${accountName(t.accountId)} → ${accountName(t.toAccountId)}` : '';
+  // abonos a metas: goalId viene populado con { name, kind }
+  const goal = t.goalId;
+  const note = goal
+    ? `${goal.kind === 'debt' ? 'Pago a deuda' : 'Abono a meta'}: ${goal.name}`
+    : isTransfer ? `${accountName(t.accountId)} → ${accountName(t.toAccountId)}` : '';
 
   let badge;
-  if (isTransfer) badge = `<span class="cat-badge" style="--dot:var(--c-blue)">Transferencia</span>`;
+  if (goal) badge = `<span class="cat-badge" style="--dot:${PAL.gold}">${goal.kind === 'debt' ? 'Deuda' : 'Ahorro'}</span>`;
+  else if (isTransfer) badge = `<span class="cat-badge" style="--dot:var(--c-blue)">Transferencia</span>`;
   else if (t.categoryId) badge = `<span class="cat-badge" style="--dot:${PAL[t.categoryId.color] || PAL.slate}">${esc(t.categoryId.name)}</span>`;
   else badge = `<span class="cat-badge" style="--dot:${PAL.slate}">Sin categoría</span>`;
 
@@ -216,9 +221,10 @@ const rowHTML = (t) => {
       <td>${badge}</td>
       <td class="tx-acct">${esc(accountName(t.accountId))}</td>
       ${amount}
-      <td><div class="tx-actions">
+      <td><div class="tx-actions">${goal ? `
+        <a class="tx-btn" href="/metas" aria-label="Administrar en Metas" title="Se administra desde Metas"><i class="fa-solid fa-bullseye"></i></a>` : `
         <button class="tx-btn" aria-label="Editar movimiento" onclick="openEditModal('${t._id}')"><i class="fa-regular fa-pen-to-square"></i></button>
-        <button class="tx-btn tx-btn-danger" aria-label="Eliminar movimiento" onclick="openDeleteModal('${t._id}')"><i class="fa-regular fa-trash-can"></i></button>
+        <button class="tx-btn tx-btn-danger" aria-label="Eliminar movimiento" onclick="openDeleteModal('${t._id}')"><i class="fa-regular fa-trash-can"></i></button>`}
       </div></td>
     </tr>`;
 };
@@ -342,7 +348,7 @@ window.openNewModal = (type = 'expense') => {
 
 window.openEditModal = (id) => {
   const t = transactions.find(x => x._id === id);
-  if (!t) return;
+  if (!t || t.goalId) return;
   document.getElementById('mov-form').reset();
   document.getElementById('mov-edit-id').value = id;
   document.getElementById('movModalTitle').textContent = 'Editar movimiento';
