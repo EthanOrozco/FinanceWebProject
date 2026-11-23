@@ -462,5 +462,8 @@ document.getElementById('mov-form').addEventListener('keydown', (e) => {
 (async () => {
   await Promise.all([loadAccounts(), loadCategories()]);
   fillFilterSelects();
+  // desde "Ver movimientos" en categorías llega ?categoria=<id>
+  const cat = new URLSearchParams(location.search).get('categoria');
+  if (cat && categories.some(c => c._id === cat)) document.getElementById('f-categoria').value = cat;
   await loadTransactions();
 })();

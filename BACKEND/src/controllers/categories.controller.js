@@ -1,17 +1,58 @@
 const Category = require('../models/Category');
+const mongoose = require('mongoose');
 const Transaction = require('../models/Transaction');
+
+// estadísticas por categoría 
+// Las fechas se guardan como medianoche UTC del día elegido,
+// los límites de mes también se arman en UTC (con el año/mes local de hoy).
+const monthRange = (offset = 0) => {
+  const now = new Date();
+  const start = new Date(Date.UTC(now.getFullYear(), now.getMonth() + offset, 1));
+  const end = new Date(Date.UTC(now.getFullYear(), now.getMonth() + offset + 1, 1));
+  return { start, end };
+};
+
+const emptyStats = () => ({ amount: 0, txMonth: 0, prevAmount: 0, txCount: 0, delta: null });
+
+// amount/prevAmount en centavos (este mes / mes pasado),
+// txCount = movimientos de siempre, delta = % de cambio vs el mes pasado (null si el mes pasado fue 0)
+const statsByCategory = async (userId, ids) => {
+  const cur = monthRange(0);
+  const prev = monthRange(-1);
+  const inRange = (r) => ({ $and: [{ $gte: ['$date', r.start] }, { $lt: ['$date', r.end] }] });
+
+  const rows = await Transaction.aggregate([
+    { $match: { userId: new mongoose.Types.ObjectId(userId), categoryId: { $in: ids } } },
+    { $group: {
+      _id: '$categoryId',
+      amount: { $sum: { $cond: [inRange(cur), '$amount', 0] } },
+      txMonth: { $sum: { $cond: [inRange(cur), 1, 0] } },
+      prevAmount: { $sum: { $cond: [inRange(prev), '$amount', 0] } },
+      txCount: { $sum: 1 },
+    } },
+  ]);
+
+  return new Map(rows.map(r => [String(r._id), {
+    amount: r.amount,
+    txMonth: r.txMonth,
+    prevAmount: r.prevAmount,
+    txCount: r.txCount,
+    delta: r.prevAmount ? Math.round(((r.amount - r.prevAmount) / r.prevAmount) * 100) : null,
+  }]));
+};
 
 const getCategories = async (req, res) => {
   const { kind, search, sort } = req.query;
 
   const filter = { userId: req.userId };
   if (kind) filter.kind = kind;
-  if (search) filter.name = { $regex: search, $options: 'i' };
+  if (search) filter.name = { $regex: search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), $options: 'i' };
 
   const sortBy = sort === 'name' ? { name: 1 } : { createdAt: -1 };
 
-  const categories = await Category.find(filter).sort(sortBy);
-  res.json(categories);
+  const categories = await Category.find(filter).sort(sortBy).lean();
+  const stats = await statsByCategory(req.userId, categories.map(c => c._id));
+  res.json(categories.map(c => ({ ...c, ...(stats.get(String(c._id)) ?? emptyStats()) })));
 };
 
 const getCategoryById = async (req, res) => {
