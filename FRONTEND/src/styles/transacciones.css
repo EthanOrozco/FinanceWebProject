@@ -351,9 +351,51 @@
 
 .tx-amount {
   text-align: right;
-  font-weight: 700;
+  font-weight: 600;
   white-space: nowrap;
 }
+
+.tx-amount-transfer { color: var(--c-text-4); }
+.tx-net { color: var(--c-gold-text); }
+.tx-net.is-negative { color: var(--c-coral); }
+
+/* ===== cargando / vacio ===== */
+.tx-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 40px 16px;
+  font-size: 13px;
+  color: var(--c-text-muted);
+}
+
+.tx-empty {
+  text-align: center;
+  padding: 40px 16px;
+  color: var(--c-text-muted);
+}
+
+.tx-loading[hidden], .tx-empty[hidden], .tx-pagination[hidden] { display: none; }
+.tx-empty i { font-size: 28px; margin-bottom: 10px; }
+.tx-empty p { margin: 0; font-size: 14px; }
+
+/* ===== toasts ===== */
+.toast-container { z-index: 1090; }
+
+.tx-toast {
+  background: var(--c-card-bg);
+  border: 1px solid var(--c-slate-blue);
+  border-left-width: 4px;
+  border-radius: 10px;
+  color: var(--c-white);
+  font-size: 14px;
+}
+
+.tx-toast-success { border-left-color: var(--c-teal); }
+.tx-toast-success i { color: var(--c-teal); }
+.tx-toast-error { border-left-color: var(--c-coral); }
+.tx-toast-error i { color: var(--c-coral); }
 
 .tx-actions {
   display: flex;

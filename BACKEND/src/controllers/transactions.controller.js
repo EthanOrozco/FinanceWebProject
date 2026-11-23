@@ -53,6 +53,8 @@ const createTransaction = async (req, res) => {
   const body = req.body ?? {};
   const data = {};
   for (const k of EDITABLE) if (body[k] !== undefined) data[k] = body[k];
+  // TEMPORAL: mientras no exista el CRUD de cuentas, se usa la cuenta de desarrollo del .env
+  if (!data.accountId) data.accountId = process.env.DEV_ACCOUNT_ID;
 
   const tx = new Transaction({ ...data, userId: req.userId });
   await tx.validate();
@@ -71,6 +73,7 @@ const updateTransaction = async (req, res) => {
 
   const body = req.body ?? {};
   for (const k of EDITABLE) if (body[k] !== undefined) tx[k] = body[k];
+  if (!tx.accountId) tx.accountId = process.env.DEV_ACCOUNT_ID; // TEMPORAL, ver createTransaction
   await tx.validate();
 
   const error = await checkCategory(tx, req.userId);
