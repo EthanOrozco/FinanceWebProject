@@ -17,7 +17,11 @@ let currentKind = 'saving';
 let pendingDeleteId = null;
 
 // ===== helpers =====
-const frmt = (num) => '$' + Number(num).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+// el backend guarda los montos en centavos (enteros)
+const frmt = (cents) => '$' + (Number(cents) / 100).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const toCents = (value) => Math.round(Number(value) * 100);
+// redondea hacia arriba al peso completo (para montos sugeridos)
+const ceilPeso = (cents) => Math.ceil(cents / 100) * 100;
 
 const esc = (str) => String(str ?? '').replace(/[&<>"']/g, ch => (
   { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
@@ -50,7 +54,7 @@ const accountName = (id) => {
   return acc ? acc.name : '';
 };
 
-const remainingOf = (g) => Math.max(0, Math.round((g.targetAmount - g.saved) * 100) / 100);
+const remainingOf = (g) => Math.max(0, g.targetAmount - g.saved);
 
 // meses completos que faltan para la fecha limite (minimo 1)
 const monthsLeft = (g) => {
@@ -81,7 +85,7 @@ const goalStatus = (g) => {
 
   const expected = end > start ? ((now - start) / (end - start)) * 100 : 100;
   if (g.progress + 1 >= expected) return { cls: 'status-ok', text: 'En camino' };
-  return { cls: 'status-late', text: `Atrasada · faltan ${frmt(Math.ceil(suggestedMonthly(g)))}/mes` };
+  return { cls: 'status-late', text: `Atrasada · faltan ${frmt(ceilPeso(suggestedMonthly(g)))}/mes` };
 };
 
 // abre un modal esperando a que se cierre el que este abierto
@@ -104,12 +108,12 @@ const setLoading = (on) => {
 
 const setBtnLoading = (btn, on, text) => {
   if (on) {
-    btn.dataset.text = btn.textContent;
+    btn.dataset.html = btn.innerHTML; // innerHTML para no perder iconos
     btn.disabled = true;
     btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>${text || 'Guardando…'}`;
   } else {
     btn.disabled = false;
-    btn.textContent = btn.dataset.text || btn.textContent;
+    btn.innerHTML = btn.dataset.html;
   }
 };
 
@@ -187,7 +191,7 @@ const renderStats = () => {
   document.getElementById('stat-debt-sub').textContent = `${pct}% pagado de ${frmt(debtTotal)}`;
 
   const monthly = active.reduce((a, g) => a + suggestedMonthly(g), 0);
-  document.getElementById('stat-monthly').textContent = frmt(Math.ceil(monthly));
+  document.getElementById('stat-monthly').textContent = frmt(ceilPeso(monthly));
 
   document.getElementById('stat-completed').textContent = goals.filter(g => g.status === 'completed').length;
   document.getElementById('stat-active').textContent = `${active.length} activas`;
@@ -271,7 +275,7 @@ const goalCardHTML = (g) => {
         <div class="goal-details">
           <div><span>${isDebt ? 'Por pagar' : 'Te faltan'}</span><strong>${frmt(remaining)}</strong></div>
           <div><span>Fecha límite</span><strong>${g.deadline ? fmtMonthYear(g.deadline) : '—'}</strong></div>
-          <div><span>Sugerido / mes</span><strong>${monthly ? frmt(Math.ceil(monthly)) : '—'}</strong></div>
+          <div><span>Sugerido / mes</span><strong>${monthly ? frmt(ceilPeso(monthly)) : '—'}</strong></div>
         </div>
 
         <span class="goal-section-label">${isDebt ? 'Últimos pagos' : 'Últimos abonos'}</span>
@@ -362,7 +366,7 @@ window.openEditModal = (id) => {
   selectKind(document.querySelector(`#meta-kind-wrap [data-kind="${g.kind}"]`));
 
   document.getElementById('meta-nombre').value = g.name;
-  document.getElementById('meta-monto').value = g.targetAmount;
+  document.getElementById('meta-monto').value = (g.targetAmount / 100).toFixed(2);
   document.getElementById('meta-fecha').value = toDateInput(g.deadline);
   document.getElementById('meta-fecha').min = '';
   fillAccountSelect(document.getElementById('meta-cuenta'), g.accountId || '');
@@ -402,7 +406,7 @@ window.saveGoal = async () => {
 
   const body = {
     name: document.getElementById('meta-nombre').value.trim(),
-    targetAmount: Number(document.getElementById('meta-monto').value),
+    targetAmount: toCents(document.getElementById('meta-monto').value),
     accountId: document.getElementById('meta-cuenta').value || null,
     deadline: document.getElementById('meta-fecha').value || null,
   };
@@ -456,7 +460,7 @@ window.updateAbonoHint = () => {
     ? `Deuda pendiente: ${frmt(rem)}`
     : `Te faltan ${frmt(rem)} para llegar a ${frmt(g.targetAmount)}`;
   document.getElementById('abonoModalTitle').textContent = g.kind === 'debt' ? 'Registrar pago' : 'Abonar a una meta';
-  document.getElementById('abono-monto').max = g.kind === 'debt' ? rem : '';
+  document.getElementById('abono-monto').max = g.kind === 'debt' ? (rem / 100).toFixed(2) : '';
 };
 
 window.saveContribution = async () => {
@@ -465,7 +469,7 @@ window.saveContribution = async () => {
   const dateEl = document.getElementById('abono-fecha');
   const g = goals.find(x => x._id === goalId);
 
-  const amount = Number(amountEl.value);
+  const amount = toCents(amountEl.value); // se compara y se manda en centavos
   let amountMsg = '';
   if (!amountEl.value || amount <= 0) amountMsg = 'El monto debe ser mayor a 0.';
   else if (g && g.kind === 'debt' && amount > remainingOf(g)) amountMsg = `El pago no puede ser mayor a la deuda pendiente (${frmt(remainingOf(g))}).`;
