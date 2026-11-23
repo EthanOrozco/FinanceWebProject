@@ -34,11 +34,11 @@
             <button id="theme-btn" class="btn btn-outline-secondary d-none d-sm-flex" onclick="toggleTheme()" aria-label="Cambiar tema">
               <i class="fa-regular fa-moon"></i>
             </button>
-            <button class="btn btn-tx-secondary d-none d-sm-flex" data-bs-toggle="modal" data-bs-target="#abonarModal">
+            <button class="btn btn-tx-secondary d-none d-sm-flex" onclick="openAbonoModal()">
               <i class="fa-solid fa-circle-plus"></i>
               <span class="d-none d-md-inline">Abonar</span>
             </button>
-            <button class="btn btn-gold-primary" data-bs-toggle="modal" data-bs-target="#nuevaMetaModal">
+            <button class="btn btn-gold-primary" onclick="openNewModal()">
               <i class="fa-solid fa-plus"></i>
               <span class="d-none d-md-inline">Nueva meta</span>
             </button>
@@ -57,311 +57,175 @@
             <div class="col-6 col-md-3">
               <div class="stat-card">
                 <span class="stat-label">Ahorrado en metas activas</span>
-                <span class="stat-value" style="color: var(--c-gold-text-2);">$42,300.00</span>
-                <span class="stat-sub">de $73,000 en total</span>
+                <span class="stat-value" id="stat-saved" style="color: var(--c-gold-text-2);">$0.00</span>
+                <span class="stat-sub" id="stat-saved-sub">de $0.00 en total</span>
               </div>
             </div>
             <div class="col-6 col-md-3">
               <div class="stat-card">
                 <span class="stat-label">Deuda por liquidar</span>
-                <span class="stat-value text-expense">$8,999.65</span>
-                <span class="stat-sub">40% pagado de $15,000</span>
+                <span class="stat-value text-expense" id="stat-debt">$0.00</span>
+                <span class="stat-sub" id="stat-debt-sub">0% pagado de $0.00</span>
               </div>
             </div>
             <div class="col-6 col-md-3">
               <div class="stat-card">
                 <span class="stat-label">Aporte mensual sugerido</span>
-                <span class="stat-value">$9,421</span>
+                <span class="stat-value" id="stat-monthly">$0.00</span>
                 <span class="stat-sub">Para cumplir todo a tiempo</span>
               </div>
             </div>
             <div class="col-6 col-md-3">
               <div class="stat-card">
                 <span class="stat-label">Metas completadas</span>
-                <span class="stat-value text-income">1</span>
-                <span class="stat-sub">4 activas</span>
+                <span class="stat-value text-income" id="stat-completed">0</span>
+                <span class="stat-sub" id="stat-active">0 activas</span>
               </div>
             </div>
           </div>
 
           <!-- filtros -->
           <div class="type-tabs goal-tabs" role="group" aria-label="Filtrar metas">
-            <button type="button" class="type-tab active">Activas (4)</button>
-            <button type="button" class="type-tab">Ahorros (3)</button>
-            <button type="button" class="type-tab">Deudas (1)</button>
-            <button type="button" class="type-tab">Completadas (1)</button>
+            <button type="button" class="type-tab active" data-filter="active">Activas (<span id="count-active">0</span>)</button>
+            <button type="button" class="type-tab" data-filter="saving">Ahorros (<span id="count-saving">0</span>)</button>
+            <button type="button" class="type-tab" data-filter="debt">Deudas (<span id="count-debt">0</span>)</button>
+            <button type="button" class="type-tab" data-filter="completed">Completadas (<span id="count-completed">0</span>)</button>
+            <button type="button" class="type-tab" data-filter="cancelled">Canceladas (<span id="count-cancelled">0</span>)</button>
+          </div>
+
+          <!-- busqueda y orden -->
+          <div class="goal-toolbar">
+            <label class="goal-search" for="goal-search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input id="goal-search" type="search" placeholder="Buscar meta…" oninput="render()">
+            </label>
+            <label class="goal-sort">
+              Ordenar
+              <select id="goal-sort" onchange="render()">
+                <option value="recent">Más recientes</option>
+                <option value="deadline">Fecha límite más próxima</option>
+                <option value="progress">Mayor progreso</option>
+                <option value="remaining">Mayor monto pendiente</option>
+                <option value="name">Nombre A–Z</option>
+              </select>
+            </label>
+          </div>
+
+          <!-- loading -->
+          <div class="goal-loading" id="goal-loading" hidden>
+            <span class="goal-spinner"></span>
+            <span>Cargando metas…</span>
           </div>
 
           <!-- tarjetas de metas -->
-          <div class="row g-3">
+          <div class="row g-3" id="goal-grid"></div>
 
-            <!-- fondo de emergencia -->
-            <div class="col-12 col-md-6 col-xl-4">
-              <div class="goal-card">
-                <div class="goal-card-header">
-                  <span class="goal-icon" style="background: var(--c-teal-tint); color: var(--c-teal);"><i class="fa-solid fa-bullseye"></i></span>
-                  <div class="flex-grow-1">
-                    <span class="goal-name">Fondo de emergencia</span>
-                    <span class="goal-type">Ahorro · Ahorro Hey</span>
-                  </div>
-                  <button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevaMetaModal"><i class="fa-solid fa-pen"></i></button>
-                  <button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button>
-                </div>
-
-                <div class="goal-progress">
-                  <div class="goal-ring" style="--pct: 69; --ring: var(--c-teal);">
-                    <span>69%</span>
-                  </div>
-                  <div>
-                    <span class="goal-amount-label">Ahorrado</span>
-                    <span class="goal-amount">$31,200.00</span>
-                    <span class="goal-amount-sub">de $45,000.00</span>
-                    <span class="goal-status status-ok">En camino</span>
-                  </div>
-                </div>
-
-                <div class="goal-details">
-                  <div><span>Te faltan</span><strong>$13,800</strong></div>
-                  <div><span>Fecha límite</span><strong>jun 2027</strong></div>
-                  <div><span>Sugerido / mes</span><strong>$1,971</strong></div>
-                </div>
-
-                <span class="goal-section-label">Últimos abonos</span>
-                <ul class="goal-history list-unstyled">
-                  <li><span>6 nov · <em>BBVA Débito</em></span><strong class="text-income">+$2,000.00</strong></li>
-                  <li><span>15 oct · <em>BBVA Débito</em></span><strong class="text-income">+$2,000.00</strong></li>
-                </ul>
-
-                <button class="btn btn-gold-primary w-100 mt-auto" data-bs-toggle="modal" data-bs-target="#abonarModal">Abonar a la meta</button>
-              </div>
-            </div>
-
-            <!-- laptop nueva -->
-            <div class="col-12 col-md-6 col-xl-4">
-              <div class="goal-card">
-                <div class="goal-card-header">
-                  <span class="goal-icon" style="background: var(--c-blue-tint); color: var(--c-blue);"><i class="fa-solid fa-bullseye"></i></span>
-                  <div class="flex-grow-1">
-                    <span class="goal-name">Laptop nueva</span>
-                    <span class="goal-type">Ahorro · Ahorro Hey</span>
-                  </div>
-                  <button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevaMetaModal"><i class="fa-solid fa-pen"></i></button>
-                  <button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button>
-                </div>
-
-                <div class="goal-progress">
-                  <div class="goal-ring" style="--pct: 33; --ring: var(--c-blue);">
-                    <span>33%</span>
-                  </div>
-                  <div>
-                    <span class="goal-amount-label">Ahorrado</span>
-                    <span class="goal-amount">$8,400.00</span>
-                    <span class="goal-amount-sub">de $25,000.00</span>
-                    <span class="goal-status status-late">Atrasada · faltan $2,950/mes</span>
-                  </div>
-                </div>
-
-                <div class="goal-details">
-                  <div><span>Te faltan</span><strong>$16,600</strong></div>
-                  <div><span>Fecha límite</span><strong>mar 2027</strong></div>
-                  <div><span>Sugerido / mes</span><strong>$4,150</strong></div>
-                </div>
-
-                <span class="goal-section-label">Últimos abonos</span>
-                <ul class="goal-history list-unstyled">
-                  <li><span>1 nov · <em>BBVA Débito</em></span><strong class="text-income">+$1,200.00</strong></li>
-                  <li><span>1 oct · <em>BBVA Débito</em></span><strong class="text-income">+$1,200.00</strong></li>
-                </ul>
-
-                <button class="btn btn-gold-primary w-100 mt-auto" data-bs-toggle="modal" data-bs-target="#abonarModal">Abonar a la meta</button>
-              </div>
-            </div>
-
-            <!-- audifonos -->
-            <div class="col-12 col-md-6 col-xl-4">
-              <div class="goal-card">
-                <div class="goal-card-header">
-                  <span class="goal-icon" style="background: var(--c-purple-tint); color: var(--c-purple);"><i class="fa-solid fa-bullseye"></i></span>
-                  <div class="flex-grow-1">
-                    <span class="goal-name">Audífonos</span>
-                    <span class="goal-type">Ahorro · Efectivo</span>
-                  </div>
-                  <button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevaMetaModal"><i class="fa-solid fa-pen"></i></button>
-                  <button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button>
-                </div>
-
-                <div class="goal-progress">
-                  <div class="goal-ring" style="--pct: 90; --ring: var(--c-purple);">
-                    <span>90%</span>
-                  </div>
-                  <div>
-                    <span class="goal-amount-label">Ahorrado</span>
-                    <span class="goal-amount">$2,700.00</span>
-                    <span class="goal-amount-sub">de $3,000.00</span>
-                    <span class="goal-status status-almost">Casi lista</span>
-                  </div>
-                </div>
-
-                <div class="goal-details">
-                  <div><span>Te faltan</span><strong>$300</strong></div>
-                  <div><span>Fecha límite</span><strong>dic 2026</strong></div>
-                  <div><span>Sugerido / mes</span><strong>$300</strong></div>
-                </div>
-
-                <span class="goal-section-label">Últimos abonos</span>
-                <ul class="goal-history list-unstyled">
-                  <li><span>2 nov · <em>Efectivo</em></span><strong class="text-income">+$900.00</strong></li>
-                  <li><span>5 oct · <em>Efectivo</em></span><strong class="text-income">+$900.00</strong></li>
-                </ul>
-
-                <button class="btn btn-gold-primary w-100 mt-auto" data-bs-toggle="modal" data-bs-target="#abonarModal">Abonar a la meta</button>
-              </div>
-            </div>
-
-            <!-- tarjeta oro (deuda) -->
-            <div class="col-12 col-md-6 col-xl-4">
-              <div class="goal-card">
-                <div class="goal-card-header">
-                  <span class="goal-icon" style="background: var(--c-gold-tint-2); color: var(--c-gold-text-2);"><i class="fa-solid fa-arrow-trend-down"></i></span>
-                  <div class="flex-grow-1">
-                    <span class="goal-name">Liquidar Tarjeta Oro</span>
-                    <span class="goal-type">Deuda · Tarjeta Oro</span>
-                  </div>
-                  <button class="tx-btn" aria-label="Editar" data-bs-toggle="modal" data-bs-target="#nuevaMetaModal"><i class="fa-solid fa-pen"></i></button>
-                  <button class="tx-btn tx-btn-danger" aria-label="Eliminar" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button>
-                </div>
-
-                <div class="goal-progress">
-                  <div class="goal-ring" style="--pct: 40; --ring: var(--c-gold-light);">
-                    <span>40%</span>
-                  </div>
-                  <div>
-                    <span class="goal-amount-label">Saldo pendiente</span>
-                    <span class="goal-amount">$8,999.65</span>
-                    <span class="goal-amount-sub">Pagado $6,000.35 de $15,000.00</span>
-                    <span class="goal-status status-late">Atrasada · faltan $1,500/mes</span>
-                  </div>
-                </div>
-
-                <div class="goal-details">
-                  <div><span>Por pagar</span><strong>$9,000</strong></div>
-                  <div><span>Fecha límite</span><strong>feb 2027</strong></div>
-                  <div><span>Sugerido / mes</span><strong>$3,000</strong></div>
-                </div>
-
-                <span class="goal-section-label">Últimos pagos</span>
-                <ul class="goal-history list-unstyled">
-                  <li><span>3 nov · <em>BBVA Débito</em></span><strong class="text-income">+$1,500.00</strong></li>
-                  <li><span>3 oct · <em>BBVA Débito</em></span><strong class="text-income">+$1,500.00</strong></li>
-                </ul>
-
-                <button class="btn btn-gold-primary w-100 mt-auto" data-bs-toggle="modal" data-bs-target="#abonarModal">Registrar pago</button>
-              </div>
-            </div>
-
-            <!-- crear meta -->
-            <div class="col-12 col-md-6 col-xl-4">
-              <button type="button" class="goal-card goal-card-new" data-bs-toggle="modal" data-bs-target="#nuevaMetaModal">
-                <span class="goal-new-icon"><i class="fa-solid fa-plus"></i></span>
-                <span>Crear meta de ahorro o deuda</span>
-              </button>
-            </div>
-
+          <!-- vacio -->
+          <div class="goal-empty" id="goal-empty" hidden>
+            <i class="fa-regular fa-flag"></i>
+            <p id="goal-empty-text">No hay metas en esta sección.</p>
           </div>
 
         </div>
 
-        <!-- nueva meta -->
-        <div class="modal fade" id="nuevaMetaModal" tabindex="-1">
+        <!-- nueva / editar meta -->
+        <div class="modal fade" id="nuevaMetaModal" tabindex="-1" aria-labelledby="metaModalTitle">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Nueva meta</h5>
+                <h5 class="modal-title" id="metaModalTitle">Nueva meta</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
               </div>
               <div class="modal-body">
-                <div class="type-selector">
-                  <button type="button" class="btn-type active flex-fill">Ahorro</button>
-                  <button type="button" class="btn-type flex-fill">Deuda</button>
+                <div class="type-selector" id="meta-kind-wrap">
+                  <button type="button" class="btn-type active flex-fill" data-kind="saving" onclick="selectKind(this)">Ahorro</button>
+                  <button type="button" class="btn-type flex-fill" data-kind="debt" onclick="selectKind(this)">Deuda</button>
                 </div>
-                <form>
+                <form id="meta-form" novalidate onsubmit="event.preventDefault();">
+                  <input type="hidden" id="meta-edit-id">
                   <div class="mb-3">
                     <label class="form-label" for="meta-nombre">Nombre</label>
-                    <input id="meta-nombre" type="text" class="form-control" placeholder="Ej. Fondo de emergencia">
+                    <input id="meta-nombre" type="text" class="form-control" placeholder="Ej. Fondo de emergencia" maxlength="40" required>
+                    <div class="invalid-feedback">Escribe un nombre (máx. 40 caracteres).</div>
                   </div>
                   <div class="mb-3">
-                    <label class="form-label" for="meta-monto">Monto objetivo</label>
-                    <input id="meta-monto" type="number" class="form-control form-control-lg" placeholder="0.00">
+                    <label class="form-label" for="meta-monto" id="meta-monto-label">Monto objetivo</label>
+                    <input id="meta-monto" type="number" class="form-control form-control-lg" placeholder="0.00" min="1" step="0.01" required>
+                    <div class="invalid-feedback" id="meta-monto-error">El monto debe ser mayor o igual a 1.</div>
                   </div>
                   <div class="row g-2 mb-1">
                     <div class="col-6">
                       <label class="form-label" for="meta-cuenta">Cuenta</label>
-                      <select id="meta-cuenta" class="form-select">
-                        <option>BBVA Débito</option>
-                        <option>Ahorro Hey</option>
-                        <option>Tarjeta Nu</option>
-                        <option>Tarjeta Oro</option>
-                        <option>Efectivo</option>
-                      </select>
+                      <select id="meta-cuenta" class="form-select"></select>
                     </div>
                     <div class="col-6">
                       <label class="form-label" for="meta-fecha">Fecha límite</label>
                       <input id="meta-fecha" type="date" class="form-control">
+                      <div class="invalid-feedback">La fecha no puede ser en el pasado.</div>
                     </div>
                   </div>
                 </form>
               </div>
               <div class="modal-footer">
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn btn-gold-primary">Guardar meta</button>
+                <button class="btn btn-gold-primary" id="meta-save-btn" onclick="saveGoal()">Guardar meta</button>
               </div>
             </div>
           </div>
         </div>
 
         <!-- abonar -->
-        <div class="modal fade" id="abonarModal" tabindex="-1">
+        <div class="modal fade" id="abonarModal" tabindex="-1" aria-labelledby="abonoModalTitle">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">Abonar a una meta</h5>
+                <h5 class="modal-title" id="abonoModalTitle">Abonar a una meta</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
               </div>
               <div class="modal-body">
-                <form>
+                <form id="abono-form" novalidate onsubmit="event.preventDefault();">
                   <div class="mb-3">
                     <label class="form-label" for="abono-meta">Meta</label>
-                    <select id="abono-meta" class="form-select">
-                      <option>Fondo de emergencia</option>
-                      <option>Laptop nueva</option>
-                      <option>Audífonos</option>
-                      <option>Liquidar Tarjeta Oro</option>
-                    </select>
+                    <select id="abono-meta" class="form-select" onchange="updateAbonoHint()" required></select>
+                    <div class="invalid-feedback">Selecciona una meta activa.</div>
                   </div>
                   <div class="mb-3">
                     <label class="form-label" for="abono-monto">Monto</label>
-                    <input id="abono-monto" type="number" class="form-control form-control-lg" placeholder="0.00">
+                    <input id="abono-monto" type="number" class="form-control form-control-lg" placeholder="0.00" min="0.01" step="0.01" required>
+                    <div class="invalid-feedback" id="abono-monto-error">El monto debe ser mayor a 0.</div>
+                    <small class="abono-hint" id="abono-hint"></small>
                   </div>
                   <div class="row g-2 mb-1">
                     <div class="col-6">
                       <label class="form-label" for="abono-cuenta">Desde la cuenta</label>
-                      <select id="abono-cuenta" class="form-select">
-                        <option>BBVA Débito</option>
-                        <option>Ahorro Hey</option>
-                        <option>Efectivo</option>
-                      </select>
+                      <select id="abono-cuenta" class="form-select"></select>
                     </div>
                     <div class="col-6">
                       <label class="form-label" for="abono-fecha">Fecha</label>
-                      <input id="abono-fecha" type="date" class="form-control" value="2026-11-08">
+                      <input id="abono-fecha" type="date" class="form-control" required>
+                      <div class="invalid-feedback">La fecha no puede ser futura.</div>
                     </div>
                   </div>
                 </form>
               </div>
               <div class="modal-footer">
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn btn-gold-primary" data-bs-toggle="modal" data-bs-target="#metaCompletadaModal">Guardar abono</button>
+                <button class="btn btn-gold-primary" id="abono-save-btn" onclick="saveContribution()">Guardar abono</button>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- detalle de meta -->
+        <div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleTitle">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="detalleTitle">Detalle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+              </div>
+              <div class="modal-body" id="detalle-body"></div>
+              <div class="modal-footer" id="detalle-footer"></div>
             </div>
           </div>
         </div>
@@ -374,11 +238,11 @@
                 <div class="delete-icon-wrap">
                   <i class="fa-regular fa-trash-can"></i>
                 </div>
-                <h5 class="mt-3 mb-1" style="font-size:16px;">¿Eliminar meta?</h5>
-                <p style="font-size:13px; color:var(--c-text-muted);">Esta acción no se puede deshacer.</p>
+                <h5 class="mt-3 mb-1" style="font-size:16px;" id="delete-title">¿Eliminar meta?</h5>
+                <p style="font-size:13px; color:var(--c-text-muted);" id="delete-desc">Esta acción no se puede deshacer.</p>
                 <div class="d-flex gap-2 mt-3">
                   <button class="btn btn-secondary flex-fill" data-bs-dismiss="modal">Cancelar</button>
-                  <button class="btn btn-danger flex-fill">Eliminar</button>
+                  <button class="btn btn-danger flex-fill" id="delete-confirm-btn" onclick="confirmDelete()">Eliminar</button>
                 </div>
               </div>
             </div>
@@ -394,40 +258,29 @@
                   <i class="fa-solid fa-trophy"></i>
                 </div>
                 <h5 class="mt-3 mb-1" id="metaCompletadaTitle" style="font-size:16px;">¡Meta completada!</h5>
-                <p style="font-size:13px; color:var(--c-text-muted);">
-                  Alcanzaste tu meta <strong style="color:var(--c-white);">Audífonos</strong>.
+                <p style="font-size:13px; color:var(--c-text-muted);" id="completada-text">
+                  Alcanzaste tu meta <strong style="color:var(--c-white);" id="completada-nombre"></strong>.
                 </p>
                 <div class="completed-amount">
-                  <span>Ahorrado</span>
-                  <strong>$3,000.00</strong>
+                  <span id="completada-label">Ahorrado</span>
+                  <strong id="completada-monto">$0.00</strong>
                 </div>
                 <div class="d-flex gap-2 mt-3">
                   <button class="btn btn-secondary flex-fill" data-bs-dismiss="modal">Cerrar</button>
-                  <button class="btn btn-gold-primary flex-fill" data-bs-dismiss="modal">Ver metas</button>
+                  <button class="btn btn-gold-primary flex-fill" data-bs-dismiss="modal" onclick="setFilter('completed')">Ver metas</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
+        <!-- toasts -->
+        <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-area"></div>
+
       </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <script>
-      document.querySelectorAll('.type-tab').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.type-tab').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-        });
-      });
-
-      document.querySelectorAll('.btn-type').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.btn-type').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-        });
-      });
-    </script>
+    <script src="/controllers/metas.js"></script>
   </body>
 </html>
