@@ -74,7 +74,7 @@
             </div>
             <div class="col-6 col-md-3">
               <div class="stat-card">
-                <span class="stat-label">Mayor cambio vs octubre</span>
+                <span class="stat-label" id="stat-mover-label">Mayor cambio vs el mes pasado</span>
                 <span class="stat-value" id="stat-mover-name" style="font-size:18px;"></span>
                 <span class="stat-note" id="stat-mover-note"></span>
               </div>
@@ -181,6 +181,10 @@
                 <div class="delete-icon-wrap"><i class="fa-regular fa-trash-can"></i></div>
                 <h5 class="mt-3 mb-1 text-center" style="font-size:16px;" id="delete-title">¿Eliminar categoría?</h5>
                 <p class="text-center mb-0" style="font-size:13px; color:var(--c-text-muted);" id="delete-desc">Esta acción no se puede deshacer.</p>
+                <div class="mt-3" id="delete-move-wrap" hidden>
+                  <label class="form-label" for="delete-move-to">Mover sus movimientos a</label>
+                  <select id="delete-move-to" class="form-select"></select>
+                </div>
 <div class="d-flex gap-2 mt-3">
                   <button class="btn btn-secondary flex-fill" data-bs-dismiss="modal">Cancelar</button>
                   <button class="btn btn-danger flex-fill" id="confirm-delete-btn" onclick="confirmDelete()">Eliminar</button>
