@@ -1,0 +1,103 @@
+(function initGlobalUI() {
+  if (document.getElementById('vector-global-ui')) return;
+
+  const lottieScript = document.createElement('script');
+  lottieScript.src = 'https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js';
+  document.head.appendChild(lottieScript);
+
+  const wrapper = document.createElement('div');
+  wrapper.id = 'vector-global-ui';
+  wrapper.innerHTML = `
+    <div id="vectorLoader" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.75); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center; flex-direction:column;">
+      <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_p8bfn5to.json" background="transparent" speed="1.2" style="width: 110px; height: 110px;" loop autoplay></lottie-player>
+      <span style="color:#f8fafc; font-family:'Inter',sans-serif; font-size:14px; font-weight:600; margin-top:4px;">Procesando...</span>
+    </div>
+    <div id="vectorToastContainer" style="position:fixed; top:20px; right:20px; z-index:10000; display:flex; flex-direction:column; gap:10px; max-width:340px;"></div>
+  `;
+  document.body.appendChild(wrapper);
+})();
+
+const VectorAuth = {
+  getUser() {
+    try {
+      return JSON.parse(localStorage.getItem('vector_user'));
+    } catch {
+      return null;
+    }
+  },
+  setUser(user) {
+    localStorage.setItem('vector_user', JSON.stringify(user));
+  },
+  logout() {
+    localStorage.removeItem('vector_user');
+    window.location.href = '/login';
+  },
+  requireAuth() {
+    const user = this.getUser();
+    if (!user || !user._id) {
+      window.location.href = '/login';
+      return null;
+    }
+    return user;
+  }
+};
+
+function showLoader() {
+  const loader = document.getElementById('vectorLoader');
+  if (loader) loader.style.display = 'flex';
+}
+
+function hideLoader() {
+  const loader = document.getElementById('vectorLoader');
+  if (loader) loader.style.display = 'none';
+}
+
+function showAlert(message, type = 'success') {
+  const container = document.getElementById('vectorToastContainer');
+  if (!container) return;
+
+  const isError = type === 'error';
+  const toast = document.createElement('div');
+  toast.style.cssText = `
+    background: ${isError ? '#7f1d1d' : '#064e3b'};
+    color: #fff;
+    border-left: 4px solid ${isError ? '#ef4444' : '#10b981'};
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  `;
+  toast.innerHTML = `
+    <span>${message}</span>
+    <button style="background:none;border:none;color:#cbd5e1;cursor:pointer;font-size:16px;" onclick="this.parentElement.remove()">&times;</button>
+  `;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 4000);
+}
+
+async function apiFetch(url, options = {}) {
+  const user = VectorAuth.getUser();
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(user?._id ? { 'x-user-id': user._id } : {}),
+    ...(options.headers || {}),
+  };
+
+  showLoader();
+  try {
+    const res = await fetch(url, { ...options, headers });
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      throw new Error(data.message || 'Ocurrió un error en la petición');
+    }
+    return data;
+  } finally {
+    hideLoader();
+  }
+}

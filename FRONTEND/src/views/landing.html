@@ -39,7 +39,7 @@
                 <span>VECTOR</span>
             </a>
 
-            <div>
+            <div id="landingNavActions" class="d-flex align-items-center gap-2">
                 <a href="/login" class="btn-nav-login">Iniciar Sesión</a>
             </div>
         </div>
@@ -233,5 +233,21 @@
 
     <!-- Bootstrap Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  (function checkLandingSession() {
+    try {
+      const user = JSON.parse(localStorage.getItem('vector_user'));
+      if (user && user._id) {
+        const navBox = document.getElementById('landingNavActions');
+        navBox.innerHTML = `
+          <span class="text-light small fw-semibold me-2 d-none d-sm-inline">Hola, ${user.name}</span>
+          <a href="/dashboard" class="btn-nav-login">Ir al Dashboard</a>
+          <button onclick="localStorage.removeItem('vector_user'); location.reload();" class="btn btn-sm btn-outline-danger rounded-pill px-3">Salir</button>
+        `;
+      }
+    } catch {}
+  })();
+</script>
 </body>
 </html>

@@ -50,9 +50,9 @@
             <div class="col-12 col-lg-4">
               <div class="profile-card">
                 <div class="profile-avatar" id="profile-avatar"></div>
-                <span class="profile-name">Ethan Orozco</span>
-                <span class="profile-email">ethan@example.com</span>
-                <span class="profile-since"><i class="fa-regular fa-calendar"></i>Miembro desde sep 2026</span>
+                <span class="profile-name" id="card-profile-name">Cargando...</span>
+                <span class="profile-email" id="card-profile-email">...</span>
+                <span class="profile-since" id="card-profile-since"></span>
 
                 <div class="profile-stats">
                   <div><strong>5</strong><span>Cuentas</span></div>
@@ -170,14 +170,113 @@
       </main>
     </div>
 
+   <script src="/controllers/api.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script>
-      const fillProfileAvatar = () => {
+      const sessionUser = VectorAuth.requireAuth();
+
+      function renderProfileUI(user) {
+        document.getElementById('card-profile-name').textContent = user.name;
+        document.getElementById('card-profile-email').textContent = user.email;
+
+        if (user.createdAt) {
+          const fecha = new Date(user.createdAt).toLocaleDateString('es-MX', { month: 'short', year: 'numeric' });
+          document.getElementById('card-profile-since').innerHTML = `<i class="fa-regular fa-calendar"></i> Miembro desde ${fecha}`;
+        }
+
+        const partes = user.name.split(' ');
+        document.getElementById('perfil-nombre').value = partes[0] || '';
+        document.getElementById('perfil-apellido').value = partes.slice(1).join(' ') || '';
+        document.getElementById('perfil-correo').value = user.email;
+
+        const navName = document.getElementById('navUserName');
+        const navEmail = document.getElementById('navUserEmail');
+        if (navName) navName.textContent = user.name;
+        if (navEmail) navEmail.textContent = user.email;
+
         const el = document.getElementById('profile-avatar');
-        el.innerHTML = window.blobatar('Ethan Orozco', { size: 88, background: 'square' });
-      };
-      if (window.blobatar) fillProfileAvatar();
-      else window.addEventListener('blobatar-ready', fillProfileAvatar, { once: true });
+        if (window.blobatar) {
+          el.innerHTML = window.blobatar(user.name, { size: 88, background: 'square' });
+        }
+      }
+
+      async function loadProfile() {
+        if (!sessionUser) return;
+        try {
+          const user = await apiFetch(`/api/users/${sessionUser._id}`);
+          VectorAuth.setUser(user);
+          renderProfileUI(user);
+        } catch (err) {
+          showAlert(err.message, 'error');
+        }
+      }
+
+      window.addEventListener('DOMContentLoaded', loadProfile);
+
+      const forms = document.querySelectorAll('.section-card form');
+      const infoForm = forms[0];
+      const passForm = forms[1];
+
+      // Actualizar nombre y correo
+      infoForm.querySelector('.btn-gold-primary').addEventListener('click', async () => {
+        const nombre = document.getElementById('perfil-nombre').value.trim();
+        const apellido = document.getElementById('perfil-apellido').value.trim();
+        const email = document.getElementById('perfil-correo').value.trim();
+        const fullName = `${nombre} ${apellido}`.trim();
+
+        if (!fullName || !email) {
+          return showAlert('Nombre y correo son obligatorios', 'error');
+        }
+
+        try {
+          const data = await apiFetch(`/api/users/${sessionUser._id}`, {
+            method: 'PUT',
+            body: JSON.stringify({ name: fullName, email })
+          });
+          VectorAuth.setUser(data.user);
+          renderProfileUI(data.user);
+          showAlert('Perfil actualizado sin recargar la página');
+        } catch (err) {
+          showAlert(err.message, 'error');
+        }
+      });
+
+      // Actualizar contraseña
+      passForm.querySelector('.btn-gold-primary').addEventListener('click', async () => {
+        const password = document.getElementById('pass-nueva').value;
+        const confirmar = document.getElementById('pass-confirmar').value;
+
+        if (!password || password.length < 6) {
+          return showAlert('La nueva contraseña debe tener al menos 6 caracteres', 'error');
+        }
+        if (password !== confirmar) {
+          return showAlert('Las contraseñas nuevas no coinciden', 'error');
+        }
+
+        try {
+          await apiFetch(`/api/users/${sessionUser._id}`, {
+            method: 'PUT',
+            body: JSON.stringify({ password })
+          });
+          passForm.reset();
+          showAlert('Contraseña actualizada correctamente');
+        } catch (err) {
+          showAlert(err.message, 'error');
+        }
+      });
+
+      // Eliminar cuenta
+      document.querySelector('#deleteModal .btn-danger').addEventListener('click', async () => {
+        try {
+          await apiFetch(`/api/users/${sessionUser._id}`, {
+            method: 'DELETE'
+          });
+          showAlert('Cuenta eliminada. Hasta pronto.');
+          setTimeout(() => VectorAuth.logout(), 800);
+        } catch (err) {
+          showAlert(err.message, 'error');
+        }
+      });
     </script>
   </body>
 </html>

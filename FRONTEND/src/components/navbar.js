@@ -1,5 +1,11 @@
 class AppNavbar extends HTMLElement {
   connectedCallback() {
+    let currentUser = { name: 'Usuario', email: '' };
+    try {
+      const saved = JSON.parse(localStorage.getItem('vector_user'));
+      if (saved) currentUser = saved;
+    } catch {}
+
     this.innerHTML = `
       <aside class="side-navbar" id="sidebarNav">
         <div class="nav-mobile-header d-lg-none">
@@ -32,18 +38,18 @@ class AppNavbar extends HTMLElement {
           </ul>
         </nav>
 
-        <div class="nav-user-card ">
+        <div class="nav-user-card">
           <div class="nav-avatar"></div>
           <div class="nav-user-info">
-            <span class="nav-user-name">Ethan Orozco</span>
-            <span class="nav-user-email">ethan@example.com</span>
+            <span class="nav-user-name" id="navUserName">${currentUser.name}</span>
+            <span class="nav-user-email" id="navUserEmail">${currentUser.email}</span>
           </div>
           <button class="nav-logout-btn" aria-label="Cerrar sesión" onclick="openLogoutModal()">
             <i class="fa-solid fa-right-from-bracket"></i>
           </button>
         </div>
       </aside>
-    `
+    `;
 
     if (!document.getElementById('logoutModal')) {
       const modal = document.createElement('div');
@@ -61,7 +67,7 @@ class AppNavbar extends HTMLElement {
                 </p>
                 <div class="d-flex gap-2 mt-3">
                   <button class="btn btn-secondary flex-fill" data-bs-dismiss="modal">Cancelar</button>
-                  <button class="btn btn-primary flex-fill" onclick="window.location.href = '/login'">
+                  <button class="btn btn-primary flex-fill" onclick="localStorage.removeItem('vector_user'); window.location.href = '/login'">
                     Cerrar sesión
                   </button>
                 </div>
@@ -88,7 +94,7 @@ class AppNavbar extends HTMLElement {
   }
 }
 
-customElements.define('app-navbar', AppNavbar)
+customElements.define('app-navbar', AppNavbar);
 
 function openLogoutModal() {
   new bootstrap.Modal(document.getElementById('logoutModal')).show();
