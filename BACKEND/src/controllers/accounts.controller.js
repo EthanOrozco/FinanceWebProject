@@ -1,4 +1,7 @@
 const Account = require('../models/Account');
+const Transaction = require('../models/Transaction');
+const Goal = require('../models/Goal');
+
 const getAccounts = async (req, res) => {
   const { type, search, sort } = req.query;
 
@@ -60,50 +63,30 @@ const updateAccount = async (req, res) => {
   res.json(account);
 };
 
-const transferBetweenAccounts = async (req, res) => {
-  const { fromId, toId, amount } = req.body ?? {};
-  const monto = Number(amount);
-
-  if (!fromId || !toId || fromId === toId) {
-    return res.status(400).json({ message: 'Selecciona dos cuentas distintas para transferir' });
-  }
-  if (!monto || monto <= 0) {
-    return res.status(400).json({ message: 'El monto a transferir debe ser mayor a 0' });
-  }
-
-  const fromAcc = await Account.findOne({ _id: fromId, userId: req.userId });
-  const toAcc = await Account.findOne({ _id: toId, userId: req.userId });
-
-  if (!fromAcc || !toAcc) {
-    return res.status(404).json({ message: 'Una de las cuentas no existe' });
-  }
-
-  if (fromAcc.type === 'credito') {
-    fromAcc.balance += monto;
-  } else {
-    if (fromAcc.balance < monto) {
-      return res.status(400).json({ message: `Saldo insuficiente en ${fromAcc.name}` });
-    }
-    fromAcc.balance -= monto;
-  }
-
-  if (toAcc.type === 'credito') {
-    toAcc.balance = Math.max(0, toAcc.balance - monto);
-  } else {
-    toAcc.balance += monto;
-  }
-
-  await fromAcc.save();
-  await toAcc.save();
-
-  res.json({ message: 'Transferencia realizada', from: fromAcc, to: toAcc });
-};
+// Las transferencias entre cuentas se crean como transacciones (POST /api/transactions
+// con type 'transfer'), así quedan en el historial y services/balances.js mueve los saldos.
 
 // DELETE
 const deleteAccount = async (req, res) => {
   const account = await Account.findOne({ _id: req.params.id, userId: req.userId });
   if (!account) return res.status(404).json({ message: 'Cuenta no encontrada' });
 
+  // no se borra si tiene movimientos (como origen o destino de una transferencia):
+  // quedarían transacciones apuntando a una cuenta que no existe
+  const txCount = await Transaction.countDocuments({
+    userId: req.userId,
+    $or: [{ accountId: account._id }, { toAccountId: account._id }],
+  });
+  if (txCount) {
+    const n = txCount === 1 ? '1 movimiento' : `${txCount} movimientos`;
+    return res.status(409).json({
+      message: `${account.name} tiene ${n}. Bórralos o cámbialos de cuenta en Transacciones antes de eliminarla.`,
+      txCount,
+    });
+  }
+
+  // las metas que la tenían como cuenta asociada se quedan "Sin cuenta"
+  await Goal.updateMany({ userId: req.userId, accountId: account._id }, { $set: { accountId: null } });
   await account.deleteOne();
   res.json({ message: 'Cuenta eliminada', account });
 };
@@ -113,6 +96,5 @@ module.exports = {
   getAccountById,
   createAccount,
   updateAccount,
-  transferBetweenAccounts,
   deleteAccount,
 };

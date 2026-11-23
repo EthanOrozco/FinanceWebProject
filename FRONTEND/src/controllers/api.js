@@ -80,11 +80,16 @@ function showAlert(message, type = 'success') {
   setTimeout(() => toast.remove(), 4000);
 }
 
-async function apiFetch(url, options = {}) {
+// header con el usuario logueado; el backend (middleware/auth.js) lo exige en /api/*
+function authHeaders() {
   const user = VectorAuth.getUser();
+  return user?._id ? { 'x-user-id': user._id } : {};
+}
+
+async function apiFetch(url, options = {}) {
   const headers = {
     'Content-Type': 'application/json',
-    ...(user?._id ? { 'x-user-id': user._id } : {}),
+    ...authHeaders(),
     ...(options.headers || {}),
   };
 

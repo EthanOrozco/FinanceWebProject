@@ -188,7 +188,8 @@
                   <div class="row g-2 mb-3">
                     <div class="col-6">
                       <label class="form-label" for="mov-cuenta" id="mov-cuenta-label">Cuenta</label>
-                      <select id="mov-cuenta" class="form-select"></select>
+                      <select id="mov-cuenta" class="form-select" required></select>
+                      <div class="invalid-feedback">Elige una cuenta.</div>
                     </div>
                     <div class="col-6" id="mov-categoria-wrap">
                       <label class="form-label" for="mov-categoria">Categoría</label>
@@ -245,6 +246,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="/controllers/api.js"></script>
     <script src="/controllers/transacciones.js"></script>
   </body>
 </html>

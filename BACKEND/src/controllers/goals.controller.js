@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Transaction = require('../models/Transaction');
 const Goal = require('../models/Goal');
+const { planBalances } = require('../services/balances');
 
 // para usar texto del usuario dentro de un $regex sin que truene con ( [ * etc.
 const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -145,7 +146,8 @@ const addContribution = async (req, res) => {
   const { amount, date, accountId } = req.body ?? {};
   const value = Number(amount);
   if (!Number.isInteger(value) || value <= 0) return res.status(400).json({ message: 'El monto debe ser mayor a 0 (en centavos)' });
-  if (accountId && !mongoose.isValidObjectId(accountId)) return res.status(400).json({ message: 'Cuenta inválida' });
+  if (!accountId) return res.status(400).json({ message: 'Elige la cuenta de donde sale el dinero' });
+  if (!mongoose.isValidObjectId(accountId)) return res.status(400).json({ message: 'Cuenta inválida' });
   if (date && isNaN(new Date(date))) return res.status(400).json({ message: 'Fecha inválida' });
   if (date && new Date(date) > new Date()) {
     return res.status(400).json({ message: 'La fecha del abono no puede ser futura' });
@@ -157,16 +159,24 @@ const addContribution = async (req, res) => {
     return res.status(400).json({ message: `El pago excede la deuda pendiente (${pesos(remaining)})` });
   }
 
-  await Transaction.create({
+  const tx = new Transaction({
     userId: req.userId,
-    // pago de deuda = gasto real; abono de ahorro = el dinero se mueve, no se gasta
+    // pago de deuda = gasto real; abono de ahorro = el dinero se aparta de la cuenta, no se gasta
+    // (en ambos casos el saldo de la cuenta baja, ver services/balances.js)
     type: goal.kind === 'debt' ? 'expense' : 'transfer',
     amount: value,
-    accountId: accountId || process.env.DEV_ACCOUNT_ID, // TEMPORAL hasta que exista el CRUD de cuentas
+    accountId,
     goalId: goal._id,
     date: date || undefined,
     description: `${goal.kind === 'debt' ? 'Pago' : 'Abono'} a ${goal.name}`,
   });
+  await tx.validate();
+
+  const balances = await planBalances(req.userId, null, tx);
+  if (balances.error) return res.status(400).json({ message: balances.error });
+
+  await tx.save();
+  await balances.apply();
 
   const completed = syncStatus(goal, saved + value);
   await goal.save();
@@ -180,9 +190,16 @@ const deleteContribution = async (req, res) => {
   if (!goal) return res.status(404).json({ message: 'Meta no encontrada' });
   if (!mongoose.isValidObjectId(contributionId)) return res.status(400).json({ message: 'ID inválido' });
 
+  const tx = await Transaction.findOne({ _id: contributionId, goalId: goal._id });
+  if (!tx) return res.status(404).json({ message: 'Abono no encontrado' });
+
+  // el dinero regresa a la cuenta de donde salió
+  const balances = await planBalances(req.userId, tx, null);
+  if (balances.error) return res.status(400).json({ message: balances.error });
+
   const wasReached = (await savedOf(goal)) >= goal.targetAmount;
-  const { deletedCount } = await Transaction.deleteOne({ _id: contributionId, goalId: goal._id });
-  if (!deletedCount) return res.status(404).json({ message: 'Abono no encontrado' });
+  await tx.deleteOne();
+  await balances.apply();
 
   // si se habia completado por los abonos y ya no alcanza, vuelve a activa
   if (wasReached) syncStatus(goal, await savedOf(goal));

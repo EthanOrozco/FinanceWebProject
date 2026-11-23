@@ -1,3 +1,5 @@
+VectorAuth.requireAuth();
+
 const PAL = {
   gold: "var(--c-gold)",
   blue: "var(--c-blue)",
@@ -40,12 +42,13 @@ const fmtDate = (iso) => {
   return { day: `${d} ${MESES[m - 1]}`, year: y };
 };
 
-// TEMPORAL: mientras no exista el CRUD de cuentas, el backend usa una cuenta de desarrollo
 const accountName = (id) => {
   if (!id) return '—';
   const acc = accounts.find(a => a._id === id);
-  return acc ? acc.name : 'Cuenta principal';
+  return acc ? acc.name : 'Cuenta eliminada';
 };
+
+const NO_ACCOUNTS_MSG = 'Primero crea una cuenta en la sección Cuentas';
 
 const showToast = (msg, type = 'success') => {
   const icon = type === 'success' ? 'fa-circle-check' : 'fa-circle-exclamation';
@@ -80,7 +83,7 @@ const api = async (url, options = {}) => {
   try {
     const res = await fetch(url, {
       ...options,
-      headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+      headers: { 'Content-Type': 'application/json', ...authHeaders(), ...(options.headers || {}) },
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
@@ -97,11 +100,11 @@ const api = async (url, options = {}) => {
 //carga de datos
 const loadAccounts = async () => {
   try {
-    const res = await fetch('/api/accounts');
+    const res = await fetch('/api/accounts', { headers: authHeaders() });
     const data = await res.json();
     accounts = Array.isArray(data) ? data : [];
   } catch {
-    accounts = []; // todavía no existe el CRUD de cuentas
+    accounts = [];
   }
 };
 
@@ -281,15 +284,11 @@ const onFilterChange = () => {
 
 //modal crear / editar
 const fillAccountSelect = (select, selected = '', exclude = '') => {
-  if (!accounts.length) {
-    select.innerHTML = '<option value="">Cuenta principal</option>';
-    select.disabled = true;
-    return;
-  }
-  select.disabled = false;
-  select.innerHTML = accounts
-    .filter(a => a._id !== exclude)
-    .map(a => `<option value="${a._id}" ${a._id === selected ? 'selected' : ''}>${esc(a.name)}</option>`).join('');
+  const list = accounts.filter(a => a._id !== exclude);
+  // si el movimiento era de una cuenta que ya no existe, se obliga a elegir otra
+  const missing = selected && !list.some(a => a._id === selected);
+  select.innerHTML = (missing ? '<option value="" selected>Elige una cuenta</option>' : '') +
+    list.map(a => `<option value="${a._id}" ${a._id === selected ? 'selected' : ''}>${esc(a.name)}</option>`).join('');
 };
 
 const fillCategorySelect = (selected = '') => {
@@ -331,6 +330,10 @@ const applyType = (type, selectedCategory = '') => {
 };
 
 window.openNewModal = (type = 'expense') => {
+  if (!accounts.length) {
+    showToast(NO_ACCOUNTS_MSG, 'error');
+    return;
+  }
   if (type === 'transfer' && accounts.length < 2) {
     showToast('Necesitas al menos dos cuentas para hacer una transferencia', 'error');
     return;
@@ -374,6 +377,9 @@ const validateForm = () => {
   const amountOk = amountEl.value !== '' && toCents(amountEl.value) >= 1;
   amountEl.classList.toggle('is-invalid', !amountOk);
 
+  const fromOk = !!fromEl.value;
+  fromEl.classList.toggle('is-invalid', !fromOk);
+
   const catOk = movType === 'transfer' || !!catEl.value;
   catEl.classList.toggle('is-invalid', !catOk);
 
@@ -383,7 +389,7 @@ const validateForm = () => {
   const dateOk = !!dateEl.value;
   dateEl.classList.toggle('is-invalid', !dateOk);
 
-  return amountOk && catOk && destOk && dateOk;
+  return amountOk && fromOk && catOk && destOk && dateOk;
 };
 
 window.saveTransaction = async () => {
@@ -394,7 +400,7 @@ window.saveTransaction = async () => {
   const body = {
     type: movType,
     amount: toCents(document.getElementById('mov-monto').value),
-    accountId: document.getElementById('mov-cuenta').value || null,
+    accountId: document.getElementById('mov-cuenta').value,
     categoryId: isTransfer ? null : document.getElementById('mov-categoria').value,
     toAccountId: isTransfer ? document.getElementById('mov-destino').value : null,
     description: document.getElementById('mov-descripcion').value.trim(),

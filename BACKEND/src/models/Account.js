@@ -16,15 +16,19 @@ const accountSchema = new Schema({
       message: 'Tipo de cuenta inválido',
     },
   },
+  // Montos en centavos (igual que transacciones y metas): $1,234.50 se guarda como 123450
+  // En crédito, balance es la deuda pendiente
   balance: {
     type: Number,
     default: 0,
     min: [0, 'El saldo o deuda no puede ser negativo'],
+    validate: { validator: Number.isInteger, message: 'El saldo debe ser un entero (centavos)' },
   },
   creditLimit: {
     type: Number,
     default: 0,
     min: [0, 'El límite de crédito no puede ser negativo'],
+    validate: { validator: Number.isInteger, message: 'El límite debe ser un entero (centavos)' },
   },
   cutoffDay: {
     type: Number,

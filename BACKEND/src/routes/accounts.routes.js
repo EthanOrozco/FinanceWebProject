@@ -8,7 +8,6 @@ router.use(auth);
 router.get('/', ctrl.getAccounts);
 router.get('/:id', ctrl.getAccountById);
 router.post('/', ctrl.createAccount);
-router.post('/transfer', ctrl.transferBetweenAccounts);
 router.put('/:id', ctrl.updateAccount);
 router.delete('/:id', ctrl.deleteAccount);
 

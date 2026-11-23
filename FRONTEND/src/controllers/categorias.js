@@ -1,3 +1,5 @@
+VectorAuth.requireAuth();
+
 const PAL = {
   gold: { color: "var(--c-gold)", tint: "var(--c-gold-tint)", label: "Dorado" },
   blue: { color: "var(--c-blue)", tint: "var(--c-blue-tint)", label: "Azul" },
@@ -34,7 +36,7 @@ let selectedColor = 'gold';
 let selectedIcon = 'fa-tag';
 
 const loadCategories = async () => {
-  const res = await fetch("/api/categories");
+  const res = await fetch("/api/categories", { headers: authHeaders() });
   const data = await res.json();
   categories = data.map(c => ({ ...c, kind: fromApi(c.kind) }));
   render();
@@ -268,7 +270,7 @@ window.saveCategory = async () => {
   const body = { name, kind: toApi(kind), color: selectedColor, icon: selectedIcon };
   const res = await fetch(id ? `/api/categories/${id}` : '/api/categories', {
     method: id ? 'PUT' : 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
     body: JSON.stringify(body),
   });
   if (!res.ok) return;
@@ -307,7 +309,7 @@ window.confirmDelete = async () => {
   if (!pendingDeleteId) return;
   const moveWrap = document.getElementById('delete-move-wrap');
   const moveTo = moveWrap.hidden ? '' : `?moveTo=${document.getElementById('delete-move-to').value}`;
-  const res = await fetch(`/api/categories/${pendingDeleteId}${moveTo}`, { method: 'DELETE' });
+  const res = await fetch(`/api/categories/${pendingDeleteId}${moveTo}`, { method: 'DELETE', headers: authHeaders() });
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
     document.getElementById('delete-desc').textContent = data.message || 'No se pudo eliminar la categoría.';

@@ -1,3 +1,5 @@
+VectorAuth.requireAuth();
+
 const PAL = {
   gold: { color: "var(--c-gold-light)", tint: "var(--c-gold-tint-2)" },
   blue: { color: "var(--c-blue)", tint: "var(--c-blue-tint)" },
@@ -139,7 +141,7 @@ const api = async (url, options = {}) => {
   try {
     const res = await fetch(url, {
       ...options,
-      headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+      headers: { 'Content-Type': 'application/json', ...authHeaders(), ...(options.headers || {}) },
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) {
@@ -156,7 +158,7 @@ const api = async (url, options = {}) => {
 // ===== carga de datos =====
 const loadAccounts = async () => {
   try {
-    const res = await fetch('/api/accounts');
+    const res = await fetch('/api/accounts', { headers: authHeaders() });
     const data = await res.json();
     accounts = Array.isArray(data) ? data : [];
   } catch {
@@ -319,8 +321,9 @@ window.setFilter = (filter) => {
 };
 
 // ===== selects de cuentas =====
-const fillAccountSelect = (select, selected = '') => {
-  select.innerHTML = '<option value="">Sin cuenta</option>' +
+// la cuenta asociada a la meta es opcional ("Sin cuenta"); la cuenta de un abono es obligatoria
+const fillAccountSelect = (select, selected = '', optional = true) => {
+  select.innerHTML = (optional ? '<option value="">Sin cuenta</option>' : '') +
     accounts.map(a => `<option value="${a._id}" ${a._id === selected ? 'selected' : ''}>${esc(a.name)}</option>`).join('');
 };
 
@@ -434,6 +437,10 @@ window.openAbonoModal = (goalId = '') => {
     showToast('Primero crea una meta activa para poder abonar', 'error');
     return;
   }
+  if (!accounts.length) {
+    showToast('Primero crea una cuenta en la sección Cuentas', 'error');
+    return;
+  }
   const form = document.getElementById('abono-form');
   form.reset();
   clearValidation(form);
@@ -443,7 +450,9 @@ window.openAbonoModal = (goalId = '') => {
     `<option value="${g._id}" ${g._id === goalId ? 'selected' : ''}>${esc(g.name)} (${g.kind === 'debt' ? 'Deuda' : 'Ahorro'})</option>`
   ).join('');
 
-  fillAccountSelect(document.getElementById('abono-cuenta'));
+  // si la meta tiene cuenta asociada, se sugiere esa
+  const goal = goals.find(g => g._id === goalId);
+  fillAccountSelect(document.getElementById('abono-cuenta'), goal?.accountId || '', false);
   const fecha = document.getElementById('abono-fecha');
   fecha.value = todayStr();
   fecha.max = todayStr();
@@ -479,7 +488,9 @@ window.saveContribution = async () => {
   const dateOk = dateEl.value && dateEl.value <= todayStr();
   dateEl.classList.toggle('is-invalid', !dateOk);
   document.getElementById('abono-meta').classList.toggle('is-invalid', !g);
-  if (amountMsg || !dateOk || !g) return;
+  const accountEl = document.getElementById('abono-cuenta');
+  accountEl.classList.toggle('is-invalid', !accountEl.value);
+  if (amountMsg || !dateOk || !g || !accountEl.value) return;
 
   const btn = document.getElementById('abono-save-btn');
   setBtnLoading(btn, true);
@@ -488,7 +499,7 @@ window.saveContribution = async () => {
     body: JSON.stringify({
       amount,
       date: dateEl.value,
-      accountId: document.getElementById('abono-cuenta').value || null,
+      accountId: accountEl.value,
     }),
   });
   setBtnLoading(btn, false);

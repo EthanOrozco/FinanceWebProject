@@ -1,5 +1,6 @@
 const Transaction = require('../models/Transaction');
 const Category = require('../models/Category');
+const { planBalances } = require('../services/balances');
 require('../models/Goal'); // registra el modelo para el populate de goalId
 
 const CATEGORY_FIELDS = 'name kind color icon';
@@ -59,8 +60,6 @@ const createTransaction = async (req, res) => {
   const body = req.body ?? {};
   const data = {};
   for (const k of EDITABLE) if (body[k] !== undefined) data[k] = body[k];
-  // TEMPORAL: mientras no exista el CRUD de cuentas, se usa la cuenta de desarrollo del .env
-  if (!data.accountId) data.accountId = process.env.DEV_ACCOUNT_ID;
 
   const tx = new Transaction({ ...data, userId: req.userId });
   await tx.validate();
@@ -68,7 +67,11 @@ const createTransaction = async (req, res) => {
   const error = await checkCategory(tx, req.userId);
   if (error) return res.status(400).json({ message: error });
 
+  const balances = await planBalances(req.userId, null, tx);
+  if (balances.error) return res.status(400).json({ message: balances.error });
+
   await tx.save();
+  await balances.apply();
   await tx.populate('categoryId', CATEGORY_FIELDS);
   res.status(201).json(tx);
 };
@@ -78,15 +81,19 @@ const updateTransaction = async (req, res) => {
   if (!tx) return res.status(404).json({ message: 'Transacción no encontrada' });
   if (tx.goalId) return res.status(400).json({ message: GOAL_LOCKED });
 
+  const before = tx.toObject(); // para revertir su efecto en los saldos
   const body = req.body ?? {};
   for (const k of EDITABLE) if (body[k] !== undefined) tx[k] = body[k];
-  if (!tx.accountId) tx.accountId = process.env.DEV_ACCOUNT_ID; // TEMPORAL, ver createTransaction
   await tx.validate();
 
   const error = await checkCategory(tx, req.userId);
   if (error) return res.status(400).json({ message: error });
 
+  const balances = await planBalances(req.userId, before, tx);
+  if (balances.error) return res.status(400).json({ message: balances.error });
+
   await tx.save();
+  await balances.apply();
   await tx.populate('categoryId', CATEGORY_FIELDS);
   res.json(tx);
 };
@@ -95,7 +102,12 @@ const deleteTransaction = async (req, res) => {
   const tx = await Transaction.findOne({ _id: req.params.id, userId: req.userId });
   if (!tx) return res.status(404).json({ message: 'Transacción no encontrada' });
   if (tx.goalId) return res.status(400).json({ message: GOAL_LOCKED });
+
+  const balances = await planBalances(req.userId, tx, null);
+  if (balances.error) return res.status(400).json({ message: balances.error });
+
   await tx.deleteOne();
+  await balances.apply();
   res.json({ message: 'Transacción eliminada', transaction: tx });
 };
 

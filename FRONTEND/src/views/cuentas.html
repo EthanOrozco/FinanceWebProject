@@ -233,7 +233,7 @@
                   <i class="fa-regular fa-trash-can"></i>
                 </div>
                 <h5 class="mt-3 mb-1" id="deleteModalTitle" style="font-size:16px;">¿Eliminar cuenta?</h5>
-                <p style="font-size:13px; color:var(--c-text-muted);">Sus movimientos también se borrarán y dejarán de contar en tu balance. Esta acción no se puede deshacer.</p>
+                <p id="deleteModalDesc" style="font-size:13px; color:var(--c-text-muted);">Esta acción no se puede deshacer.</p>
                 <div class="d-flex gap-2 mt-3">
                   <button type="button" class="btn btn-secondary flex-fill" data-bs-dismiss="modal">Cancelar</button>
                   <button type="button" class="btn btn-danger flex-fill" id="btnConfirmDelete">Eliminar</button>
@@ -272,7 +272,10 @@
         credito:  { label: 'Crédito',  icon: 'fa-credit-card' },
       };
 
-      const fmtMoney = (n) => '$' + Number(n || 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      // El backend guarda los montos en centavos
+      const fmtMoney = (cents) => '$' + (Number(cents || 0) / 100).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const toCents = (value) => Math.round(Number(value || 0) * 100);
+      const toPesos = (cents) => (Number(cents || 0) / 100).toFixed(2);
 
       async function loadAccounts() {
         try {
@@ -436,8 +439,8 @@
 
         document.getElementById('cuenta-nombre').value = acc.name;
         document.querySelector(`input[name="cuenta-tipo"][value="${acc.type}"]`).checked = true;
-        document.getElementById('cuenta-saldo').value = acc.balance;
-        document.getElementById('cuenta-limite').value = acc.creditLimit || '';
+        document.getElementById('cuenta-saldo').value = toPesos(acc.balance);
+        document.getElementById('cuenta-limite').value = acc.creditLimit ? toPesos(acc.creditLimit) : '';
         document.getElementById('cuenta-corte').value = acc.cutoffDay || '';
         document.getElementById('cuenta-pago').value = acc.dueDay || '';
 
@@ -451,8 +454,8 @@
       document.getElementById('btnSaveCuenta').addEventListener('click', async () => {
         const name = document.getElementById('cuenta-nombre').value.trim();
         const type = document.querySelector('input[name="cuenta-tipo"]:checked')?.value || 'debito';
-        const balance = Number(document.getElementById('cuenta-saldo').value || 0);
-        const creditLimit = Number(document.getElementById('cuenta-limite').value || 0);
+        const balance = toCents(document.getElementById('cuenta-saldo').value);
+        const creditLimit = toCents(document.getElementById('cuenta-limite').value);
         const cutoffDay = document.getElementById('cuenta-corte').value;
         const dueDay = document.getElementById('cuenta-pago').value;
         const colorInputId = document.querySelector('input[name="cuenta-color"]:checked')?.id || 'color-dorado';
@@ -484,8 +487,12 @@
       });
 
       function openDeleteModal(id) {
+        const acc = allAccounts.find(a => a._id === id);
         deletingAccountId = id;
-        new bootstrap.Modal(document.getElementById('deleteModal')).show();
+        document.getElementById('deleteModalTitle').textContent = `¿Eliminar "${acc?.name ?? 'cuenta'}"?`;
+        document.getElementById('deleteModalDesc').textContent = 'Esta acción no se puede deshacer.';
+        document.getElementById('btnConfirmDelete').disabled = false;
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteModal')).show();
       }
 
       document.getElementById('btnConfirmDelete').addEventListener('click', async () => {
@@ -496,7 +503,9 @@
           bootstrap.Modal.getInstance(document.getElementById('deleteModal'))?.hide();
           await loadAccounts();
         } catch (err) {
-          showAlert(err.message, 'error');
+          // p. ej. la cuenta tiene movimientos: se explica dentro del modal y no se deja confirmar
+          document.getElementById('deleteModalDesc').textContent = err.message;
+          document.getElementById('btnConfirmDelete').disabled = true;
         }
       });
 
@@ -507,6 +516,13 @@
         desde.innerHTML = opts;
         hacia.innerHTML = opts;
         if (allAccounts.length > 1) hacia.selectedIndex = 1;
+        document.getElementById('tf-monto').value = '';
+      }
+
+      // si origen y destino quedaron iguales, mueve el otro select a la primera cuenta distinta
+      function avoidSameAccount(fixedId, otherSelectId) {
+        const other = document.getElementById(otherSelectId);
+        if (other.value === fixedId) other.value = allAccounts.find(a => a._id !== fixedId)._id;
       }
 
       function openTransferModal() {
@@ -523,6 +539,7 @@
         }
         populateTransferSelects();
         document.getElementById('tf-desde').value = id;
+        avoidSameAccount(id, 'tf-hacia');
         new bootstrap.Modal(document.getElementById('transferModal')).show();
       }
 
@@ -532,18 +549,26 @@
         }
         populateTransferSelects();
         document.getElementById('tf-hacia').value = id;
+        avoidSameAccount(id, 'tf-desde');
         new bootstrap.Modal(document.getElementById('transferModal')).show();
       }
 
       document.getElementById('btnConfirmTransfer').addEventListener('click', async () => {
         const fromId = document.getElementById('tf-desde').value;
         const toId = document.getElementById('tf-hacia').value;
-        const amount = Number(document.getElementById('tf-monto').value);
+        const amount = toCents(document.getElementById('tf-monto').value);
+
+        if (fromId === toId) return showAlert('Elige dos cuentas distintas', 'error');
+        if (amount <= 0) return showAlert('El monto debe ser mayor a 0', 'error');
+
+        // se guarda como transacción para que aparezca en el historial de Transacciones
+        const toAcc = allAccounts.find(a => a._id === toId);
+        const description = toAcc?.type === 'credito' ? `Pago de tarjeta ${toAcc.name}` : `Transferencia a ${toAcc?.name ?? ''}`;
 
         try {
-          await apiFetch('/api/accounts/transfer', {
+          await apiFetch('/api/transactions', {
             method: 'POST',
-            body: JSON.stringify({ fromId, toId, amount }),
+            body: JSON.stringify({ type: 'transfer', amount, accountId: fromId, toAccountId: toId, description }),
           });
           showAlert('Transferencia realizada con éxito');
           bootstrap.Modal.getInstance(document.getElementById('transferModal'))?.hide();
