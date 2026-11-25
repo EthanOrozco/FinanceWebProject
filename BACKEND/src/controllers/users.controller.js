@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const bcrypt = require('bcrypt')
 const User = require('../models/User');
+const { setSessionCookie, clearSessionCookie } = require('../utils/session');
 
 const BCRYPT_ROUNDS = 12;
 
@@ -11,7 +12,7 @@ const hashPassword = (password) => bcrypt.hash(password, BCRYPT_ROUNDS);
 
 //bcrypt hashes start with "$2a$"/"$2b$". Anything else is old hash
 const isLegacyHash = (hash) => !hash.startsWith('$2');
-
+// ^^^^^ remove ASAP (prob can do it now but better to leave it be a while)
 const verifyPassword = async (password, storedHash) => {
   if (!isLegacyHash(storedHash)) return bcrypt.compare(password, storedHash);
   
@@ -41,6 +42,8 @@ const registerUser = async (req, res) => {
     email,
     passwordHash: await hashPassword(password),
   });
+
+  setSessionCookie(res, user._id);
 
   res.status(201).json({
     message: 'Usuario registrado exitosamente',
@@ -77,6 +80,8 @@ const loginUser = async (req, res) => {
   if (isLegacyHash(user.passwordHash)) {
     await User.updateOne({ _id: user._id }, { passwordHash: await hashPassword(password) }); 
   };
+
+  setSessionCookie(res, user._id);
   
   res.json({
     message: 'Inicio de sesión exitoso',
@@ -140,7 +145,13 @@ const deleteUser = async (req, res) => {
   }
 
   await user.deleteOne();
+  clearSessionCookie(res);
   res.json({ message: 'Cuenta eliminada correctamente' });
+};
+
+const logoutUser = (req, res) => {
+  clearSessionCookie(res);
+  res.json({ message: 'Sesión cerrada' });
 };
 
 module.exports = {
@@ -149,4 +160,5 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
+  logoutUser,
 };

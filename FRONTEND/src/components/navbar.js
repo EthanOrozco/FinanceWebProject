@@ -67,7 +67,7 @@ class AppNavbar extends HTMLElement {
                 </p>
                 <div class="d-flex gap-2 mt-3">
                   <button class="btn btn-secondary flex-fill" data-bs-dismiss="modal">Cancelar</button>
-                  <button class="btn btn-primary flex-fill" onclick="localStorage.removeItem('vector_user'); window.location.href = '/login'">
+                  <button class="btn btn-primary flex-fill" onclick="VectorAuth.logout()">
                     Cerrar sesión
                   </button>
                 </div>
