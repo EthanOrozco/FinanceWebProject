@@ -198,7 +198,8 @@
                   <div class="row g-2 mb-1">
                     <div class="col-6">
                       <label class="form-label" for="abono-cuenta">Desde la cuenta</label>
-                      <select id="abono-cuenta" class="form-select"></select>
+                      <select id="abono-cuenta" class="form-select" required></select>
+                      <div class="invalid-feedback">Elige una cuenta.</div>
                     </div>
                     <div class="col-6">
                       <label class="form-label" for="abono-fecha">Fecha</label>
@@ -281,6 +282,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="/controllers/api.js"></script>
     <script src="/controllers/metas.js"></script>
   </body>
 </html>

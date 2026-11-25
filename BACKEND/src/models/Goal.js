@@ -5,7 +5,12 @@ const goalSchema = new Schema({
   name: { type: String, required: [true, 'El nombre es obligatorio'], trim: true, maxlength: [40, 'El nombre no puede pasar de 40 caracteres'] },
   kind: { type: String, required: true, enum: { values: ['saving', 'debt'], message: 'Tipo de meta inválido' } },
   // ahorro: monto objetivo / deuda: saldo inicial de la deuda
-  targetAmount: { type: Number, required: [true, 'El monto objetivo es obligatorio'], min: [1, 'El monto objetivo debe ser al menos 1'] },
+  // montos van en centavos para evitar errores de flotante
+  targetAmount: {
+    type: Number, required: [true, 'El monto objetivo es obligatorio'],
+    min: [1, 'El monto objetivo debe ser al menos 1'],
+    validate: { validator: Number.isInteger, message: 'Amount must be an integer (cents)' },
+  },
   deadline: { type: Date, default: null },
   accountId: { type: Schema.Types.ObjectId, ref: 'Account', default: null },
   status: { type: String, enum: { values: ['active', 'completed', 'cancelled'], message: 'Estado inválido' }, default: 'active' },

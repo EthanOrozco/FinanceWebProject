@@ -34,11 +34,11 @@
             <button id="theme-btn" class="btn btn-outline-secondary d-none d-sm-flex" onclick="toggleTheme()" aria-label="Cambiar tema">
               <i class="fa-regular fa-moon"></i>
             </button>
-            <button class="btn btn-tx-secondary d-none d-sm-flex" data-bs-toggle="modal" data-bs-target="#transferModal">
+            <button class="btn btn-tx-secondary d-none d-sm-flex" onclick="openTransferModal()">
               <i class="fa-solid fa-right-left"></i>
               <span class="d-none d-md-inline">Transferir</span>
             </button>
-            <button class="btn btn-gold-primary" data-bs-toggle="modal" data-bs-target="#cuentaModal">
+            <button class="btn btn-gold-primary" onclick="openCreateModal()">
               <i class="fa-solid fa-plus"></i>
               <span class="d-none d-md-inline">Nueva cuenta</span>
             </button>
@@ -57,280 +57,56 @@
             <div class="col-6 col-md-3">
               <div class="stat-card">
                 <span class="stat-label">Balance neto</span>
-                <span class="stat-value" style="color: var(--c-gold-text-2);">$42,370.55</span>
+                <span class="stat-value" id="stat-neto" style="color: var(--c-gold-text-2);">$0.00</span>
               </div>
             </div>
             <div class="col-6 col-md-3">
               <div class="stat-card">
                 <span class="stat-label">Activos (débito, ahorro, efectivo)</span>
-                <span class="stat-value">$55,620.20</span>
+                <span class="stat-value" id="stat-activos">$0.00</span>
               </div>
             </div>
             <div class="col-6 col-md-3">
               <div class="stat-card">
                 <span class="stat-label">Deuda en tarjetas</span>
-                <span class="stat-value text-expense">−$13,249.65</span>
+                <span class="stat-value text-expense" id="stat-deuda">−$0.00</span>
               </div>
             </div>
             <div class="col-6 col-md-3">
               <div class="stat-card">
                 <span class="stat-label">Crédito disponible</span>
-                <span class="stat-value">$18,750.35</span>
+                <span class="stat-value" id="stat-credito">$0.00</span>
               </div>
             </div>
           </div>
 
-          <!-- filtros -->
+          <!-- filtros, busqueda y ordenamiento -->
           <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
             <div class="type-tabs acc-tabs" role="group" aria-label="Filtrar por tipo de cuenta">
-              <button type="button" class="type-tab active" data-filter="all">Todas (5)</button>
-              <button type="button" class="type-tab" data-filter="debito">Débito (1)</button>
-              <button type="button" class="type-tab" data-filter="ahorro">Ahorro (1)</button>
-              <button type="button" class="type-tab" data-filter="efectivo">Efectivo (1)</button>
-              <button type="button" class="type-tab" data-filter="credito">Crédito (2)</button>
+              <button type="button" class="type-tab active" data-filter="all">Todas (0)</button>
+              <button type="button" class="type-tab" data-filter="debito">Débito (0)</button>
+              <button type="button" class="type-tab" data-filter="ahorro">Ahorro (0)</button>
+              <button type="button" class="type-tab" data-filter="efectivo">Efectivo (0)</button>
+              <button type="button" class="type-tab" data-filter="credito">Crédito (0)</button>
             </div>
-            <span class="acc-count">5 cuentas</span>
+            <div class="d-flex align-items-center gap-2">
+              <input type="search" id="accSearch" class="form-control form-control-sm" placeholder="Buscar cuenta..." style="max-width: 180px;">
+              <select id="accSort" class="form-select form-select-sm" style="max-width: 165px;">
+                <option value="recent">Más recientes</option>
+                <option value="name">Nombre (A–Z)</option>
+                <option value="balance_desc">Mayor saldo</option>
+                <option value="balance_asc">Menor saldo</option>
+              </select>
+              <span class="acc-count">0 cuentas</span>
+            </div>
           </div>
 
-          <!-- tarjetas de cuentas -->
-          <div class="row g-3">
-
-            <!-- bbva débito -->
-            <div class="col-12 col-md-6 col-xl-4" data-type="debito">
-              <article class="acc-card acc-card-selected" aria-label="BBVA Débito">
-                <div class="acc-card-header">
-                  <span class="acc-icon" style="background: var(--c-blue-tint); color: var(--c-blue);"><i class="fa-solid fa-building-columns"></i></span>
-                  <div class="flex-grow-1 min-w-0">
-                    <h2 class="acc-name">BBVA Débito</h2>
-                    <span class="acc-type">Débito · •••• 4821</span>
-                  </div>
-                  <button class="tx-btn" aria-label="Editar BBVA Débito" data-bs-toggle="modal" data-bs-target="#cuentaModal"><i class="fa-solid fa-pen"></i></button>
-                  <button class="tx-btn tx-btn-danger" aria-label="Eliminar BBVA Débito" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button>
-                </div>
-
-                <div>
-                  <span class="acc-balance-label">Saldo actual</span>
-                  <span class="acc-balance">$22,480.20</span>
-                </div>
-
-                <div class="acc-details acc-details-2">
-                  <div><span>Entradas del mes</span><strong class="text-income">+$12,700.00</strong></div>
-                  <div><span>Salidas del mes</span><strong class="text-expense">−$4,326.40</strong></div>
-                </div>
-
-                <div class="acc-actions">
-                  <a href="/transacciones" class="btn btn-acc-ghost">Ver movimientos</a>
-                  <button class="btn btn-acc-slate" data-bs-toggle="modal" data-bs-target="#transferModal">Transferir</button>
-                </div>
-              </article>
-            </div>
-
-            <!-- ahorro hey -->
-            <div class="col-12 col-md-6 col-xl-4" data-type="ahorro">
-              <article class="acc-card" aria-label="Ahorro Hey">
-                <div class="acc-card-header">
-                  <span class="acc-icon" style="background: var(--c-teal-tint); color: var(--c-teal);"><i class="fa-solid fa-piggy-bank"></i></span>
-                  <div class="flex-grow-1 min-w-0">
-                    <h2 class="acc-name">Ahorro Hey</h2>
-                    <span class="acc-type">Ahorro · 10.5% anual</span>
-                  </div>
-                  <button class="tx-btn" aria-label="Editar Ahorro Hey" data-bs-toggle="modal" data-bs-target="#cuentaModal"><i class="fa-solid fa-pen"></i></button>
-                  <button class="tx-btn tx-btn-danger" aria-label="Eliminar Ahorro Hey" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button>
-                </div>
-
-                <div>
-                  <span class="acc-balance-label">Saldo actual</span>
-                  <span class="acc-balance">$31,200.00</span>
-                </div>
-
-                <div class="acc-details acc-details-2">
-                  <div><span>Entradas del mes</span><strong class="text-income">+$2,268.40</strong></div>
-                  <div><span>Salidas del mes</span><strong class="text-expense">−$0.00</strong></div>
-                </div>
-
-                <div class="acc-actions">
-                  <a href="/transacciones" class="btn btn-acc-ghost">Ver movimientos</a>
-                  <button class="btn btn-acc-slate" data-bs-toggle="modal" data-bs-target="#transferModal">Transferir</button>
-                </div>
-              </article>
-            </div>
-
-            <!-- efectivo -->
-            <div class="col-12 col-md-6 col-xl-4" data-type="efectivo">
-              <article class="acc-card" aria-label="Efectivo">
-                <div class="acc-card-header">
-                  <span class="acc-icon" style="background: var(--c-gold-tint); color: var(--c-gold-text-2);"><i class="fa-solid fa-wallet"></i></span>
-                  <div class="flex-grow-1 min-w-0">
-                    <h2 class="acc-name">Efectivo</h2>
-                    <span class="acc-type">Efectivo · En cartera</span>
-                  </div>
-                  <button class="tx-btn" aria-label="Editar Efectivo" data-bs-toggle="modal" data-bs-target="#cuentaModal"><i class="fa-solid fa-pen"></i></button>
-                  <button class="tx-btn tx-btn-danger" aria-label="Eliminar Efectivo" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button>
-                </div>
-
-                <div>
-                  <span class="acc-balance-label">Saldo actual</span>
-                  <span class="acc-balance">$1,940.00</span>
-                </div>
-
-                <div class="acc-details acc-details-2">
-                  <div><span>Entradas del mes</span><strong class="text-income">+$1,000.00</strong></div>
-                  <div><span>Salidas del mes</span><strong class="text-expense">−$785.00</strong></div>
-                </div>
-
-                <div class="acc-actions">
-                  <a href="/transacciones" class="btn btn-acc-ghost">Ver movimientos</a>
-                  <button class="btn btn-acc-slate" data-bs-toggle="modal" data-bs-target="#transferModal">Transferir</button>
-                </div>
-              </article>
-            </div>
-
-            <!-- tarjeta nu -->
-            <div class="col-12 col-md-6 col-xl-4" data-type="credito">
-              <article class="acc-card" aria-label="Tarjeta Nu">
-                <div class="acc-card-header">
-                  <span class="acc-icon" style="background: var(--c-purple-tint); color: var(--c-purple);"><i class="fa-solid fa-credit-card"></i></span>
-                  <div class="flex-grow-1 min-w-0">
-                    <h2 class="acc-name">Tarjeta Nu</h2>
-                    <span class="acc-type">Crédito · •••• 0937</span>
-                  </div>
-                  <button class="tx-btn" aria-label="Editar Tarjeta Nu" data-bs-toggle="modal" data-bs-target="#cuentaModal"><i class="fa-solid fa-pen"></i></button>
-                  <button class="tx-btn tx-btn-danger" aria-label="Eliminar Tarjeta Nu" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button>
-                </div>
-
-                <div>
-                  <span class="acc-balance-label">Deuda pendiente</span>
-                  <span class="acc-balance text-expense">−$4,250.00</span>
-                </div>
-
-                <div>
-                  <div class="credit-usage">
-                    <span>28% del límite usado</span>
-                    <span>Límite $15,000</span>
-                  </div>
-                  <div class="credit-bar" role="progressbar" aria-label="Uso del límite" aria-valuenow="28" aria-valuemin="0" aria-valuemax="100">
-                    <div style="width: 28%; background: var(--c-purple);"></div>
-                  </div>
-                </div>
-
-                <div class="acc-details">
-                  <div><span>Disponible</span><strong>$10,750.00</strong></div>
-                  <div><span>Corte</span><strong>Día 25</strong></div>
-                  <div><span>Pago límite</span><strong>10 nov</strong></div>
-                </div>
-
-                <div class="due-alert" role="status">
-                  <i class="fa-solid fa-triangle-exclamation"></i>
-                  Tu pago vence en 3 días
-                </div>
-
-                <div class="acc-actions">
-                  <a href="/transacciones" class="btn btn-acc-ghost">Ver movimientos</a>
-                  <button class="btn btn-acc-gold" data-bs-toggle="modal" data-bs-target="#transferModal">Pagar tarjeta</button>
-                </div>
-              </article>
-            </div>
-
-            <!-- tarjeta oro -->
-            <div class="col-12 col-md-6 col-xl-4" data-type="credito">
-              <article class="acc-card" aria-label="Tarjeta Oro">
-                <div class="acc-card-header">
-                  <span class="acc-icon" style="background: var(--c-coral-tint); color: var(--c-coral);"><i class="fa-solid fa-credit-card"></i></span>
-                  <div class="flex-grow-1 min-w-0">
-                    <h2 class="acc-name">Tarjeta Oro</h2>
-                    <span class="acc-type">Crédito · •••• 7712</span>
-                  </div>
-                  <button class="tx-btn" aria-label="Editar Tarjeta Oro" data-bs-toggle="modal" data-bs-target="#cuentaModal"><i class="fa-solid fa-pen"></i></button>
-                  <button class="tx-btn tx-btn-danger" aria-label="Eliminar Tarjeta Oro" data-bs-toggle="modal" data-bs-target="#deleteModal"><i class="fa-regular fa-trash-can"></i></button>
-                </div>
-
-                <div>
-                  <span class="acc-balance-label">Deuda pendiente</span>
-                  <span class="acc-balance text-expense">−$8,999.65</span>
-                </div>
-
-                <div>
-                  <div class="credit-usage">
-                    <span>53% del límite usado</span>
-                    <span>Límite $17,000</span>
-                  </div>
-                  <div class="credit-bar" role="progressbar" aria-label="Uso del límite" aria-valuenow="53" aria-valuemin="0" aria-valuemax="100">
-                    <div style="width: 53%; background: var(--c-gold-light);"></div>
-                  </div>
-                </div>
-
-                <div class="acc-details">
-                  <div><span>Disponible</span><strong>$8,000.35</strong></div>
-                  <div><span>Corte</span><strong>Día 3</strong></div>
-                  <div><span>Pago límite</span><strong>23 nov</strong></div>
-                </div>
-
-                <div class="acc-actions">
-                  <a href="/transacciones" class="btn btn-acc-ghost">Ver movimientos</a>
-                  <button class="btn btn-acc-gold" data-bs-toggle="modal" data-bs-target="#transferModal">Pagar tarjeta</button>
-                </div>
-              </article>
-            </div>
-
-            <!-- agregar cuenta -->
-            <div class="col-12 col-md-6 col-xl-4">
-              <button type="button" class="acc-card acc-card-new" data-bs-toggle="modal" data-bs-target="#cuentaModal">
-                <span class="acc-new-icon"><i class="fa-solid fa-plus"></i></span>
-                Agregar cuenta
-              </button>
-            </div>
-
-          </div>
-
-          <!-- movimientos de la cuenta seleccionada -->
-          <section class="movements-card" id="movimientos" aria-labelledby="movimientos-title">
-            <div class="d-flex flex-wrap align-items-start justify-content-between gap-2">
-              <div>
-                <h2 class="movements-title" id="movimientos-title">Movimientos recientes · BBVA Débito</h2>
-                <span class="movements-sub">Últimos movimientos de esta cuenta</span>
-              </div>
-              <a href="/transacciones" class="movements-link">Ver en historial</a>
-            </div>
-
-            <ul class="movements-list list-unstyled">
-              <li>
-                <span class="mv-icon mv-in"><i class="fa-solid fa-arrow-down"></i></span>
-                <div class="flex-grow-1 min-w-0">
-                  <span class="mv-title">Nómina quincenal</span>
-                  <span class="mv-sub">7 nov · Nómina</span>
-                </div>
-                <strong class="text-income">+$9,200.00</strong>
-              </li>
-              <li>
-                <span class="mv-icon mv-tr"><i class="fa-solid fa-right-left"></i></span>
-                <div class="flex-grow-1 min-w-0">
-                  <span class="mv-title">BBVA → Ahorro Hey</span>
-                  <span class="mv-sub">6 nov · Transferencia</span>
-                </div>
-                <strong class="text-transfer">$2,000.00</strong>
-              </li>
-              <li>
-                <span class="mv-icon mv-out"><i class="fa-solid fa-arrow-up"></i></span>
-                <div class="flex-grow-1 min-w-0">
-                  <span class="mv-title">Gasolina</span>
-                  <span class="mv-sub">4 nov · Transporte</span>
-                </div>
-                <strong class="text-expense">−$850.00</strong>
-              </li>
-              <li>
-                <span class="mv-icon mv-in"><i class="fa-solid fa-arrow-down"></i></span>
-                <div class="flex-grow-1 min-w-0">
-                  <span class="mv-title">Proyecto freelance</span>
-                  <span class="mv-sub">3 nov · Freelance</span>
-                </div>
-                <strong class="text-income">+$3,500.00</strong>
-              </li>
-            </ul>
-          </section>
+          <!-- contenedor dinamico de tarjetas -->
+          <div class="row g-3" id="accountsGrid"></div>
 
         </div>
 
-        <!-- nueva / editar cuenta -->
+        <!-- modal nueva / editar cuenta -->
         <div class="modal fade" id="cuentaModal" tabindex="-1" aria-labelledby="cuentaModalTitle">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -407,14 +183,14 @@
                 </form>
               </div>
               <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn btn-gold-primary" data-bs-dismiss="modal">Crear cuenta</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-gold-primary" id="btnSaveCuenta">Crear cuenta</button>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- transferir / pagar tarjeta -->
+        <!-- modal transferir / pagar tarjeta -->
         <div class="modal fade" id="transferModal" tabindex="-1" aria-labelledby="transferModalTitle">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -423,59 +199,26 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
               </div>
               <div class="modal-body">
-                <form>
+                <form id="transferForm">
                   <div class="row g-2 mb-3">
                     <div class="col-6">
                       <label class="form-label" for="tf-desde">Desde</label>
-                      <select id="tf-desde" class="form-select">
-                        <option selected>BBVA Débito</option>
-                        <option>Ahorro Hey</option>
-                        <option>Efectivo</option>
-                        <option>Tarjeta Nu</option>
-                        <option>Tarjeta Oro</option>
-                      </select>
+                      <select id="tf-desde" class="form-select"></select>
                     </div>
                     <div class="col-6">
                       <label class="form-label" for="tf-hacia">Hacia</label>
-                      <select id="tf-hacia" class="form-select">
-                        <option>BBVA Débito</option>
-                        <option selected>Ahorro Hey</option>
-                        <option>Efectivo</option>
-                        <option>Tarjeta Nu</option>
-                        <option>Tarjeta Oro</option>
-                      </select>
+                      <select id="tf-hacia" class="form-select"></select>
                     </div>
                   </div>
                   <div class="mb-3">
                     <label class="form-label" for="tf-monto">Monto</label>
-                    <input id="tf-monto" type="number" step="0.01" class="form-control form-control-lg" placeholder="0.00" value="2000.00">
-                  </div>
-                  <div class="row g-2 mb-3">
-                    <div class="col-6">
-                      <label class="form-label" for="tf-fecha">Fecha</label>
-                      <input id="tf-fecha" type="date" class="form-control" value="2026-11-09">
-                    </div>
-                    <div class="col-6">
-                      <label class="form-label" for="tf-meta">Abonar a meta (opcional)</label>
-                      <select id="tf-meta" class="form-select">
-                        <option>Ninguna</option>
-                        <option>Fondo de emergencia</option>
-                        <option>Laptop nueva</option>
-                        <option>Liquidar Tarjeta Oro</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="transfer-preview">
-                    <span class="transfer-preview-title">Así quedarán tus saldos</span>
-                    <div><span>BBVA Débito</span><span>$22,480.20 → <strong>$20,480.20</strong></span></div>
-                    <div><span>Ahorro Hey</span><span>$31,200.00 → <strong>$33,200.00</strong></span></div>
+                    <input id="tf-monto" type="number" step="0.01" class="form-control form-control-lg" placeholder="0.00">
                   </div>
                 </form>
               </div>
               <div class="modal-footer">
-                <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button class="btn btn-gold-primary" data-bs-dismiss="modal">Confirmar transferencia</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-gold-primary" id="btnConfirmTransfer">Confirmar transferencia</button>
               </div>
             </div>
           </div>
@@ -490,10 +233,10 @@
                   <i class="fa-regular fa-trash-can"></i>
                 </div>
                 <h5 class="mt-3 mb-1" id="deleteModalTitle" style="font-size:16px;">¿Eliminar cuenta?</h5>
-                <p style="font-size:13px; color:var(--c-text-muted);">Sus movimientos también se borrarán y dejarán de contar en tu balance. Esta acción no se puede deshacer.</p>
+                <p id="deleteModalDesc" style="font-size:13px; color:var(--c-text-muted);">Esta acción no se puede deshacer.</p>
                 <div class="d-flex gap-2 mt-3">
-                  <button class="btn btn-secondary flex-fill" data-bs-dismiss="modal">Cancelar</button>
-                  <button class="btn btn-danger flex-fill" data-bs-dismiss="modal">Eliminar</button>
+                  <button type="button" class="btn btn-secondary flex-fill" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="button" class="btn btn-danger flex-fill" id="btnConfirmDelete">Eliminar</button>
                 </div>
               </div>
             </div>
@@ -503,28 +246,351 @@
       </main>
     </div>
 
+    <script src="/controllers/api.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script>
-      // filtro por tipo de cuenta
-      const tabs = document.querySelectorAll('.type-tab');
-      const cards = document.querySelectorAll('[data-type]');
-      const count = document.querySelector('.acc-count');
+      VectorAuth.requireAuth();
 
-      tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-          tabs.forEach(t => t.classList.remove('active'));
-          tab.classList.add('active');
+      let allAccounts = [];
+      let currentFilter = 'all';
+      let editingAccountId = null;
+      let deletingAccountId = null;
 
-          const filter = tab.dataset.filter;
-          let visible = 0;
-          cards.forEach(card => {
-            const show = filter === 'all' || card.dataset.type === filter;
-            card.classList.toggle('d-none', !show);
-            if (show) visible++;
+      const COLOR_MAP = {
+        gold:   { bg: 'var(--c-gold-tint)',   fg: 'var(--c-gold-text-2)' },
+        blue:   { bg: 'var(--c-blue-tint)',   fg: 'var(--c-blue)' },
+        teal:   { bg: 'var(--c-teal-tint)',   fg: 'var(--c-teal)' },
+        purple: { bg: 'var(--c-purple-tint)', fg: 'var(--c-purple)' },
+        coral:  { bg: 'var(--c-coral-tint)',  fg: 'var(--c-coral)' },
+        slate:  { bg: 'var(--c-hover)',       fg: 'var(--c-text-3)' },
+      };
+
+      const TYPE_META = {
+        debito:   { label: 'Débito',   icon: 'fa-building-columns' },
+        ahorro:   { label: 'Ahorro',   icon: 'fa-piggy-bank' },
+        efectivo: { label: 'Efectivo', icon: 'fa-wallet' },
+        credito:  { label: 'Crédito',  icon: 'fa-credit-card' },
+      };
+
+      // El backend guarda los montos en centavos
+      const fmtMoney = (cents) => '$' + (Number(cents || 0) / 100).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const toCents = (value) => Math.round(Number(value || 0) * 100);
+      const toPesos = (cents) => (Number(cents || 0) / 100).toFixed(2);
+
+      async function loadAccounts() {
+        try {
+          const search = document.getElementById('accSearch').value.trim();
+          const sort = document.getElementById('accSort').value;
+          const params = new URLSearchParams();
+          if (search) params.set('search', search);
+          if (sort) params.set('sort', sort);
+
+          allAccounts = await apiFetch(`/api/accounts?${params.toString()}`);
+          updateStats();
+          updateTabCounts();
+          renderAccounts();
+          populateTransferSelects();
+        } catch (err) {
+          showAlert(err.message, 'error');
+        }
+      }
+
+      function updateStats() {
+        let activos = 0;
+        let deuda = 0;
+        let creditoDisp = 0;
+
+        allAccounts.forEach(acc => {
+          if (acc.type === 'credito') {
+            deuda += acc.balance;
+            creditoDisp += Math.max(0, acc.creditLimit - acc.balance);
+          } else {
+            activos += acc.balance;
+          }
+        });
+
+        const neto = activos - deuda;
+        document.getElementById('stat-neto').textContent = (neto < 0 ? '−' : '') + fmtMoney(Math.abs(neto));
+        document.getElementById('stat-activos').textContent = fmtMoney(activos);
+        document.getElementById('stat-deuda').textContent = '−' + fmtMoney(deuda);
+        document.getElementById('stat-credito').textContent = fmtMoney(creditoDisp);
+      }
+
+      function updateTabCounts() {
+        const counts = { all: allAccounts.length, debito: 0, ahorro: 0, efectivo: 0, credito: 0 };
+        allAccounts.forEach(a => { if (counts[a.type] !== undefined) counts[a.type]++; });
+
+        document.querySelector('[data-filter="all"]').textContent = `Todas (${counts.all})`;
+        document.querySelector('[data-filter="debito"]').textContent = `Débito (${counts.debito})`;
+        document.querySelector('[data-filter="ahorro"]').textContent = `Ahorro (${counts.ahorro})`;
+        document.querySelector('[data-filter="efectivo"]').textContent = `Efectivo (${counts.efectivo})`;
+        document.querySelector('[data-filter="credito"]').textContent = `Crédito (${counts.credito})`;
+      }
+
+      function renderAccounts() {
+        const grid = document.getElementById('accountsGrid');
+        const filtered = currentFilter === 'all'
+          ? allAccounts
+          : allAccounts.filter(a => a.type === currentFilter);
+
+        document.querySelector('.acc-count').textContent = `${filtered.length} ${filtered.length === 1 ? 'cuenta' : 'cuentas'}`;
+
+        const cardsHtml = filtered.map(acc => {
+          const colors = COLOR_MAP[acc.color] || COLOR_MAP.gold;
+          const meta = TYPE_META[acc.type] || TYPE_META.debito;
+
+          if (acc.type === 'credito') {
+            const pct = acc.creditLimit > 0 ? Math.min(100, Math.round((acc.balance / acc.creditLimit) * 100)) : 0;
+            const disponible = Math.max(0, acc.creditLimit - acc.balance);
+            return `
+              <div class="col-12 col-md-6 col-xl-4">
+                <article class="acc-card">
+                  <div class="acc-card-header">
+                    <span class="acc-icon" style="background:${colors.bg}; color:${colors.fg};"><i class="fa-solid ${meta.icon}"></i></span>
+                    <div class="flex-grow-1 min-w-0">
+                      <h2 class="acc-name">${acc.name}</h2>
+                      <span class="acc-type">${meta.label}</span>
+                    </div>
+                    <button class="tx-btn" onclick="openEditModal('${acc._id}')" aria-label="Editar"><i class="fa-solid fa-pen"></i></button>
+                    <button class="tx-btn tx-btn-danger" onclick="openDeleteModal('${acc._id}')" aria-label="Eliminar"><i class="fa-regular fa-trash-can"></i></button>
+                  </div>
+                  <div>
+                    <span class="acc-balance-label">Deuda pendiente</span>
+                    <span class="acc-balance text-expense">−${fmtMoney(acc.balance)}</span>
+                  </div>
+                  <div>
+                    <div class="credit-usage">
+                      <span>${pct}% del límite usado</span>
+                      <span>Límite ${fmtMoney(acc.creditLimit)}</span>
+                    </div>
+                    <div class="credit-bar"><div style="width:${pct}%; background:${colors.fg};"></div></div>
+                  </div>
+                  <div class="acc-details">
+                    <div><span>Disponible</span><strong>${fmtMoney(disponible)}</strong></div>
+                    <div><span>Corte</span><strong>${acc.cutoffDay ? 'Día ' + acc.cutoffDay : '—'}</strong></div>
+                    <div><span>Pago límite</span><strong>${acc.dueDay ? 'Día ' + acc.dueDay : '—'}</strong></div>
+                  </div>
+                  <div class="acc-actions">
+                    <a href="/transacciones" class="btn btn-acc-ghost">Ver movimientos</a>
+                    <button class="btn btn-acc-gold" onclick="openTransferTo('${acc._id}')">Pagar tarjeta</button>
+                  </div>
+                </article>
+              </div>`;
+          }
+
+          return `
+            <div class="col-12 col-md-6 col-xl-4">
+              <article class="acc-card">
+                <div class="acc-card-header">
+                  <span class="acc-icon" style="background:${colors.bg}; color:${colors.fg};"><i class="fa-solid ${meta.icon}"></i></span>
+                  <div class="flex-grow-1 min-w-0">
+                    <h2 class="acc-name">${acc.name}</h2>
+                    <span class="acc-type">${meta.label}</span>
+                  </div>
+                  <button class="tx-btn" onclick="openEditModal('${acc._id}')" aria-label="Editar"><i class="fa-solid fa-pen"></i></button>
+                  <button class="tx-btn tx-btn-danger" onclick="openDeleteModal('${acc._id}')" aria-label="Eliminar"><i class="fa-regular fa-trash-can"></i></button>
+                </div>
+                <div>
+                  <span class="acc-balance-label">Saldo actual</span>
+                  <span class="acc-balance">${fmtMoney(acc.balance)}</span>
+                </div>
+                <div class="acc-actions">
+                  <a href="/transacciones" class="btn btn-acc-ghost">Ver movimientos</a>
+                  <button class="btn btn-acc-slate" onclick="openTransferFrom('${acc._id}')">Transferir</button>
+                </div>
+              </article>
+            </div>`;
+        }).join('');
+
+        grid.innerHTML = cardsHtml + `
+          <div class="col-12 col-md-6 col-xl-4">
+            <button type="button" class="acc-card acc-card-new" onclick="openCreateModal()">
+              <span class="acc-new-icon"><i class="fa-solid fa-plus"></i></span>
+              Agregar cuenta
+            </button>
+          </div>`;
+      }
+
+      const COLOR_ID_MAP = {
+        'color-dorado': 'gold',
+        'color-azul': 'blue',
+        'color-verde': 'teal',
+        'color-morado': 'purple',
+        'color-coral': 'coral',
+        'color-gris': 'slate',
+      };
+      const REVERSE_COLOR_MAP = Object.fromEntries(Object.entries(COLOR_ID_MAP).map(([k, v]) => [v, k]));
+
+      function openCreateModal() {
+        editingAccountId = null;
+        document.getElementById('cuentaModalTitle').textContent = 'Nueva cuenta';
+        document.getElementById('btnSaveCuenta').textContent = 'Crear cuenta';
+        document.getElementById('cuentaForm').reset();
+        document.getElementById('tipo-debito').checked = true;
+        new bootstrap.Modal(document.getElementById('cuentaModal')).show();
+      }
+
+      function openEditModal(id) {
+        const acc = allAccounts.find(a => a._id === id);
+        if (!acc) return;
+        editingAccountId = id;
+        document.getElementById('cuentaModalTitle').textContent = 'Editar cuenta';
+        document.getElementById('btnSaveCuenta').textContent = 'Guardar cambios';
+
+        document.getElementById('cuenta-nombre').value = acc.name;
+        document.querySelector(`input[name="cuenta-tipo"][value="${acc.type}"]`).checked = true;
+        document.getElementById('cuenta-saldo').value = toPesos(acc.balance);
+        document.getElementById('cuenta-limite').value = acc.creditLimit ? toPesos(acc.creditLimit) : '';
+        document.getElementById('cuenta-corte').value = acc.cutoffDay || '';
+        document.getElementById('cuenta-pago').value = acc.dueDay || '';
+
+        const colorRadioId = REVERSE_COLOR_MAP[acc.color] || 'color-dorado';
+        const colorEl = document.getElementById(colorRadioId);
+        if (colorEl) colorEl.checked = true;
+
+        new bootstrap.Modal(document.getElementById('cuentaModal')).show();
+      }
+
+      document.getElementById('btnSaveCuenta').addEventListener('click', async () => {
+        const name = document.getElementById('cuenta-nombre').value.trim();
+        const type = document.querySelector('input[name="cuenta-tipo"]:checked')?.value || 'debito';
+        const balance = toCents(document.getElementById('cuenta-saldo').value);
+        const creditLimit = toCents(document.getElementById('cuenta-limite').value);
+        const cutoffDay = document.getElementById('cuenta-corte').value;
+        const dueDay = document.getElementById('cuenta-pago').value;
+        const colorInputId = document.querySelector('input[name="cuenta-color"]:checked')?.id || 'color-dorado';
+        const color = COLOR_ID_MAP[colorInputId] || 'gold';
+
+        if (!name) return showAlert('Escribe el nombre de la cuenta', 'error');
+
+        const payload = { name, type, balance, creditLimit, cutoffDay, dueDay, color };
+
+        try {
+          if (editingAccountId) {
+            await apiFetch(`/api/accounts/${editingAccountId}`, {
+              method: 'PUT',
+              body: JSON.stringify(payload),
+            });
+            showAlert('Cuenta actualizada');
+          } else {
+            await apiFetch('/api/accounts', {
+              method: 'POST',
+              body: JSON.stringify(payload),
+            });
+            showAlert('Cuenta creada correctamente');
+          }
+          bootstrap.Modal.getInstance(document.getElementById('cuentaModal'))?.hide();
+          await loadAccounts();
+        } catch (err) {
+          showAlert(err.message, 'error');
+        }
+      });
+
+      function openDeleteModal(id) {
+        const acc = allAccounts.find(a => a._id === id);
+        deletingAccountId = id;
+        document.getElementById('deleteModalTitle').textContent = `¿Eliminar "${acc?.name ?? 'cuenta'}"?`;
+        document.getElementById('deleteModalDesc').textContent = 'Esta acción no se puede deshacer.';
+        document.getElementById('btnConfirmDelete').disabled = false;
+        bootstrap.Modal.getOrCreateInstance(document.getElementById('deleteModal')).show();
+      }
+
+      document.getElementById('btnConfirmDelete').addEventListener('click', async () => {
+        if (!deletingAccountId) return;
+        try {
+          await apiFetch(`/api/accounts/${deletingAccountId}`, { method: 'DELETE' });
+          showAlert('Cuenta eliminada');
+          bootstrap.Modal.getInstance(document.getElementById('deleteModal'))?.hide();
+          await loadAccounts();
+        } catch (err) {
+          // p. ej. la cuenta tiene movimientos: se explica dentro del modal y no se deja confirmar
+          document.getElementById('deleteModalDesc').textContent = err.message;
+          document.getElementById('btnConfirmDelete').disabled = true;
+        }
+      });
+
+      function populateTransferSelects() {
+        const desde = document.getElementById('tf-desde');
+        const hacia = document.getElementById('tf-hacia');
+        const opts = allAccounts.map(a => `<option value="${a._id}">${a.name} (${fmtMoney(a.balance)})</option>`).join('');
+        desde.innerHTML = opts;
+        hacia.innerHTML = opts;
+        if (allAccounts.length > 1) hacia.selectedIndex = 1;
+        document.getElementById('tf-monto').value = '';
+      }
+
+      // si origen y destino quedaron iguales, mueve el otro select a la primera cuenta distinta
+      function avoidSameAccount(fixedId, otherSelectId) {
+        const other = document.getElementById(otherSelectId);
+        if (other.value === fixedId) other.value = allAccounts.find(a => a._id !== fixedId)._id;
+      }
+
+      function openTransferModal() {
+        if (allAccounts.length < 2) {
+          return showAlert('Necesitas al menos 2 cuentas para transferir', 'error');
+        }
+        populateTransferSelects();
+        new bootstrap.Modal(document.getElementById('transferModal')).show();
+      }
+
+      function openTransferFrom(id) {
+        if (allAccounts.length < 2) {
+          return showAlert('Necesitas al menos 2 cuentas para transferir', 'error');
+        }
+        populateTransferSelects();
+        document.getElementById('tf-desde').value = id;
+        avoidSameAccount(id, 'tf-hacia');
+        new bootstrap.Modal(document.getElementById('transferModal')).show();
+      }
+
+      function openTransferTo(id) {
+        if (allAccounts.length < 2) {
+          return showAlert('Necesitas al menos 2 cuentas para pagar la tarjeta', 'error');
+        }
+        populateTransferSelects();
+        document.getElementById('tf-hacia').value = id;
+        avoidSameAccount(id, 'tf-desde');
+        new bootstrap.Modal(document.getElementById('transferModal')).show();
+      }
+
+      document.getElementById('btnConfirmTransfer').addEventListener('click', async () => {
+        const fromId = document.getElementById('tf-desde').value;
+        const toId = document.getElementById('tf-hacia').value;
+        const amount = toCents(document.getElementById('tf-monto').value);
+
+        if (fromId === toId) return showAlert('Elige dos cuentas distintas', 'error');
+        if (amount <= 0) return showAlert('El monto debe ser mayor a 0', 'error');
+
+        // se guarda como transacción para que aparezca en el historial de Transacciones
+        const toAcc = allAccounts.find(a => a._id === toId);
+        const description = toAcc?.type === 'credito' ? `Pago de tarjeta ${toAcc.name}` : `Transferencia a ${toAcc?.name ?? ''}`;
+
+        try {
+          await apiFetch('/api/transactions', {
+            method: 'POST',
+            body: JSON.stringify({ type: 'transfer', amount, accountId: fromId, toAccountId: toId, description }),
           });
-          count.textContent = visible + (visible === 1 ? ' cuenta' : ' cuentas');
+          showAlert('Transferencia realizada con éxito');
+          bootstrap.Modal.getInstance(document.getElementById('transferModal'))?.hide();
+          await loadAccounts();
+        } catch (err) {
+          showAlert(err.message, 'error');
+        }
+      });
+
+      document.querySelectorAll('.type-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.type-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          currentFilter = tab.dataset.filter;
+          renderAccounts();
         });
       });
+
+      document.getElementById('accSearch').addEventListener('input', loadAccounts);
+      document.getElementById('accSort').addEventListener('change', loadAccounts);
+
+      window.addEventListener('DOMContentLoaded', loadAccounts);
     </script>
   </body>
 </html>

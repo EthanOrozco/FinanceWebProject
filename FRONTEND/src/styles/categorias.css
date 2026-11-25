@@ -580,3 +580,17 @@
   .sort-label { margin-left: 0; }
   .search-label { max-width: 100%; }
 }
+
+/* cambio vs mes pasado */
+.cat-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.cat-delta i { font-size: 10px; }
+.cat-delta-good { color: var(--c-teal); }
+.cat-delta-bad { color: var(--c-coral); }

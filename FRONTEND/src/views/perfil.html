@@ -50,17 +50,11 @@
             <div class="col-12 col-lg-4">
               <div class="profile-card">
                 <div class="profile-avatar" id="profile-avatar"></div>
-                <span class="profile-name">Ethan Orozco</span>
-                <span class="profile-email">ethan@example.com</span>
-                <span class="profile-since"><i class="fa-regular fa-calendar"></i>Miembro desde sep 2026</span>
+                <span class="profile-name" id="card-profile-name">Cargando...</span>
+                <span class="profile-email" id="card-profile-email">...</span>
+                <span class="profile-since" id="card-profile-since"></span>
 
-                <div class="profile-stats">
-                  <div><strong>5</strong><span>Cuentas</span></div>
-                  <div><strong>24</strong><span>Movimientos</span></div>
-                  <div><strong>4</strong><span>Metas</span></div>
-                </div>
-
-                <button class="btn btn-tx-secondary w-100 justify-content-center" onclick="openLogoutModal()">
+                <button class="btn btn-tx-secondary w-100 justify-content-center mt-3" onclick="openLogoutModal()">
                   <i class="fa-solid fa-right-from-bracket"></i>
                   Cerrar sesión
                 </button>
@@ -78,24 +72,24 @@
                     <p class="section-sub">Tu nombre y correo se muestran en la barra lateral.</p>
                   </div>
                 </div>
-                <form>
+                <form id="infoForm">
                   <div class="row g-3">
                     <div class="col-12 col-md-6">
                       <label class="form-label" for="perfil-nombre">Nombre</label>
-                      <input id="perfil-nombre" type="text" class="form-control" value="Ethan">
+                      <input id="perfil-nombre" type="text" class="form-control">
                     </div>
                     <div class="col-12 col-md-6">
                       <label class="form-label" for="perfil-apellido">Apellido</label>
-                      <input id="perfil-apellido" type="text" class="form-control" value="Orozco">
+                      <input id="perfil-apellido" type="text" class="form-control">
                     </div>
                     <div class="col-12">
                       <label class="form-label" for="perfil-correo">Correo electrónico</label>
-                      <input id="perfil-correo" type="email" class="form-control" value="ethan@example.com">
+                      <input id="perfil-correo" type="email" class="form-control">
                     </div>
                   </div>
                   <div class="section-actions">
-                    <button type="reset" class="btn btn-secondary">Cancelar</button>
-                    <button type="button" class="btn btn-gold-primary">Guardar cambios</button>
+                    <button type="button" class="btn btn-secondary" onclick="renderProfileUI(VectorAuth.getUser())">Cancelar</button>
+                    <button type="button" class="btn btn-gold-primary" id="btnSaveInfo">Guardar cambios</button>
                   </div>
                 </form>
               </div>
@@ -106,18 +100,14 @@
                   <span class="section-icon"><i class="fa-solid fa-lock"></i></span>
                   <div>
                     <h2 class="section-title">Cambiar contraseña</h2>
-                    <p class="section-sub">Necesitas tu contraseña actual para poner una nueva.</p>
+                    <p class="section-sub">Ingresa una nueva contraseña de al menos 6 caracteres.</p>
                   </div>
                 </div>
-                <form>
+                <form id="passForm">
                   <div class="row g-3">
-                    <div class="col-12">
-                      <label class="form-label" for="pass-actual">Contraseña actual</label>
-                      <input id="pass-actual" type="password" class="form-control" placeholder="••••••••">
-                    </div>
                     <div class="col-12 col-md-6">
                       <label class="form-label" for="pass-nueva">Nueva contraseña</label>
-                      <input id="pass-nueva" type="password" class="form-control" placeholder="Mínimo 8 caracteres">
+                      <input id="pass-nueva" type="password" class="form-control" placeholder="Mínimo 6 caracteres">
                     </div>
                     <div class="col-12 col-md-6">
                       <label class="form-label" for="pass-confirmar">Confirmar contraseña</label>
@@ -125,7 +115,7 @@
                     </div>
                   </div>
                   <div class="section-actions">
-                    <button type="button" class="btn btn-gold-primary">Actualizar contraseña</button>
+                    <button type="button" class="btn btn-gold-primary" id="btnSavePass">Actualizar contraseña</button>
                   </div>
                 </form>
               </div>
@@ -157,10 +147,9 @@
                 </div>
                 <h5 class="mt-3 mb-1" style="font-size:16px;">¿Eliminar tu cuenta?</h5>
                 <p style="font-size:13px; color:var(--c-text-muted);">Se borrarán todos tus datos. Esta acción no se puede deshacer.</p>
-                <input type="password" class="form-control mb-1" placeholder="Escribe tu contraseña" aria-label="Contraseña">
                 <div class="d-flex gap-2 mt-3">
-                  <button class="btn btn-secondary flex-fill" data-bs-dismiss="modal">Cancelar</button>
-                  <button class="btn btn-danger flex-fill">Eliminar</button>
+                  <button type="button" class="btn btn-secondary flex-fill" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="button" class="btn btn-danger flex-fill" id="btnDeleteAccount">Eliminar</button>
                 </div>
               </div>
             </div>
@@ -170,14 +159,110 @@
       </main>
     </div>
 
+    <script src="/controllers/api.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script>
-      const fillProfileAvatar = () => {
+      const sessionUser = VectorAuth.requireAuth();
+
+      function renderProfileUI(user) {
+        if (!user) return;
+        document.getElementById('card-profile-name').textContent = user.name;
+        document.getElementById('card-profile-email').textContent = user.email;
+
+        if (user.createdAt) {
+          const fecha = new Date(user.createdAt).toLocaleDateString('es-MX', { month: 'short', year: 'numeric' });
+          document.getElementById('card-profile-since').innerHTML = `<i class="fa-regular fa-calendar"></i> Miembro desde ${fecha}`;
+        }
+
+        const partes = user.name.split(' ');
+        document.getElementById('perfil-nombre').value = partes[0] || '';
+        document.getElementById('perfil-apellido').value = partes.slice(1).join(' ') || '';
+        document.getElementById('perfil-correo').value = user.email;
+
+        const navName = document.getElementById('navUserName');
+        const navEmail = document.getElementById('navUserEmail');
+        if (navName) navName.textContent = user.name;
+        if (navEmail) navEmail.textContent = user.email;
+
         const el = document.getElementById('profile-avatar');
-        el.innerHTML = window.blobatar('Ethan Orozco', { size: 88, background: 'square' });
-      };
-      if (window.blobatar) fillProfileAvatar();
-      else window.addEventListener('blobatar-ready', fillProfileAvatar, { once: true });
+        if (window.blobatar) {
+          el.innerHTML = window.blobatar(user.name, { size: 88, background: 'square' });
+        }
+      }
+
+      async function loadProfile() {
+        if (!sessionUser) return;
+        try {
+          const user = await apiFetch(`/api/users/${sessionUser._id}`);
+          VectorAuth.setUser(user);
+          renderProfileUI(user);
+        } catch (err) {
+          showAlert(err.message, 'error');
+        }
+      }
+
+      window.addEventListener('DOMContentLoaded', loadProfile);
+
+      // Actualizar nombre y correo
+      document.getElementById('btnSaveInfo').addEventListener('click', async () => {
+        const nombre = document.getElementById('perfil-nombre').value.trim();
+        const apellido = document.getElementById('perfil-apellido').value.trim();
+        const email = document.getElementById('perfil-correo').value.trim();
+        const fullName = `${nombre} ${apellido}`.trim();
+
+        if (!fullName || !email) {
+          return showAlert('Nombre y correo son obligatorios', 'error');
+        }
+
+        try {
+          const data = await apiFetch(`/api/users/${sessionUser._id}`, {
+            method: 'PUT',
+            body: JSON.stringify({ name: fullName, email })
+          });
+          VectorAuth.setUser(data.user);
+          renderProfileUI(data.user);
+          showAlert('Perfil actualizado correctamente');
+        } catch (err) {
+          showAlert(err.message, 'error');
+        }
+      });
+
+      // Actualizar contraseña
+      document.getElementById('btnSavePass').addEventListener('click', async () => {
+        const password = document.getElementById('pass-nueva').value;
+        const confirmar = document.getElementById('pass-confirmar').value;
+
+        if (!password || password.length < 6) {
+          return showAlert('La nueva contraseña debe tener al menos 6 caracteres', 'error');
+        }
+        if (password !== confirmar) {
+          return showAlert('Las contraseñas nuevas no coinciden', 'error');
+        }
+
+        try {
+          await apiFetch(`/api/users/${sessionUser._id}`, {
+            method: 'PUT',
+            body: JSON.stringify({ password })
+          });
+          document.getElementById('passForm').reset();
+          showAlert('Contraseña actualizada correctamente');
+        } catch (err) {
+          showAlert(err.message, 'error');
+        }
+      });
+
+      // Eliminar cuenta
+      document.getElementById('btnDeleteAccount').addEventListener('click', async () => {
+        try {
+          await apiFetch(`/api/users/${sessionUser._id}`, {
+            method: 'DELETE'
+          });
+          showAlert('Cuenta eliminada. Hasta pronto.');
+          setTimeout(() => VectorAuth.logout(), 800);
+        } catch (err) {
+          showAlert(err.message, 'error');
+        }
+      });
     </script>
   </body>
 </html>
