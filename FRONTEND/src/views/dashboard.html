@@ -38,7 +38,7 @@
           <button class="btn btn-outline-secondary d-none d-sm-flex" aria-label="Notificaciones">
             <i class="fa-regular fa-bell"></i>
           </button>
-          <button class="btn btn-gold-primary" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal">
+          <button class="btn btn-gold-primary" id="dash-new-btn">
             <i class="fa-solid fa-plus"></i>
             <span class="d-none d-md-inline">Nuevo movimiento</span>
           </button>
@@ -48,28 +48,18 @@
       <div class="content-area">
         <div class="d-flex justify-content-between align-items-end greeting-row">
           <div>
-            <h1 class="mb-1" style="font-size: 1.75rem; font-weight: 700;">Buenas tardes, Ethan</h1>
-            <p class="mb-0" style="font-size: 14px; color: var(--c-text-muted);">Resumen de noviembre 2026</p>
+            <h1 class="mb-1" style="font-size: 1.75rem; font-weight: 700;" id="dash-greeting">Hola</h1>
+            <p class="mb-0" style="font-size: 14px; color: var(--c-text-muted);" id="dash-period-label">&nbsp;</p>
           </div>
-          <div class="period-toggle" role="group" aria-label="Periodo">
-            <button type="button" class="btn">Semana</button>
-            <button type="button" class="btn active">Mes</button>
-            <button type="button" class="btn">Año</button>
+          <div class="period-toggle" role="group" aria-label="Periodo" id="dash-period">
+            <button type="button" class="btn" data-period="week">Semana</button>
+            <button type="button" class="btn active" data-period="month">Mes</button>
+            <button type="button" class="btn" data-period="year">Año</button>
           </div>
         </div>
 
         <!-- alertas -->
-        <div class="alert-payment d-flex align-items-center gap-3 p-3" role="alert">
-          <i class="fa-solid fa-credit-card fa-lg" style="color: var(--c-gold-text); flex-shrink: 0;"></i>
-          <div class="flex-grow-1">
-            <strong>Tu Tarjeta Nu vence en 3 días</strong>
-            <p class="mb-0" style="font-size: 13px;">Fecha límite: martes 10 de noviembre · Saldo a pagar $4,250.00</p>
-          </div>
-          <button class="btn btn-gold-primary btn-sm" data-bs-toggle="modal" data-bs-target="#nuevoMovimientoModal">Registrar pago</button>
-          <button type="button" class="btn btn-sm" style="color: var(--c-text-muted);" onclick="this.closest('.alert-payment').remove()" aria-label="Cerrar">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
+        <div id="dash-alerts"></div>
 
         <!-- detalles -->
         <div class="row g-3">
@@ -79,25 +69,23 @@
                 <div class="card-header-row">
                   <div>
                     <p class="mb-0" style="font-size: 14px; font-weight: 600;">Balance neto total</p>
-                    <p class="mb-0" style="font-size: 12px; color: var(--c-text-muted);">5 cuentas · MXN</p>
+                    <p class="mb-0" style="font-size: 12px; color: var(--c-text-muted);" id="dash-account-count">&nbsp;</p>
                   </div>
-                  <span class="badge" style="background: var(--c-teal-tint); color: var(--c-teal); font-weight: 600;">
-                    <i class="fa-solid fa-arrow-trend-up me-1"></i>+8.4% vs oct
-                  </span>
+                  <span id="dash-balance-change"></span>
                 </div>
-                <h2 class="balance-amount">$42,370.55</h2>
+                <h2 class="balance-amount" id="dash-net-worth">—</h2>
                 <div class="balance-stats">
                   <div>
                     <p class="balance-stat-label">Activos (débito, ahorro, efectivo)</p>
-                    <p class="balance-stat-value">$55,620.20</p>
+                    <p class="balance-stat-value" id="dash-assets">—</p>
                   </div>
                   <div>
                     <p class="balance-stat-label">Deuda en tarjetas</p>
-                    <p class="balance-stat-value text-expense">−$13,249.65</p>
+                    <p class="balance-stat-value text-expense" id="dash-debt">—</p>
                   </div>
                   <div>
-                    <p class="balance-stat-label">Ahorro neto del mes</p>
-                    <p class="balance-stat-value text-income">+$8,527.50</p>
+                    <p class="balance-stat-label" id="dash-savings-label">Ahorro neto del mes</p>
+                    <p class="balance-stat-value" id="dash-savings">—</p>
                   </div>
                 </div>
               </div>
@@ -107,19 +95,19 @@
             <div class="card flex-grow-1">
               <div class="card-body p-4">
                 <div class="kpi-header">
-                  <span class="kpi-label"><i class="fa-solid fa-arrow-down me-1" style="color:var(--c-teal)"></i>Ingresos de noviembre</span>
-                  <span class="badge" style="background:var(--c-teal-tint); color:var(--c-teal);">+6.2%</span>
+                  <span class="kpi-label"><i class="fa-solid fa-arrow-down me-1" style="color:var(--c-teal)"></i><span id="dash-income-label">Ingresos del mes</span></span>
+                  <span id="dash-income-change"></span>
                 </div>
-                <p class="kpi-amount">$18,400.00</p>
+                <p class="kpi-amount" id="dash-income">—</p>
               </div>
             </div>
             <div class="card flex-grow-1">
               <div class="card-body p-4">
                 <div class="kpi-header">
-                  <span class="kpi-label"><i class="fa-solid fa-arrow-up me-1" style="color:var(--c-coral)"></i>Gastos de noviembre</span>
-                  <span class="badge" style="background:var(--c-coral-tint); color:var(--c-coral);">−3.1%</span>
+                  <span class="kpi-label"><i class="fa-solid fa-arrow-up me-1" style="color:var(--c-coral)"></i><span id="dash-expense-label">Gastos del mes</span></span>
+                  <span id="dash-expense-change"></span>
                 </div>
-                <p class="kpi-amount">$9,872.50</p>
+                <p class="kpi-amount" id="dash-expense">—</p>
               </div>
             </div>
           </div>
@@ -133,7 +121,7 @@
                 <div class="card-header-row">
                   <div>
                     <h5 class="mb-0" style="font-size: 15px; font-weight: 600;">Flujo de efectivo</h5>
-                    <p class="mb-0" style="font-size: 13px; color: var(--c-text-muted);">Ingresos vs gastos por mes</p>
+                    <p class="mb-0" style="font-size: 13px; color: var(--c-text-muted);" id="dash-cashflow-sub">Ingresos vs gastos por mes</p>
                   </div>
                 </div>
                 <canvas id="cashFlowChart" class="mt-3"></canvas>
@@ -146,25 +134,14 @@
                 <div class="card-header-row">
                   <div>
                     <h5 class="mb-0" style="font-size: 15px; font-weight: 600;">Gastos por categoría</h5>
-                    <p class="mb-0" style="font-size: 13px; color: var(--c-text-muted);">Noviembre 2026</p>
+                    <p class="mb-0" style="font-size: 13px; color: var(--c-text-muted);" id="dash-cat-sub">&nbsp;</p>
                   </div>
                   <a href="/categorias">Ver todo</a>
                 </div>
                 <div class="cat-chart-wrap mt-3">
                   <canvas id="catChart"></canvas>
-                  <div class="cat-chart-center">
-                    <span class="cat-total-label"></span>
-                    <span class="cat-total-amount"></span>
-                  </div>
                 </div>
-                <ul class="cat-legend list-unstyled mt-3 mb-0">
-                  <li><span class="cat-dot" style="background:var(--c-gold-dark)"></span><span class="cat-name">Comida</span><span class="cat-pct">32%</span><span class="cat-amount">$3,120</span></li>
-                  <li><span class="cat-dot" style="background:var(--c-blue)"></span><span class="cat-name">Transporte</span><span class="cat-pct">19%</span><span class="cat-amount">$1,850</span></li>
-                  <li><span class="cat-dot" style="background:var(--c-purple)"></span><span class="cat-name">Hogar</span><span class="cat-pct">16%</span><span class="cat-amount">$1,600</span></li>
-                  <li><span class="cat-dot" style="background:var(--c-teal)"></span><span class="cat-name">Suscripciones</span><span class="cat-pct">13%</span><span class="cat-amount">$1,240</span></li>
-                  <li><span class="cat-dot" style="background:var(--c-coral)"></span><span class="cat-name">Ocio</span><span class="cat-pct">12%</span><span class="cat-amount">$1,180</span></li>
-                  <li><span class="cat-dot" style="background:var(--c-slate)"></span><span class="cat-name">Otros</span><span class="cat-pct">9%</span><span class="cat-amount">$882</span></li>
-                </ul>
+                <ul class="cat-legend list-unstyled mt-3 mb-0" id="dash-cat-legend"></ul>
               </div>
             </div>
           </div>
@@ -178,31 +155,13 @@
                 <div class="card-header-row mb-1">
                   <div>
                     <h5 class="mb-0" style="font-size: 15px; font-weight: 600;">Mis cuentas</h5>
-                    <p class="mb-0" style="font-size: 13px; color: var(--c-text-muted);">Saldo actual proyectado</p>
+                    <p class="mb-0" style="font-size: 13px; color: var(--c-text-muted);">Saldo actual</p>
                   </div>
                   <a href="/cuentas">Gestionar</a>
                 </div>
-                <ul class="list-unstyled mb-0 mt-2">
-                  <li class="card-list-item">
-                    <div>
-                      <p class="item-name">BBVA Débito</p>
-                      <p class="item-sub">Débito</p>
-                    </div>
-                    <p class="item-value">$22,480.20</p>
-                  </li>
-                  <li class="card-list-item">
-                    <div>
-                      <p class="item-name">Ahorro Hey</p>
-                      <p class="item-sub">Ahorro · 10.5% anual</p>
-                    </div>
-                    <p class="item-value">$31,200.00</p>
-                  </li>
-                  <li class="card-list-item">
-                    <div>
-                      <p class="item-name">Tarjeta Nu</p>
-                      <p class="item-sub">Crédito · corte día 25</p>
-                    </div>
-                    <p class="item-value text-expense">−$4,250.00</p>
+                <ul class="list-unstyled mb-0 mt-2" id="dash-accounts">
+                  <li class="text-center py-3" style="font-size: 13px; color: var(--c-text-muted);">
+                    <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Cargando cuentas…
                   </li>
                 </ul>
               </div>
@@ -220,38 +179,9 @@
                   </div>
                   <a href="/metas">Ver metas</a>
                 </div>
-                <ul class="list-unstyled mb-0 mt-3">
-                  <li class="goal-item">
-                    <div class="goal-header">
-                      <div>
-                        <p class="item-name">Fondo de emergencia</p>
-                        <p class="item-sub">Ahorro · meta jun 2027</p>
-                      </div>
-                      <span style="font-weight: 700; color: var(--c-teal);">69%</span>
-                    </div>
-                    <div class="progress" style="height: 8px; background: var(--c-input-bg);">
-                      <div class="progress-bar" style="width: 69%; background: var(--c-teal);"></div>
-                    </div>
-                    <div class="goal-footer">
-                      <span>$31,200 ahorrados</span>
-                      <span>Meta $45,000</span>
-                    </div>
-                  </li>
-                  <li class="goal-item mt-3">
-                    <div class="goal-header">
-                      <div>
-                        <p class="item-name">Liquidar Tarjeta Oro</p>
-                        <p class="item-sub">Deuda · baja hacia $0</p>
-                      </div>
-                      <span style="font-weight: 700; color: var(--c-gold-text);">40%</span>
-                    </div>
-                    <div class="progress" style="height: 8px; background: var(--c-input-bg);">
-                      <div class="progress-bar" style="width: 40%; background: var(--c-gold-dark);"></div>
-                    </div>
-                    <div class="goal-footer">
-                      <span>$8,999 pendientes</span>
-                      <span>Inicial $15,000</span>
-                    </div>
+                <ul class="list-unstyled mb-0 mt-3" id="dash-goals">
+                  <li class="text-center py-3" style="font-size: 13px; color: var(--c-text-muted);">
+                    <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Cargando metas…
                   </li>
                 </ul>
               </div>
@@ -269,34 +199,9 @@
                   </div>
                   <a href="/transacciones">Historial</a>
                 </div>
-                <ul class="list-unstyled mb-0 mt-2">
-                  <li class="card-list-item">
-                    <div>
-                      <p class="item-name">Nómina quincenal</p>
-                      <p class="item-sub">Hoy · BBVA Débito</p>
-                    </div>
-                    <p class="item-value text-income">+$9,200.00</p>
-                  </li>
-                  <li class="card-list-item">
-                    <div>
-                      <p class="item-name">Despensa Soriana</p>
-                      <p class="item-sub">Hoy · Tarjeta Nu · Comida</p>
-                    </div>
-                    <p class="item-value text-expense">−$1,286.40</p>
-                  </li>
-                  <li class="card-list-item">
-                    <div>
-                      <p class="item-name">Uber al trabajo</p>
-                      <p class="item-sub">Ayer · Tarjeta Oro</p>
-                    </div>
-                    <p class="item-value text-expense">−$148.00</p>
-                  </li>
-                  <li class="card-list-item">
-                    <div>
-                      <p class="item-name">Spotify Premium</p>
-                      <p class="item-sub">5 nov · Tarjeta Nu</p>
-                    </div>
-                    <p class="item-value text-expense">−$129.00</p>
+                <ul class="list-unstyled mb-0 mt-2" id="dash-recent">
+                  <li class="text-center py-3" style="font-size: 13px; color: var(--c-text-muted);">
+                    <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Cargando movimientos…
                   </li>
                 </ul>
               </div>
@@ -305,151 +210,72 @@
         </div>
 
       </div>
-      <div class="modal fade" id="nuevoMovimientoModal" tabindex="-1">
+
+      <!-- nuevo movimiento -->
+      <div class="modal fade" id="nuevoMovimientoModal" tabindex="-1" aria-labelledby="movModalTitle">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title">Nuevo movimiento</h5>
+              <h5 class="modal-title" id="movModalTitle">Nuevo movimiento</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
-              <div class="type-selector">
-                <button type="button" class="btn-type active flex-fill">Gasto</button>
-                <button type="button" class="btn-type flex-fill">Ingreso</button>
-                <button type="button" class="btn-type flex-fill">Transferencia</button>
+              <div class="type-selector" id="mov-type-wrap">
+                <button type="button" class="btn-type active flex-fill" data-type="expense">Gasto</button>
+                <button type="button" class="btn-type flex-fill" data-type="income">Ingreso</button>
+                <button type="button" class="btn-type flex-fill" data-type="transfer">Transferencia</button>
               </div>
-              <form>
+              <form id="mov-form" novalidate>
                 <div class="mb-3">
-                  <label for="mov-amount" class="form-label" style="font-size: 13px; color: var(--c-text-muted);">Monto</label>
-                  <input id="mov-amount" type="number" class="form-control form-control-lg" placeholder="0.00">
+                  <label for="mov-monto" class="form-label" style="font-size: 13px; color: var(--c-text-muted);">Monto</label>
+                  <input id="mov-monto" type="number" class="form-control form-control-lg" placeholder="0.00" min="0.01" step="0.01" required>
+                  <div class="invalid-feedback">El monto debe ser mayor a 0.</div>
                 </div>
                 <div class="row g-2 mb-3">
                   <div class="col-6">
-                    <label for="Cuentas" class="form-label" style="font-size: 13px; color: var(--c-text-muted);">Cuenta</label>
-                    <select id="Cuentas" class="form-select">
-                      <option>BBVA Débito</option>
-                      <option>Ahorro Hey</option>
-                      <option>Tarjeta Nu</option>
-                      <option>Tarjeta Oro</option>
-                      <option>Efectivo</option>
-                    </select>
+                    <label for="mov-cuenta" id="mov-cuenta-label" class="form-label" style="font-size: 13px; color: var(--c-text-muted);">Cuenta</label>
+                    <select id="mov-cuenta" class="form-select" required></select>
+                    <div class="invalid-feedback">Elige una cuenta.</div>
                   </div>
-                  <div class="col-6">
-                    <label class="form-label" style="font-size: 13px; color: var(--c-text-muted);">Categoría</label>
-                    <select class="form-select">
-                      <option>Comida</option>
-                      <option>Transporte</option>
-                      <option>Hogar</option>
-                      <option>Suscripciones</option>
-                      <option>Ocio</option>
-                      <option>Nómina</option>
-                      <option>Otros</option>
-                    </select>
+                  <div class="col-6" id="mov-categoria-wrap">
+                    <label for="mov-categoria" class="form-label" style="font-size: 13px; color: var(--c-text-muted);">Categoría</label>
+                    <select id="mov-categoria" class="form-select" required></select>
+                    <div class="invalid-feedback" id="mov-categoria-error">Elige una categoría.</div>
+                  </div>
+                  <div class="col-6" id="mov-destino-wrap" hidden>
+                    <label for="mov-destino" class="form-label" style="font-size: 13px; color: var(--c-text-muted);">Cuenta destino</label>
+                    <select id="mov-destino" class="form-select"></select>
+                    <div class="invalid-feedback">Elige una cuenta distinta a la de origen.</div>
                   </div>
                 </div>
                 <div class="mb-3">
-                  <label class="form-label" style="font-size: 13px; color: var(--c-text-muted);">Descripción</label>
-                  <input type="text" class="form-control" placeholder="Ej. Pago de tarjeta Nu">
+                  <label for="mov-descripcion" class="form-label" style="font-size: 13px; color: var(--c-text-muted);">Descripción</label>
+                  <input id="mov-descripcion" type="text" class="form-control" placeholder="Ej. Pago de tarjeta Nu" maxlength="100">
                 </div>
                 <div class="mb-1">
-                  <label class="form-label" style="font-size: 13px; color: var(--c-text-muted);">Fecha</label>
-                  <input type="date" class="form-control" value="2026-11-07">
+                  <label for="mov-fecha" class="form-label" style="font-size: 13px; color: var(--c-text-muted);">Fecha</label>
+                  <input id="mov-fecha" type="date" class="form-control" required>
+                  <div class="invalid-feedback">Elige una fecha.</div>
                 </div>
               </form>
             </div>
             <div class="modal-footer">
               <button class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-              <button class="btn btn-gold-primary">Guardar movimiento</button>
+              <button class="btn btn-gold-primary" id="mov-save-btn">Guardar movimiento</button>
             </div>
           </div>
         </div>
       </div>
+
+      <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-area"></div>
 
     </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.9/dist/chart.umd.min.js" integrity="sha384-b0GXujLkk9eYYSmcSfoyZbfyElGAQnDyY0skCHSG6w3JgTMFnz11ggrTAr7seu9f" crossorigin="anonymous"></script>
-    <script>
-      const cashChart = new Chart(document.getElementById('cashFlowChart'), {
-        type: 'bar',
-        data: {
-          labels: ['Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov'],
-          datasets: [
-            { label: 'Ingresos', data: [15200, 15800, 16100, 17900, 17300, 18400], borderRadius: 4 },
-            { label: 'Gastos',   data: [11200,  9800, 12600, 10400, 10180,  9872], borderRadius: 4 }
-          ]
-        },
-        options: {
-          responsive: true,
-          plugins: { legend: { position: 'top', labels: {} } },
-          scales: { x: { ticks: {}, grid: {} }, y: { ticks: {}, grid: {} } }
-        }
-      });
-
-      const centerTextPlugin = {
-        id: 'centerText',
-        beforeDraw(chart) {
-          if (chart.config.type !== 'doughnut') return;
-          const { ctx, chartArea: { left, right, top, bottom } } = chart;
-          const cx = (left + right) / 2;
-          const cy = (top + bottom) / 2;
-          ctx.save();
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillStyle = cssVar('--c-text-4');
-          ctx.font = '500 12px Inter, sans-serif';
-          ctx.fillText('Total', cx, cy - 11);
-          ctx.fillStyle = cssVar('--c-text-strong');
-          ctx.font = '600 18px Inter, sans-serif';
-          ctx.fillText('$9,872.00', cx, cy + 11);
-          ctx.restore();
-        }
-      };
-
-      const catChart = new Chart(document.getElementById('catChart'), {
-        type: 'doughnut',
-        data: {
-          labels: ['Comida', 'Transporte', 'Hogar', 'Suscripciones', 'Ocio', 'Otros'],
-          datasets: [{
-            data: [3120, 1850, 1600, 1240, 1180, 882],
-            borderWidth: 0,
-            hoverOffset: 6,
-            cutout: '72%'
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: { legend: { display: false } }
-        },
-        plugins: [centerTextPlugin]
-      });
-
-      // Canvas can't resolve var(), so pull token values and repaint on theme change.
-      function paintCharts() {
-        const muted = cssVar('--c-text-muted'), grid = cssVar('--c-grid');
-        const [inc, exp] = cashChart.data.datasets;
-        inc.backgroundColor = cssVar('--c-teal');
-        exp.backgroundColor = cssVar('--c-coral');
-        cashChart.options.plugins.legend.labels.color = muted;
-        for (const axis of ['x', 'y']) {
-          cashChart.options.scales[axis].ticks.color = muted;
-          cashChart.options.scales[axis].grid.color = grid;
-        }
-        catChart.data.datasets[0].backgroundColor =
-          ['--c-gold-dark', '--c-blue', '--c-purple', '--c-teal', '--c-coral', '--c-slate'].map(cssVar);
-        cashChart.update('none');
-        catChart.update('none');
-      }
-      paintCharts();
-      window.addEventListener('themechange', paintCharts);
-
-      document.querySelectorAll('.btn-type').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.btn-type').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-        });
-      });
-    </script>
+    <script src="/controllers/api.js"></script>
+    <script src="/controllers/dashboard-metas.js"></script>
+    <script src="/controllers/dashboard.js"></script>
   </body>
 </html>

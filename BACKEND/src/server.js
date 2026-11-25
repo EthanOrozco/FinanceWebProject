@@ -14,6 +14,7 @@ const accountsRoutes = require('./routes/accounts.routes');
 const categoriesRoutes = require('./routes/categories.routes');
 const goalsRoutes = require('./routes/goals.routes');
 const transactionsRoutes = require('./routes/transactions.routes')
+const dashboardRoutes = require('./routes/dashboard.routes');
 const viewsRoutes = require('./routes/views.routes');
 
 const app = express();
@@ -27,6 +28,7 @@ app.use('/api/accounts', accountsRoutes);
 app.use('/api/categories', categoriesRoutes);
 app.use('/api/goals', goalsRoutes);
 app.use('/api/transactions', transactionsRoutes);
+app.use('/api/dashboard', dashboardRoutes);
 
 app.use('/', viewsRoutes);
 

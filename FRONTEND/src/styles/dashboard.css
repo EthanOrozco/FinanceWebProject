@@ -382,3 +382,24 @@
     gap: 12px;
   }
 }
+
+/* toasts (mismos que en transacciones) */
+.tx-toast {
+  background: var(--c-card-bg);
+  border: 1px solid var(--c-slate-blue);
+  border-left-width: 4px;
+  border-radius: 10px;
+  color: var(--c-white);
+  font-size: 14px;
+}
+.tx-toast-success { border-left-color: var(--c-teal); }
+.tx-toast-success i { color: var(--c-teal); }
+.tx-toast-error { border-left-color: var(--c-coral); }
+.tx-toast-error i { color: var(--c-coral); }
+
+.dash-empty {
+  text-align: center;
+  padding: 12px 0;
+  font-size: 13px;
+  color: var(--c-text-muted);
+}
