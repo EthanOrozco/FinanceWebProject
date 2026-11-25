@@ -4,7 +4,8 @@
   const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
   const MAX_GOALS = 3;
 
-  const frmt = (num) => '$' + Number(num).toLocaleString('es-MX', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  // los montos de las metas vienen en centavos
+  const frmt = (cents) => '$' + (Number(cents) / 100).toLocaleString('es-MX', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
   const esc = (str) => String(str ?? '').replace(/[&<>"']/g, ch => (
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]
