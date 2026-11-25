@@ -1,10 +1,9 @@
-const mongoose = require('mongoose');
+const { readSession } = require('../utils/session');
 
-// El frontend manda el _id del usuario logueado en el header x-user-id (ver authHeaders en api.js)
 module.exports = (req, res, next) => {
-  const userId = req.headers['x-user-id'];
-  if (!userId || !mongoose.isValidObjectId(userId)) {
-    return res.status(401).json({ message: 'No autorizado. Inicia sesión primero.' });
+  const userId = readSession(req);
+  if (!userId) {
+    return res.status(401).json({ message: 'Tu sesión expiró. Inicia sesión de nuevo.' });
   }
   req.userId = userId;
   next();

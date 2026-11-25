@@ -28,7 +28,10 @@ const VectorAuth = {
   setUser(user) {
     localStorage.setItem('vector_user', JSON.stringify(user));
   },
-  logout() {
+  async logout() {
+    try {
+      await fetch('/api/users/logout', { method: 'POST' });
+    } catch { }
     localStorage.removeItem('vector_user');
     window.location.href = '/login';
   },
@@ -80,10 +83,9 @@ function showAlert(message, type = 'success') {
   setTimeout(() => toast.remove(), 4000);
 }
 
-// header con el usuario logueado; el backend (middleware/auth.js) lo exige en /api/*
+// La sesión ahora viaja en una cookie httpOnly; ya no se envian headers
 function authHeaders() {
-  const user = VectorAuth.getUser();
-  return user?._id ? { 'x-user-id': user._id } : {};
+  return {};
 }
 
 async function apiFetch(url, options = {}) {
@@ -98,6 +100,11 @@ async function apiFetch(url, options = {}) {
     const res = await fetch(url, { ...options, headers });
     const data = await res.json().catch(() => ({}));
 
+    const isAuthRoute = url.startsWith('/api/users/login') || url.startsWith('/api/users/register');
+    if (res.status === 401 && !isAuthRoute) {
+      Vector.VectorAuth.logout();
+      return new Promise(() => { }); //stop in spot; the page is redirecting
+    }
     if (!res.ok) {
       throw new Error(data.message || 'Ocurrió un error en la petición');
     }
