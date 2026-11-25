@@ -1,22 +1,45 @@
-module.exports = {}
 const crypto = require('crypto');
+const bcrypt = require('bcrypt')
 const User = require('../models/User');
 
-const hashPassword = (password) => {
-  return crypto.createHash('sha256').update(password).digest('hex');
+const BCRYPT_ROUNDS = 12;
+
+//dummy hash so the do NOT know which emails are registered based on the timings
+const DUMMY_HASH = bcrypt.hashSync('dummy-password-for-timing', BCRYPT_ROUNDS);
+
+const hashPassword = (password) => bcrypt.hash(password, BCRYPT_ROUNDS);
+
+//bcrypt hashes start with "$2a$"/"$2b$". Anything else is old hash
+const isLegacyHash = (hash) => !hash.startsWith('$2');
+
+const verifyPassword = async (password, storedHash) => {
+  if (!isLegacyHash(storedHash)) return bcrypt.compare(password, storedHash);
+  
+  const stored = Buffer.from(storedHash, 'hex');
+  const given = crypto.createHash('sha256').update(password).digest();
+
+  return stored.length && crypto.timingSafeEqual(stored, given);
+};
+
+const validatePassword = (password) => {
+  if (typeof password !== 'string' || password.length < 8) {
+    return 'La contraseña debe tener al menos 6 caracteres';
+  }
+  if (Buffer.byteLength(password) > 72) {
+    return 'La contraseña es demasiado larga';
+  }
+  return null;
 };
 
 const registerUser = async (req, res) => {
   const { name, email, password } = req.body ?? {};
-
-  if (!password || password.length < 6) {
-    return res.status(400).json({ message: 'La contraseña debe tener al menos 6 caracteres' });
-  }
+  const pwError = validatePassword(password);
+  if (pwError) return res.status(400).json({ message: pwError });
 
   const user = await User.create({
     name,
     email,
-    passwordHash: hashPassword(password),
+    passwordHash: await hashPassword(password),
   });
 
   res.status(201).json({
@@ -36,12 +59,25 @@ const loginUser = async (req, res) => {
   if (!email || !password) {
     return res.status(400).json({ message: 'Ingresa correo y contraseña' });
   }
+  
+  if (typeof email !== 'string' || typeof password !== 'string' || !email || !password) {
+    return res.status(400).json({ message: 'Ingresa correo y contraseña' });
+  }
   const user = await User.findOne({ email: email.toLowerCase().trim() }).select('+passwordHash');
 
-  if (!user || user.passwordHash !== hashPassword(password)) {
-    return res.status(401).json({ message: 'Correo o contraseña incorrectos' });
+  if (!user) {
+    await bcrypt.compare(password, DUMMY_HASH); //same timing as a real check
   }
 
+  if (!(await verifyPassword(password, user.passwordHash))) {
+    return res.status(401).json({ message: 'Correo o contraseña incorrectos' });
+  };
+
+  // Upgrade old SHA-256 hashes to bcrypt now that we have the plain text
+  if (isLegacyHash(user.passwordHash)) {
+    await User.updateOne({ _id: user._id }, { passwordHash: await hashPassword(password) }); 
+  };
+  
   res.json({
     message: 'Inicio de sesión exitoso',
     user: {
@@ -77,11 +113,9 @@ const updateUser = async (req, res) => {
 
   if (name !== undefined) user.name = name;
   if (email !== undefined) user.email = email;
-  if (password !== undefined && password.trim() !== '') {
-    if (password.length < 6) {
-      return res.status(400).json({ message: 'La nueva contraseña debe tener al menos 6 caracteres' });
-    }
-    user.passwordHash = hashPassword(password);
+  if (password !== undefined && password !== '') {
+    const pwError = validatePassword(password);
+    if (pwError) return res.status(400).json({ message: pwError });
   }
 
   await user.save();
