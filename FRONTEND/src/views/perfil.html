@@ -100,14 +100,14 @@
                   <span class="section-icon"><i class="fa-solid fa-lock"></i></span>
                   <div>
                     <h2 class="section-title">Cambiar contraseña</h2>
-                    <p class="section-sub">Ingresa una nueva contraseña de al menos 6 caracteres.</p>
+                    <p class="section-sub">Ingresa una nueva contraseña de al menos 8 caracteres.</p>
                   </div>
                 </div>
                 <form id="passForm">
                   <div class="row g-3">
                     <div class="col-12 col-md-6">
                       <label class="form-label" for="pass-nueva">Nueva contraseña</label>
-                      <input id="pass-nueva" type="password" class="form-control" placeholder="Mínimo 6 caracteres">
+                      <input id="pass-nueva" type="password" class="form-control" placeholder="Mínimo 8 caracteres">
                     </div>
                     <div class="col-12 col-md-6">
                       <label class="form-label" for="pass-confirmar">Confirmar contraseña</label>
@@ -193,7 +193,7 @@
       async function loadProfile() {
         if (!sessionUser) return;
         try {
-          const user = await apiFetch(`/api/users/${sessionUser._id}`);
+          const user = await apiFetch(`/api/users/me`);
           VectorAuth.setUser(user);
           renderProfileUI(user);
         } catch (err) {
@@ -215,7 +215,7 @@
         }
 
         try {
-          const data = await apiFetch(`/api/users/${sessionUser._id}`, {
+          const data = await apiFetch(`/api/users/me`, {
             method: 'PUT',
             body: JSON.stringify({ name: fullName, email })
           });
@@ -232,15 +232,15 @@
         const password = document.getElementById('pass-nueva').value;
         const confirmar = document.getElementById('pass-confirmar').value;
 
-        if (!password || password.length < 6) {
-          return showAlert('La nueva contraseña debe tener al menos 6 caracteres', 'error');
+        if (!password || password.length < 8) {
+          return showAlert('La nueva contraseña debe tener al menos 8 caracteres', 'error');
         }
         if (password !== confirmar) {
           return showAlert('Las contraseñas nuevas no coinciden', 'error');
         }
 
         try {
-          await apiFetch(`/api/users/${sessionUser._id}`, {
+          await apiFetch(`/api/users/me`, {
             method: 'PUT',
             body: JSON.stringify({ password })
           });
@@ -254,7 +254,7 @@
       // Eliminar cuenta
       document.getElementById('btnDeleteAccount').addEventListener('click', async () => {
         try {
-          await apiFetch(`/api/users/${sessionUser._id}`, {
+          await apiFetch(`/api/users/me`, {
             method: 'DELETE'
           });
           showAlert('Cuenta eliminada. Hasta pronto.');

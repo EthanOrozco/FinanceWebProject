@@ -8,8 +8,8 @@ router.post('/register', ctrl.registerUser);
 router.post('/login', ctrl.loginUser);
 router.post('/logout', ctrl.logoutUser);
 
-router.get('/:id', auth, ctrl.getUserById);
-router.put('/:id', auth, ctrl.updateUser);
-router.delete('/:id', auth, ctrl.deleteUser);
+router.get('/me', auth, ctrl.getMe);
+router.put('/me', auth, ctrl.updateMe);
+router.delete('/me', auth, ctrl.deleteMe);
 
 module.exports = router;
