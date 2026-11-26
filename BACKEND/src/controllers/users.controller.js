@@ -117,16 +117,31 @@ const getMe = async (req, res) => {
 };
 
 const updateMe = async (req, res) => {
-  const { name, email, password } = req.body ?? {};
+  const { name, email, password, currentPassword } = req.body ?? {};
 
   const user = await User.findById(req.userId).select("+passwordHash");
   if (!user) {
     return res.status(404).json({ message: "Usuario no encontrado" });
   }
 
+  const changingEmail =
+    email !== undefined && email.toLowerCase().trim() !== user.email;
+  const changingPassword = password !== undefined && password !== "";
+
+  if (changingEmail || changingPassword) {
+    if (typeof currentPassword !== "string" || !currentPassword) {
+      return res.status(400).json({ message: "Ingresa tu contraseña actual" });
+    }
+    if (!(await verifyPassword(currentPassword, user.passwordHash))) {
+      return res
+        .status(403)
+        .json({ message: "La contraseña actual es incorrecta" });
+    }
+  }
+
   if (name !== undefined) user.name = name;
-  if (email !== undefined) user.email = email;
-  if (password !== undefined && password !== "") {
+  if (changingEmail) user.email = email;
+  if (changingPassword) {
     const pwError = validatePassword(password);
     if (pwError) return res.status(400).json({ message: pwError });
     user.passwordHash = await hashPassword(password);
@@ -146,10 +161,21 @@ const updateMe = async (req, res) => {
 };
 
 const deleteMe = async (req, res) => {
-  const user = await User.findById(req.userId);
+  const user = await User.findById(req.userId).select("+passwordHash");
+  const { currentPassword } = req.body ?? {};
 
   if (!user) {
     return res.status(404).json({ message: "Usuario no encontrado" });
+  }
+
+  if (typeof currentPassword !== "string" || !currentPassword) {
+    return res.status(400).json({ message: "Ingresa tu contraseña actual" });
+  }
+
+  if (!(await verifyPassword(currentPassword, user.passwordHash))) {
+    return res
+      .status(403)
+      .json({ message: "La contraseña actual es incorrecta" });
   }
 
   await user.deleteOne();
