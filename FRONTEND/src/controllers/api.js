@@ -1,16 +1,12 @@
 (function initGlobalUI() {
   if (document.getElementById('vector-global-ui')) return;
 
-  const lottieScript = document.createElement('script');
-  lottieScript.src = 'https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js';
-  document.head.appendChild(lottieScript);
-
   const wrapper = document.createElement('div');
   wrapper.id = 'vector-global-ui';
   wrapper.innerHTML = `
     <div id="vectorLoader" style="display:none; position:fixed; inset:0; background:rgba(15,23,42,0.75); backdrop-filter:blur(4px); z-index:9999; align-items:center; justify-content:center; flex-direction:column;">
-      <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_p8bfn5to.json" background="transparent" speed="1.2" style="width: 110px; height: 110px;" loop autoplay></lottie-player>
-      <span style="color:#f8fafc; font-family:'Inter',sans-serif; font-size:14px; font-weight:600; margin-top:4px;">Procesando...</span>
+      <span class="spinner-border" role="status" aria-hidden="true" style="width:3rem; height:3rem; color:#f8fafc;"></span>
+      <span style="color:#f8fafc; font-family:'Inter',sans-serif; font-size:14px; font-weight:600; margin-top:14px;">Procesando...</span>
     </div>
     <div id="vectorToastContainer" style="position:fixed; top:20px; right:20px; z-index:10000; display:flex; flex-direction:column; gap:10px; max-width:340px;"></div>
   `;
